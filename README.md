@@ -9,4 +9,3 @@ options.
 ## Syllabus
 
 - [Syllabus PDF](lectures/syllabus.pdf)
-- [Syllabus TeX source](lectures/syllabus.tex)

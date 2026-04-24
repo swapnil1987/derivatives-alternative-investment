@@ -1,0 +1,12 @@
+self-material/
+
+# Ignore Markdown drafts, but keep the repository README tracked.
+*.md
+!README.md
+!readme.md
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz
