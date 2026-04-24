@@ -9,3 +9,7 @@ options.
 ## Syllabus
 
 - [Syllabus PDF](lectures/syllabus.pdf)
+
+## Lecture Notes
+
+- [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-notes.pdf)

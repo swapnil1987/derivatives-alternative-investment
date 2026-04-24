@@ -10,3 +10,4 @@ self-material/
 *.log
 *.out
 *.synctex.gz
+*.thm
