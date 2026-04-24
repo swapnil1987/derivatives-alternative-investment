@@ -1,0 +1,434 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!60!black,
+    urlcolor=blue!60!black,
+    citecolor=blue!60!black
+}
+
+\setlist[itemize]{leftmargin=1.2em}
+\setlist[enumerate]{leftmargin=1.4em}
+\renewcommand{\arraystretch}{1.2}
+
+\title{\textbf{S181M116 Derivatives and Alternative Investments}}
+\author{Swapnil Singh \\ Lietuvos Bankas and Kaunas University of Technology}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Course Format}
+
+\begin{tabular}{@{}p{0.25\textwidth}p{0.68\textwidth}@{}}
+\toprule
+Main text & John C. Hull, \emph{Options, Futures, and Other Derivatives}, 11th Global Edition (no need to buy the book, I will provide slides and lecture notes) \\
+Assessment & Assignment: 40\%; closed-book final examination: 60\% \\
+\textbf{\textcolor{red}{Before attending}} & I will release lecture notes for the specific class one day before. Students should read them before attending otherwise they will not follow the material. This is a high paced, mathematically intensive course\\
+\bottomrule
+\end{tabular}
+
+\section*{Course Description}
+
+This intensive course introduces the economics, mathematics, and practical use of derivative securities and selected alternative investments. The core of the course follows Hull's treatment of forwards, futures, swaps, options, no-arbitrage valuation, binomial trees, Wiener processes, It\^o's lemma, the Black--Scholes--Merton model, option Greeks, volatility, and risk management. Because the course also covers alternative investments and private equity, the final part of the course connects option-pricing logic to real options, venture capital, private equity fund economics, illiquidity, leverage, and performance measurement.
+
+The course is designed for students who need both basic working knowledge and mathematical detail. The emphasis is not only on knowing the vocabulary of derivative markets, but also on being able to derive prices, state no-arbitrage arguments, interpret hedging equations, and explain why the mathematics matters for financial decisions.
+
+\section*{Prerequisites}
+
+\textbf{\textcolor{red}{Students should be comfortable with algebra, time value of money, basic probability, normal and lognormal distributions, and introductory calculus.}} Prior exposure to finance is helpful but not essential. No prior stochastic calculus is assumed; the course introduces the necessary stochastic process tools directly.
+
+\section*{Learning Objectives}
+
+By the end of the course, students should be able to:
+\begin{enumerate}
+    \item Explain the economic role of forwards, futures, swaps, options, and selected alternative investments.
+    \item Distinguish exchange-traded and OTC derivatives, including margin, clearing, counterparty risk, and settlement.
+    \item Price forward and futures contracts using no-arbitrage cost-of-carry arguments.
+    \item Construct hedges using futures and explain basis risk, cross hedging, hedge ratios, and rolling strategies.
+    \item Use zero rates, forward rates, discount factors, duration, and convexity in derivative valuation.
+    \item Derive option bounds, put-call parity, and basic static option strategies.
+    \item Price European and American-style options with one-step and multi-step binomial trees.
+    \item Define Brownian motion and geometric Brownian motion and apply It\^o's lemma.
+    \item Derive and interpret the Black--Scholes--Merton partial differential equation.
+    \item Apply risk-neutral valuation to obtain Black--Scholes--Merton option prices.
+    \item Compute and interpret Delta, Gamma, Theta, Vega, and Rho.
+    \item Explain implied volatility, volatility smiles, and why market prices deviate from the simplest Black--Scholes assumptions.
+    \item Connect derivative pricing concepts to real options, private equity, venture capital, leverage, and alternative investment risk.
+\end{enumerate}
+
+\section*{Assessment}
+
+\subsection*{Assignment: 40\%}
+
+The assignment will test both numerical competence and economic interpretation. It will be released after the first week and submitted before the final examination unless otherwise announced. All submitted work must explain the financial reasoning and mathematical steps.
+
+
+\subsection*{Final Examination: 60\%}
+
+The final examination is closed book. Students should expect a mixture of conceptual questions, derivations, and numerical problems. The exam may include formula recall, but the emphasis will be on understanding and applying the formulas rather than mechanically reproducing them. Unless explicitly stated by the instructor, books, notes, slides, solved exercises, and electronic communication devices are not permitted.
+
+The final examination will cover all lecture material, all assigned Hull readings, and the private equity / alternative investment material distributed in class.
+
+\section*{Main Reading Map from Hull}
+
+\begin{tabular}{@{}p{0.20\textwidth}p{0.70\textwidth}@{}}
+\toprule
+Core & Chapters 1--7, 10--15, 17--21, 35--37 \\
+Highly relevant & Chapters 19--23 for Greeks, volatility, numerical methods, VaR, and volatility estimation \\
+Selective use & Chapters 8--9 and 24--26 for securitization, XVA, credit risk, credit derivatives, and exotic options \\
+Alternatives bridge & Chapter 36 on real options; instructor-supplied notes for private equity, hedge funds, infrastructure, and illiquid assets \\
+\bottomrule
+\end{tabular}
+
+\section*{Detailed Two-Week Schedule}
+
+\subsection*{Week 1: Foundations, Forwards, Futures, Interest Rates, and Option Basics}
+
+\subsubsection*{Class 1: Derivative Markets, Payoffs, and No-Arbitrage Thinking}
+\textbf{Hull readings:} Chapters 1 and 2; skim Chapter 37 for examples of misuse and risk.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item What derivatives are: forwards, futures, swaps, calls, puts, and structured exposures.
+    \item Exchange-traded versus OTC markets.
+    \item Long and short positions; payoff diagrams and profit diagrams.
+    \item Hedgers, speculators, arbitrageurs, and market makers.
+    \item Central clearing, margin accounts, daily settlement, default waterfalls, and counterparty risk.
+    \item Contract specification: underlying, size, delivery, maturity, settlement, tick size, and price quotation.
+    \item The no-arbitrage principle as the organizing logic of derivatives pricing.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Payoff notation for a forward: long payoff $S_T-K$, short payoff $K-S_T$.
+    \item Call and put payoffs: $(S_T-K)^+$ and $(K-S_T)^+$.
+    \item Present value and compounding conventions.
+    \item Simple arbitrage inequalities and replication arguments.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Build payoff diagrams for forwards, calls, puts, and simple combinations.
+    \item Margin account example for a futures position.
+    \item Discussion: why derivatives can reduce risk for one party while increasing leverage in the system.
+\end{itemize}
+
+\subsubsection*{Class 2: Hedging with Futures and Determination of Forward/Futures Prices}
+\textbf{Hull readings:} Chapters 3 and 5; selected examples from Chapter 35 for commodities.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Short hedges and long hedges.
+    \item Basis risk and convergence of futures prices to spot prices.
+    \item Cross hedging and the minimum-variance hedge ratio.
+    \item Stock index futures and beta hedging.
+    \item Stack-and-roll hedging.
+    \item Forward price for investment assets, assets with known income, and assets with known dividend yield.
+    \item Commodity forwards and futures: storage costs, convenience yield, investment assets versus consumption assets.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Hedge ratio $h^*=\rho \sigma_S/\sigma_F$ and optimal number of contracts $N^*=h^*Q_A/Q_F$.
+    \item No-income forward price: $F_0=S_0 e^{rT}$.
+    \item Known income: $F_0=(S_0-I)e^{rT}$.
+    \item Known yield: $F_0=S_0 e^{(r-q)T}$.
+    \item Forward contract value after initiation: $f=(F_0-K)e^{-rT}$ for a long forward under constant rates.
+    \item Cost-of-carry form $F_0=S_0e^{cT}$ and commodity extension with storage cost and convenience yield.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Hedge an equity portfolio with index futures.
+    \item Price a commodity forward with storage cost and convenience yield.
+    \item Explain why futures and expected future spot prices need not be equal.
+\end{itemize}
+
+\subsubsection*{Class 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs}
+\textbf{Hull readings:} Chapters 4, 6, and 7.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Simple, annual, and continuous compounding.
+    \item Zero rates, par yields, forward rates, and discount factors.
+    \item Bond pricing and bootstrapping a zero curve.
+    \item Duration and convexity as first- and second-order interest rate risk measures.
+    \item Treasury bond futures, conversion factors, and cheapest-to-deliver intuition.
+    \item SOFR futures and forward rate agreements.
+    \item Plain vanilla interest rate swaps and currency swaps.
+    \item Swap valuation as the difference between fixed-rate and floating-rate bonds.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Discount factor $P(0,T)=e^{-R(0,T)T}$ under continuous compounding.
+    \item Forward rate relation $F_{t_1,t_2} = \frac{R_2T_2-R_1T_1}{T_2-T_1}$ for continuously compounded zero rates.
+    \item Bond price $B=\sum_i C_i e^{-r_i t_i}$.
+    \item Duration approximation $\Delta B/B \approx -D\Delta y$ and convexity correction.
+    \item Swap value $V_{\text{swap}}=B_{\text{float}}-B_{\text{fixed}}$ or $B_{\text{fixed}}-B_{\text{float}}$, depending on position.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Bootstrap a simple zero curve from bond or swap quotes.
+    \item Value a vanilla fixed-for-floating interest rate swap.
+    \item Discuss why interest rate conventions are operationally important in derivatives markets.
+\end{itemize}
+
+\subsubsection*{Class 4: Options Markets, Put-Call Parity, Trading Strategies, and Binomial Trees}
+\textbf{Hull readings:} Chapters 10--13.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Mechanics of options markets: contract terms, moneyness, exercise style, clearing, and margins.
+    \item Determinants of option prices: stock price, strike, time to maturity, volatility, risk-free rate, and dividends.
+    \item Upper and lower bounds for European and American options.
+    \item Put-call parity for non-dividend-paying and dividend-paying stocks.
+    \item Option strategies: covered calls, protective puts, spreads, straddles, strangles, collars, and synthetic forwards.
+    \item One-step and multi-step binomial trees.
+    \item Risk-neutral probabilities and backward induction.
+    \item American option early exercise logic.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Put-call parity for European options: $c+Ke^{-rT}=p+S_0$.
+    \item Dividend-yield version: $c+Ke^{-rT}=p+S_0e^{-qT}$.
+    \item One-step binomial hedge ratio $\Delta=(f_u-f_d)/(S_0u-S_0d)$.
+    \item Risk-neutral probability $p=(e^{r\Delta t}-d)/(u-d)$.
+    \item Backward induction $f=e^{-r\Delta t}[pf_u+(1-p)f_d]$.
+    \item Cox--Ross--Rubinstein parameters $u=e^{\sigma\sqrt{\Delta t}}$ and $d=e^{-\sigma\sqrt{\Delta t}}$.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Detect arbitrage violations in option quotes using put-call parity.
+    \item Price a European call and an American put using a binomial tree.
+    \item Compare static option strategies by payoff, cost, and risk exposure.
+\end{itemize}
+
+\subsection*{Week 2: Stochastic Calculus, Black--Scholes--Merton, Greeks, Volatility, and Alternatives}
+
+\subsubsection*{Class 5: Wiener Processes, It\^o's Lemma, and Stock Price Dynamics}
+\textbf{Hull readings:} Chapter 14; review probability and lognormal distribution material from Chapter 15.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Markov processes and why memoryless dynamics are useful in pricing.
+    \item Brownian motion / Wiener process: independent increments, normal increments, and continuous paths.
+    \item Generalized Wiener processes and It\^o processes.
+    \item Geometric Brownian motion as the standard stock price model.
+    \item Drift and volatility.
+    \item Correlated stochastic processes.
+    \item It\^o's lemma and its financial interpretation.
+    \item Lognormal stock price distribution.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Wiener increment $dz=\epsilon\sqrt{dt}$, with $\epsilon\sim N(0,1)$.
+    \item It\^o process $dx=a(x,t)dt+b(x,t)dz$.
+    \item Quadratic variation rule $(dz)^2=dt$ and higher-order rules $dt\,dz=0$, $(dt)^2=0$.
+    \item It\^o's lemma:
+    \[
+        dG=\left(\frac{\partial G}{\partial x}a+\frac{\partial G}{\partial t}
+        +\frac{1}{2}\frac{\partial^2G}{\partial x^2}b^2\right)dt
+        +\frac{\partial G}{\partial x}b\,dz.
+    \]
+    \item Geometric Brownian motion $dS=\mu Sdt+\sigma Sdz$.
+    \item Log price dynamics $d\ln S=(\mu-\frac{1}{2}\sigma^2)dt+\sigma dz$.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Apply It\^o's lemma to $G=\ln S$ and $G=S^n$.
+    \item Explain why volatility affects expected log returns.
+    \item Simulate one-period and multi-period stock price paths conceptually.
+\end{itemize}
+
+\subsubsection*{Class 6: Black--Scholes--Merton Pricing and Risk-Neutral Valuation}
+\textbf{Hull readings:} Chapter 15; optional Chapter 17 for index and currency options; Chapter 18 for Black's model if time permits.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Assumptions of the Black--Scholes--Merton model.
+    \item Delta hedging and construction of a locally riskless portfolio.
+    \item Derivation of the Black--Scholes--Merton partial differential equation.
+    \item Boundary conditions for calls and puts.
+    \item Risk-neutral valuation and change from real-world expected return to risk-free drift.
+    \item Closed-form prices for European calls and puts.
+    \item Dividend yield, index options, currency options, and futures options.
+    \item Implied volatility as the market's translation of prices into model volatility.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Black--Scholes--Merton PDE:
+    \[
+        \frac{\partial f}{\partial t}
+        +rS\frac{\partial f}{\partial S}
+        +\frac{1}{2}\sigma^2S^2\frac{\partial^2f}{\partial S^2}
+        =rf.
+    \]
+    \item European call:
+    \[
+        c=S_0N(d_1)-Ke^{-rT}N(d_2),
+        \qquad
+        d_1=\frac{\ln(S_0/K)+(r+\frac{1}{2}\sigma^2)T}{\sigma\sqrt{T}},
+        \qquad
+        d_2=d_1-\sigma\sqrt{T}.
+    \]
+    \item European put:
+    \[
+        p=Ke^{-rT}N(-d_2)-S_0N(-d_1).
+    \]
+    \item Dividend yield adjustment: replace $S_0$ with $S_0e^{-qT}$ and $r$ with $r-q$ in the stock drift under the risk-neutral measure.
+    \item Risk-neutral expectation:
+    \[
+        f_0=e^{-rT}\mathbb{E}^{\mathbb{Q}}\left[\text{payoff at }T\right].
+    \]
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Derive the PDE step by step from It\^o's lemma and a delta-hedged portfolio.
+    \item Price a European call and put and verify put-call parity.
+    \item Interpret what changes when dividends, foreign interest rates, or futures prices enter the model.
+\end{itemize}
+
+\subsubsection*{Class 7: Greeks, Dynamic Hedging, Volatility, and Numerical Methods}
+\textbf{Hull readings:} Chapters 19--21; selected material from Chapters 22--23 if time permits.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item Delta, Gamma, Theta, Vega, and Rho.
+    \item Delta hedging in continuous time versus discrete time.
+    \item Gamma and Vega risk; why delta-neutral portfolios remain risky.
+    \item Relationship between Delta, Gamma, and Theta in Black--Scholes--Merton.
+    \item Scenario analysis and stress testing.
+    \item Implied volatility, volatility smiles, volatility skews, and volatility surfaces.
+    \item Estimating volatility from historical data; EWMA and GARCH intuition.
+    \item Numerical pricing overview: binomial trees, Monte Carlo simulation, and finite differences.
+    \item VaR and expected shortfall as risk measures for derivative portfolios.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item Delta $\Delta=\partial f/\partial S$.
+    \item Gamma $\Gamma=\partial^2 f/\partial S^2$.
+    \item Theta $\Theta=\partial f/\partial t$.
+    \item Vega $\nu=\partial f/\partial \sigma$.
+    \item Rho $\rho=\partial f/\partial r$.
+    \item Taylor approximation:
+    \[
+        \Delta f \approx \Delta\,\Delta S+\frac{1}{2}\Gamma(\Delta S)^2+\Theta\,\Delta t+\nu\,\Delta\sigma+\rho\,\Delta r.
+    \]
+    \item Black--Scholes--Merton Greek formulas for European calls and puts.
+    \item Historical volatility estimator and exponentially weighted moving average intuition.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Construct a delta-neutral portfolio and show why Gamma matters.
+    \item Use Greeks to approximate the effect of a market move.
+    \item Interpret an implied volatility smile as evidence against constant-volatility lognormal pricing.
+\end{itemize}
+
+\subsubsection*{Class 8: Alternative Investments, Private Equity, Real Options, and Course Integration}
+\textbf{Hull readings:} Chapter 36; selected material from Chapters 8, 22, 24, 35, and 37. Instructor-supplied private equity notes are required.
+
+\textbf{Topics:}
+\begin{itemize}
+    \item What counts as alternative investment: private equity, venture capital, hedge funds, real assets, commodities, infrastructure, real estate, private credit, and structured products.
+    \item Private equity fund structure: limited partners, general partners, management fees, carried interest, hurdle rates, catch-up clauses, fund life, capital calls, and distributions.
+    \item Private equity performance measurement: IRR, money multiple, DPI, RVPI, TVPI, public market equivalent, and the pitfalls of stale valuations.
+    \item Leverage and value creation in buyouts: operating improvement, multiple expansion, tax shields, and debt risk.
+    \item Venture capital and staged financing as compound options.
+    \item Real options: option to delay, expand, abandon, switch inputs, or stage investment.
+    \item Commodity derivatives and real asset hedging.
+    \item Derivatives mishaps: model risk, liquidity risk, basis risk, leverage, incentives, and governance.
+    \item Course synthesis: no-arbitrage, risk-neutral valuation, hedging, volatility, and illiquidity.
+\end{itemize}
+
+\textbf{Mathematical details:}
+\begin{itemize}
+    \item IRR as the discount rate solving $\sum_{t=0}^{T}CF_t/(1+\mathrm{IRR})^t=0$.
+    \item Money multiple $=\text{total distributions and residual value}/\text{paid-in capital}$.
+    \item Simple carried interest waterfall calculations.
+    \item Real option valuation by binomial tree and risk-neutral probabilities.
+    \item Mapping investment flexibility to option payoffs: delay as a call option, abandonment as a put-like floor, expansion as a growth option.
+    \item Illiquidity and stale-pricing bias in measured volatility and correlation.
+\end{itemize}
+
+\textbf{In-class applications:}
+\begin{itemize}
+    \item Evaluate a staged venture investment using a binomial real-options framework.
+    \item Compute basic private equity fund performance measures from cash flows.
+    \item Discuss how derivative risk-management logic applies, and where it fails, in illiquid alternative investments.
+\end{itemize}
+
+\section*{Suggested Problem Practice}
+
+Students should attempt end-of-chapter practice questions from Hull after each class. The instructor may assign a narrower list depending on the pace of the course.
+
+\begin{tabular}{@{}p{0.18\textwidth}p{0.72\textwidth}@{}}
+\toprule
+After Class 1 & Hull Chapters 1--2: market structure, payoff diagrams, margin, and contract mechanics. \\
+After Class 2 & Hull Chapters 3 and 5: hedge ratios, basis risk, and forward/futures pricing. \\
+After Class 3 & Hull Chapters 4, 6, and 7: zero rates, forward rates, bond pricing, duration, and swaps. \\
+After Class 4 & Hull Chapters 10--13: put-call parity, option bounds, option strategies, and binomial trees. \\
+After Class 5 & Hull Chapter 14: Brownian motion, It\^o processes, It\^o's lemma, and lognormality. \\
+After Class 6 & Hull Chapter 15: BSM PDE, risk-neutral valuation, closed-form formulas, and implied volatility. \\
+After Class 7 & Hull Chapters 19--21 and 23: Greeks, hedging, volatility surfaces, numerical methods, and volatility estimation. \\
+After Class 8 & Hull Chapters 35--37 plus instructor notes: real options, commodities, private equity, and derivative failures. \\
+\bottomrule
+\end{tabular}
+
+\section*{Mathematical Emphasis}
+
+The course will treat the following derivations as central:
+\begin{enumerate}
+    \item No-arbitrage derivation of forward prices.
+    \item Minimum-variance hedge ratio for futures hedging.
+    \item Put-call parity and option price bounds.
+    \item Binomial option pricing by replication and by risk-neutral valuation.
+    \item It\^o's lemma for functions of stochastic processes.
+    \item Lognormal stock price dynamics under geometric Brownian motion.
+    \item Black--Scholes--Merton PDE from a delta-hedged portfolio.
+    \item Black--Scholes--Merton formula by risk-neutral valuation.
+    \item Greek-based approximation of changes in option values.
+    \item Real-options interpretation of staged investment and abandonment decisions.
+\end{enumerate}
+
+\section*{Closed-Book Exam Expectations}
+
+Students should be prepared to:
+\begin{itemize}
+    \item Define key instruments and explain their economic use.
+    \item Draw and interpret payoff diagrams.
+    \item Solve numerical pricing and hedging problems without access to notes.
+    \item Derive core no-arbitrage and Black--Scholes--Merton equations.
+    \item Apply It\^o's lemma to simple functions.
+    \item Compute option prices and Greeks when formulas are provided or required from memory.
+    \item Interpret results economically, including the limitations of the assumptions used.
+    \item Explain how alternative investments differ from liquid traded derivatives in valuation, risk measurement, and governance.
+\end{itemize}
+
+\section*{Course Philosophy}
+
+Derivatives are best learned by moving repeatedly between three views: contract mechanics, no-arbitrage mathematics, and economic interpretation. Students should therefore expect each class to combine institutional details, derivations, numerical examples, and discussion of real market use. The mathematical parts of the course are essential: they explain why derivative prices are linked across instruments, why hedging can create valuation equations, and why model assumptions matter in practice.
+
+\end{document}
