@@ -13,3 +13,7 @@ options.
 ## Lecture Notes
 
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-notes.pdf)
+
+## Lecture Slides
+
+- [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-slides.pdf)

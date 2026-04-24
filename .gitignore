@@ -11,3 +11,6 @@ self-material/
 *.out
 *.synctex.gz
 *.thm
+*.nav
+*.snm
+*.toc
