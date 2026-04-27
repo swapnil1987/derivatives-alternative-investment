@@ -12,6 +12,7 @@ options.
 
 ## Lecture Notes
 
+- [Mathematical Foundations](lectures/lecture-0-math-foundations-notes.pdf)
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-notes.pdf)
 
 ## Lecture Slides

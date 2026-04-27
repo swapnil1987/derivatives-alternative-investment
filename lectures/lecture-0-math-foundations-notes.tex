@@ -1,0 +1,2003 @@
+\input{tufte-style.tex}
+
+\title{S181M116 Derivatives and Alternative Investments: Mathematical Foundations}
+\author{Swapnil Singh}
+\date{}
+
+\hypersetup{
+  pdftitle={S181M116 Derivatives and Alternative Investments: Mathematical Foundations},
+  pdfauthor={Swapnil Singh},
+  pdfkeywords={derivatives, mathematical foundations, algebra, probability, calculus, discounting, stochastic processes}
+}
+
+\setlength{\headheight}{26pt}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Corr}{\operatorname{Corr}}
+\newcommand{\NPV}{\mathrm{NPV}}
+\newcommand{\PV}{\mathrm{PV}}
+\newcommand{\FV}{\mathrm{FV}}
+\newcommand{\St}{S_T}
+\newcommand{\Szero}{S_0}
+\newcommand{\Fzero}{F_0}
+\newcommand{\K}{K}
+\newcommand{\dd}{\,d}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note reviews the mathematical foundations needed for the course. It is not
+a general mathematics textbook. It is a practical toolkit for derivatives and
+alternative investments: algebra, discounting, payoff functions, no-arbitrage
+logic, probability, normal and lognormal distributions, calculus, Taylor
+approximations, optimization, portfolio variance, regression beta, binomial
+trees, and the first ideas behind Brownian motion and It\^o's lemma. The note is
+example-heavy because the course is mathematically intensive and the formulas are
+useful only when students can interpret them economically.
+\end{abstract}
+
+\begin{boxD}
+\textbf{How to use this note.} Read Sections 1--6 before the first class if the
+notation is unfamiliar. Return to Sections 7--12 before the lectures on hedging,
+binomial trees, Black--Scholes--Merton, Greeks, volatility, and real options.
+The goal is working fluency: you should be able to compute, draw, explain, and
+check each object.
+\end{boxD}
+
+\section{Why Mathematics Matters in This Course}
+
+Derivatives are contracts whose cash flows depend on future variables. This
+means that almost every important question has a mathematical form:
+\[
+    \text{contract value today}
+    =
+    \text{value of uncertain future cash flows}.
+\]
+The course repeatedly uses four ideas.
+\begin{enumerate}
+    \item \textbf{Payoffs are functions.} A forward payoff, option payoff, swap
+    payment, and carried-interest payoff are all functions of future variables.
+    \item \textbf{Time matters.} A euro today and a euro next year are not the
+    same object. Discounting converts future cash flows into present values.
+    \item \textbf{Risk matters.} Future cash flows are random. We need
+    probability, expectation, variance, covariance, and distributional thinking.
+    \item \textbf{Replication matters.} If two strategies generate the same
+    future cash flows, they should have the same current value. This is the
+    no-arbitrage principle.
+\end{enumerate}
+
+\begin{boxF}
+\textbf{Central habit.} Do not memorize a formula without asking three questions:
+What is being measured? What are the units? Under what assumptions is the formula
+valid?
+\end{boxF}
+
+\subsection{A Map of the Toolkit}
+
+\begin{tabular}{@{}p{0.25\linewidth}p{0.65\linewidth}@{}}
+\toprule
+Course topic & Mathematical tools used \\
+\midrule
+Forwards and futures & Algebra, compounding, discounting, no-arbitrage
+replication, linear payoff functions \\
+Hedging with futures & Covariance, correlation, regression beta, variance
+minimization \\
+Interest rates and swaps & Present value, discount factors, zero rates, forward
+rates, sums of cash flows \\
+Options & Positive-part functions, convexity, inequalities, put-call parity,
+piecewise functions \\
+Binomial trees & Weighted averages, replication, backward induction, risk-neutral
+probabilities \\
+Black--Scholes--Merton & Calculus, partial derivatives, Taylor expansion,
+Brownian motion, It\^o's lemma \\
+Greeks and risk & First and second derivatives, scenario approximation,
+portfolio aggregation \\
+Alternative investments & Net present value, IRR, option-like flexibility,
+discounted cash-flow logic \\
+\bottomrule
+\end{tabular}
+
+\section{Notation and Algebra}
+
+\subsection{Variables, Parameters, and Subscripts}
+
+A \emph{variable} can change. A \emph{parameter} is treated as fixed within the
+calculation. In derivatives notation:
+\[
+    S_0 = \text{spot price today}, \qquad S_T = \text{spot price at maturity},
+\]
+\[
+    K = \text{strike or delivery price}, \qquad T = \text{time to maturity}.
+\]
+The subscript $0$ usually means today. The subscript $T$ means at maturity.
+
+\begin{exmp}[Reading notation]
+If a European call has payoff
+\[
+    (S_T-K)^+,
+\]
+then $S_T$ is random before maturity, while $K$ is fixed by the option contract.
+The plus sign does not mean ``add something.'' It means positive part:
+\[
+    x^+ = \max(x,0).
+\]
+\end{exmp}
+
+\subsection{Units}
+
+Financial formulas are easier when units are explicit. If $S_T$ and $K$ are both
+in dollars per share, then $S_T-K$ is also dollars per share. If the contract is
+for $N$ shares, the total payoff is
+\[
+    N(S_T-K).
+\]
+
+\begin{exmp}[Units in a forward payoff]
+A forward contract is written on 5,000 barrels of oil. The delivery price is
+$K=74$ dollars per barrel. At maturity the spot price is $S_T=79$ dollars per
+barrel. The long forward payoff per barrel is
+\[
+    S_T-K = 79-74 = 5.
+\]
+The total payoff is
+\[
+    5{,}000 \times 5 = \$25{,}000.
+\]
+The unit check is
+\[
+    \text{barrels} \times \frac{\text{dollars}}{\text{barrel}}
+    =
+    \text{dollars}.
+\]
+\end{exmp}
+
+\subsection{Fractions, Percentages, and Basis Points}
+
+A percentage rate must be converted into decimal form before it is used in a
+formula:
+\[
+    5\% = 0.05, \qquad 12.5\% = 0.125.
+\]
+One basis point is one-hundredth of one percentage point:
+\[
+    1\text{ bp}=0.01\%=0.0001.
+\]
+Therefore 75 basis points is $0.75\%$ or $0.0075$.
+
+\begin{exmp}[Basis points]
+An interest rate increases from $3.20\%$ to $3.65\%$. The change is
+\[
+    3.65\%-3.20\%=0.45\%=45\text{ bp}.
+\]
+In decimal form the rate increases from $0.0320$ to $0.0365$.
+\end{exmp}
+
+\subsection{Powers and Exponents}
+
+The expression $x^n$ means $x$ multiplied by itself $n$ times. The expression
+$e^x$ uses the exponential function, where $e\approx 2.71828$. Exponentials are
+central because continuously compounded interest grows as $e^{rT}$.
+
+Useful rules:
+\[
+    e^a e^b = e^{a+b}, \qquad \frac{e^a}{e^b}=e^{a-b}, \qquad (e^a)^b=e^{ab}.
+\]
+For any positive number $A$,
+\[
+    \ln(A)
+\]
+is the natural logarithm, the inverse of the exponential:
+\[
+    \ln(e^x)=x, \qquad e^{\ln(A)}=A.
+\]
+
+\begin{exmp}[Solving with logs]
+Suppose a price grows from 100 to 110 over one year under continuous compounding.
+Find the continuously compounded return $r$:
+\[
+    110=100e^r.
+\]
+Divide by 100:
+\[
+    1.10=e^r.
+\]
+Take logs:
+\[
+    r=\ln(1.10)\approx 0.0953.
+\]
+The continuously compounded return is $9.53\%$.
+\end{exmp}
+
+\subsection{Summation Notation}
+
+The symbol $\sum$ means add terms:
+\[
+    \sum_{t=1}^{T} CF_t
+    =
+    CF_1+CF_2+\cdots+CF_T.
+\]
+For discounted cash flows,
+\[
+    \PV=\sum_{t=1}^{T}\frac{CF_t}{(1+r)^t}.
+\]
+
+\begin{exmp}[Present value as a sum]
+A project pays 100 at the end of year 1, 120 at the end of year 2, and 150 at
+the end of year 3. If the annual discount rate is 5\%, then
+\[
+    \PV = \frac{100}{1.05}+\frac{120}{1.05^2}+\frac{150}{1.05^3}
+    \approx 333.18.
+\]
+\end{exmp}
+
+\section{Time Value of Money}
+
+\subsection{Future Value and Present Value}
+
+If money earns interest, one unit today grows into more than one unit tomorrow.
+With annual compounding at rate $r$,
+\[
+    \FV = \PV(1+r)^T.
+\]
+Solving for present value gives
+\[
+    \PV = \frac{\FV}{(1+r)^T}.
+\]
+
+\begin{defN}[Discount factor]
+The discount factor $D(0,T)$ is the price today of one unit of currency paid at
+time $T$ with no default risk. Under annual compounding,
+\[
+    D(0,T)=\frac{1}{(1+r)^T}.
+\]
+Under continuous compounding,
+\[
+    D(0,T)=e^{-rT}.
+\]
+\end{defN}
+
+\begin{exmp}[Discounting one cash flow]
+You will receive 1,000 in two years. The annual interest rate is 4\%. The present
+value is
+\[
+    \PV=\frac{1{,}000}{1.04^2}\approx 924.56.
+\]
+Under continuous compounding at 4\%, the present value is
+\[
+    \PV=1{,}000e^{-0.04\times 2}\approx 923.12.
+\]
+\end{exmp}
+
+\subsection{Compounding Conventions}
+
+With $m$ compounding periods per year, the future value of one unit invested for
+$T$ years at nominal annual rate $r$ is
+\[
+    \left(1+\frac{r}{m}\right)^{mT}.
+\]
+As $m$ becomes very large, this approaches continuous compounding:
+\[
+    \lim_{m\to\infty}\left(1+\frac{r}{m}\right)^{mT}=e^{rT}.
+\]
+
+\begin{exmp}[Annual, quarterly, and continuous compounding]
+Invest 100 for two years at a quoted annual rate of 6\%.
+\[
+\begin{aligned}
+    \text{Annual compounding:} \quad
+    &100(1.06)^2 = 112.36,\\
+    \text{Quarterly compounding:} \quad
+    &100\left(1+\frac{0.06}{4}\right)^8 \approx 112.65,\\
+    \text{Continuous compounding:} \quad
+    &100e^{0.06\times 2}\approx 112.75.
+\end{aligned}
+\]
+More frequent compounding produces slightly more interest for the same nominal
+rate.
+\end{exmp}
+
+\subsection{Converting Rates}
+
+If $R_c$ is a continuously compounded rate and $R_m$ is a rate compounded $m$
+times per year, the same one-year accumulation requires
+\[
+    e^{R_c}=\left(1+\frac{R_m}{m}\right)^m.
+\]
+Therefore
+\[
+    R_c = m\ln\left(1+\frac{R_m}{m}\right),
+    \qquad
+    R_m = m\left(e^{R_c/m}-1\right).
+\]
+
+\begin{exmp}[Convert an annual rate to continuous compounding]
+A bank quotes 8\% with annual compounding. The equivalent continuously
+compounded rate is
+\[
+    R_c=\ln(1.08)\approx 0.07696.
+\]
+So 8\% annual compounding is equivalent to about 7.696\% continuous compounding.
+\end{exmp}
+
+\subsection{Zero Rates, Discount Factors, and Forward Rates}
+
+A zero-coupon bond pays one cash flow at maturity. If the continuously
+compounded zero rate for maturity $T$ is $R(0,T)$, then the discount factor is
+\[
+    P(0,T)=e^{-R(0,T)T}.
+\]
+If we know discount factors, we can recover zero rates:
+\[
+    R(0,T)=-\frac{1}{T}\ln P(0,T).
+\]
+
+The forward rate from $T_1$ to $T_2$ is the rate agreed today for borrowing or
+lending between those future dates. With continuous compounding,
+\[
+    f(T_1,T_2)
+    =
+    \frac{R(0,T_2)T_2-R(0,T_1)T_1}{T_2-T_1}.
+\]
+
+\begin{exmp}[Forward rate from zero rates]
+The one-year continuously compounded zero rate is 3\% and the two-year zero rate
+is 4\%. The one-year forward rate starting one year from now is
+\[
+    f(1,2)=\frac{0.04\times 2-0.03\times 1}{2-1}=0.05.
+\]
+The implied forward rate is 5\%.
+\end{exmp}
+
+\subsection{Net Present Value}
+
+Net present value subtracts the initial cost from the present value of future
+cash flows:
+\[
+    \NPV = -I_0 + \sum_{t=1}^{T}\frac{CF_t}{(1+r)^t}.
+\]
+The financial interpretation is simple: if $\NPV>0$, the project is worth more
+than it costs using discount rate $r$.
+
+\begin{exmp}[Project NPV]
+A real asset investment costs 500 today and is expected to generate 180 at the
+end of each of the next three years. At a discount rate of 7\%,
+\[
+    \NPV=-500+\frac{180}{1.07}+\frac{180}{1.07^2}+\frac{180}{1.07^3}
+    \approx -27.63.
+\]
+At this discount rate, the project destroys value unless it has additional
+strategic value, such as an option to expand later.
+\end{exmp}
+
+\section{Functions and Payoffs}
+
+\subsection{Functions}
+
+A function maps an input into an output. In finance, the input is often a future
+price and the output is a payoff:
+\[
+    \text{payoff}=g(S_T).
+\]
+The same function can be represented by a formula, a table, or a graph.
+
+\begin{exmp}[A linear payoff function]
+A long forward with delivery price $K=100$ has payoff
+\[
+    g(S_T)=S_T-100.
+\]
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+$S_T$ & 70 & 90 & 100 & 130 \\
+\midrule
+$g(S_T)$ & -30 & -10 & 0 & 30 \\
+\bottomrule
+\end{tabular}
+The payoff increases one-for-one with the terminal spot price.
+\end{exmp}
+
+\subsection{Positive-Part Notation}
+
+The positive part of $x$ is
+\[
+    x^+ = \max(x,0)
+    =
+    \begin{cases}
+    x, & x>0,\\
+    0, & x\leq 0.
+    \end{cases}
+\]
+This notation is used constantly for options:
+\[
+    \text{Call payoff}=(S_T-K)^+,
+    \qquad
+    \text{Put payoff}=(K-S_T)^+.
+\]
+
+\begin{exmp}[Call option payoff]
+A call has strike $K=50$. Its payoff is
+\[
+    (S_T-50)^+.
+\]
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+$S_T$ & 35 & 45 & 50 & 60 & 80 \\
+\midrule
+Call payoff & 0 & 0 & 0 & 10 & 30 \\
+\bottomrule
+\end{tabular}
+The option is valuable at maturity only when the underlying price exceeds the
+strike.
+\end{exmp}
+
+\begin{exmp}[Put option payoff]
+A put has strike $K=50$. Its payoff is
+\[
+    (50-S_T)^+.
+\]
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+$S_T$ & 35 & 45 & 50 & 60 & 80 \\
+\midrule
+Put payoff & 15 & 5 & 0 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+The put is valuable at maturity when the underlying price is below the strike.
+\end{exmp}
+
+\subsection{Payoff Versus Profit}
+
+Payoff is the cash flow at maturity. Profit subtracts the initial price of the
+position, usually adjusted for financing. Ignoring financing, a call bought for
+premium $c_0$ has profit
+\[
+    (S_T-K)^+ - c_0.
+\]
+
+\begin{exmp}[Option payoff and profit]
+A trader buys a call with strike 100 for premium 7. Ignoring interest on the
+premium:
+\[
+    \text{profit}=(S_T-100)^+-7.
+\]
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+$S_T$ & 80 & 95 & 100 & 107 & 120 \\
+\midrule
+Payoff & 0 & 0 & 0 & 7 & 20 \\
+Profit & -7 & -7 & -7 & 0 & 13 \\
+\bottomrule
+\end{tabular}
+The break-even terminal price is 107.
+\end{exmp}
+
+\subsection{Piecewise Functions}
+
+Many derivative payoffs are piecewise: the formula changes depending on the
+state. A call payoff can be written as
+\[
+    (S_T-K)^+
+    =
+    \begin{cases}
+    0, & S_T\leq K,\\
+    S_T-K, & S_T>K.
+    \end{cases}
+\]
+
+\begin{exmp}[Covered call payoff]
+A covered call consists of buying one share and selling one call with strike
+$K$. Ignoring the option premium, the terminal payoff is
+\[
+    S_T-(S_T-K)^+.
+\]
+If $S_T\leq K$, the call expires worthless and the payoff is $S_T$. If $S_T>K$,
+the short call loses $S_T-K$, so the total payoff is
+\[
+    S_T-(S_T-K)=K.
+\]
+Thus
+\[
+    S_T-(S_T-K)^+
+    =
+    \begin{cases}
+    S_T, & S_T\leq K,\\
+    K, & S_T>K.
+    \end{cases}
+\]
+The covered call keeps downside stock exposure but caps the upside.
+\end{exmp}
+
+\subsection{Convexity}
+
+A function is convex when the line segment between two points on the graph lies
+above the graph. Intuitively, a convex payoff benefits from movement in either
+direction. Options have convex payoffs.
+
+For a differentiable function, convexity corresponds to a nonnegative second
+derivative:
+\[
+    g''(x)\geq 0.
+\]
+Linear functions are both convex and concave because their second derivative is
+zero.
+
+\begin{exmp}[Why a call is convex]
+The call payoff is flat when $S_T<K$ and then rises with slope one when $S_T>K$.
+The slope jumps upward from 0 to 1 at $K$. That upward change in slope is the
+source of convexity.
+\end{exmp}
+
+\begin{boxF}
+\textbf{Financial intuition.} Forwards give linear exposure. Options give
+nonlinear exposure. Nonlinearity is why option pricing requires more machinery
+than forward pricing.
+\end{boxF}
+
+\section{No-Arbitrage Logic}
+
+\subsection{Law of One Price}
+
+The law of one price says that two assets with exactly the same future cash
+flows in every state should have the same price today. If not, a trader can buy
+the cheap asset and sell the expensive asset.
+
+\begin{defN}[Arbitrage]
+An arbitrage is a trading strategy with no initial cost or a negative initial
+cost, no possibility of future loss, and a positive probability of future gain.
+\end{defN}
+
+Most textbook pricing arguments use a stronger practical version: if two
+self-financing strategies have the same future payoff, their current costs must
+be equal.
+
+\subsection{Forward Price for a Non-Dividend-Paying Asset}
+
+Consider a stock with current price $S_0$ and no dividends before time $T$.
+Compare two strategies:
+\begin{enumerate}
+    \item Buy the stock today and finance the purchase by borrowing $S_0$.
+    \item Enter a forward contract to buy the stock at time $T$ for delivery
+    price $F_0$.
+\end{enumerate}
+At time $T$, both strategies produce ownership of one share. The first strategy
+requires repayment $S_0e^{rT}$. The second strategy requires payment $F_0$.
+No-arbitrage implies
+\[
+    F_0 = S_0e^{rT}.
+\]
+
+\begin{exmp}[Cash-and-carry arbitrage]
+Suppose $S_0=100$, $r=5\%$, $T=1$, and the market forward price is 108. The
+no-arbitrage forward price is
+\[
+    100e^{0.05}\approx 105.13.
+\]
+The forward is too expensive. A trader can:
+\begin{enumerate}
+    \item borrow 100,
+    \item buy the stock,
+    \item short the forward at 108.
+\end{enumerate}
+At maturity, deliver the stock into the forward, receive 108, and repay
+$100e^{0.05}=105.13$. The locked-in profit is
+\[
+    108-105.13=2.87.
+\]
+\end{exmp}
+
+\begin{exmp}[Reverse cash-and-carry arbitrage]
+Suppose $S_0=100$, $r=5\%$, $T=1$, and the market forward price is 102. The
+forward is too cheap relative to $105.13$. A trader can:
+\begin{enumerate}
+    \item short sell the stock and receive 100,
+    \item invest 100 at the risk-free rate,
+    \item enter a long forward at 102.
+\end{enumerate}
+At maturity, the investment grows to 105.13. Use 102 to buy the stock through the
+forward and return it to close the short sale. The locked-in profit is
+\[
+    105.13-102=3.13.
+\]
+\end{exmp}
+
+\subsection{Option Bounds}
+
+No-arbitrage also gives inequalities. A European call on a non-dividend-paying
+stock cannot be worth more than the stock:
+\[
+    c \leq S_0.
+\]
+It cannot be worth less than
+\[
+    S_0-Ke^{-rT},
+\]
+unless this number is negative. Therefore
+\[
+    c \geq \max(S_0-Ke^{-rT},0).
+\]
+
+\begin{exmp}[Detecting a call-price violation]
+Let $S_0=50$, $K=45$, $r=4\%$, and $T=0.5$. The lower bound is
+\[
+    50-45e^{-0.04\times 0.5}
+    \approx 50-44.11
+    =
+    5.89.
+\]
+If the call trades for 4.80, it is too cheap relative to the bound. The quoted
+price violates no-arbitrage under the assumptions.
+\end{exmp}
+
+\subsection{Put-Call Parity}
+
+For European options on a non-dividend-paying stock, put-call parity is
+\[
+    c + Ke^{-rT} = p + S_0.
+\]
+The left side is a call plus a risk-free bond that pays $K$ at maturity. The
+right side is a put plus the stock. At maturity both sides pay
+\[
+    \max(S_T,K).
+\]
+
+\begin{exmp}[Put-call parity]
+Suppose $S_0=100$, $K=100$, $r=5\%$, $T=1$, and a European call price is
+$c=10.45$. Put-call parity implies
+\[
+    p = c + Ke^{-rT} - S_0
+    = 10.45 + 100e^{-0.05} - 100
+    \approx 5.57.
+\]
+If the put trades at 7.00, the put is expensive relative to the call, stock, and
+bond combination.
+\end{exmp}
+
+\begin{boxD}
+\textbf{Method.} No-arbitrage problems usually become easy when you build a
+payoff table. Write the payoff of each strategy in each future state. If two
+columns are identical, their current costs should match.
+\end{boxD}
+
+\section{Probability}
+
+\subsection{Random Variables}
+
+A random variable is a numerical outcome of an uncertain event. Before maturity,
+$S_T$ is a random variable. After maturity, it is observed.
+
+\begin{exmp}[Random payoff]
+A stock will be either 120 or 80 in one year. A call with strike 100 has payoff
+\[
+    (S_T-100)^+.
+\]
+\begin{tabular}{@{}lrr@{}}
+\toprule
+State & $S_T$ & Call payoff \\
+\midrule
+Up & 120 & 20 \\
+Down & 80 & 0 \\
+\bottomrule
+\end{tabular}
+The payoff is random because it depends on the future state.
+\end{exmp}
+
+\subsection{Expected Value}
+
+The expected value is the probability-weighted average outcome. If $X$ takes
+values $x_1,\ldots,x_n$ with probabilities $p_1,\ldots,p_n$, then
+\[
+    \E[X]=\sum_{i=1}^{n}p_i x_i.
+\]
+
+\begin{exmp}[Expected stock price]
+A stock will be 120 with probability 0.6 and 80 with probability 0.4. Then
+\[
+    \E[S_T]=0.6(120)+0.4(80)=104.
+\]
+The expected price is not necessarily a price at which the stock can trade. It
+is a probability-weighted average.
+\end{exmp}
+
+\begin{exmp}[Expected option payoff]
+With the same states, a call with strike 100 pays 20 in the up state and 0 in
+the down state. Its expected payoff is
+\[
+    \E[(S_T-100)^+]=0.6(20)+0.4(0)=12.
+\]
+This is not automatically the option price. Pricing also requires discounting
+and risk adjustment or replication.
+\end{exmp}
+
+\subsection{Variance and Standard Deviation}
+
+Variance measures average squared deviation from the mean:
+\[
+    \Var(X)=\E[(X-\E[X])^2].
+\]
+Standard deviation is the square root of variance:
+\[
+    \sigma_X=\sqrt{\Var(X)}.
+\]
+In finance, standard deviation is often called volatility.
+
+\begin{exmp}[Variance in a two-state model]
+Let $S_T$ be 120 with probability 0.6 and 80 with probability 0.4. We already
+computed $\E[S_T]=104$. The variance is
+\[
+\begin{aligned}
+    \Var(S_T)
+    &=
+    0.6(120-104)^2+0.4(80-104)^2\\
+    &=
+    0.6(16)^2+0.4(-24)^2\\
+    &=
+    384.
+\end{aligned}
+\]
+The standard deviation is
+\[
+    \sqrt{384}\approx 19.60.
+\]
+\end{exmp}
+
+\subsection{Covariance and Correlation}
+
+Covariance measures whether two variables move together:
+\[
+    \Cov(X,Y)=\E[(X-\E[X])(Y-\E[Y])].
+\]
+Correlation rescales covariance:
+\[
+    \Corr(X,Y)=\frac{\Cov(X,Y)}{\sigma_X\sigma_Y}.
+\]
+Correlation always lies between $-1$ and $1$.
+
+\begin{exmp}[Interpreting correlation]
+If oil-price changes and airline stock returns have negative correlation, oil
+price increases tend to coincide with airline stock losses. This does not mean
+oil prices are the only cause of airline returns. Correlation is a co-movement
+measure, not a complete causal statement.
+\end{exmp}
+
+\begin{exmp}[Covariance calculation]
+Suppose two returns have the following equally likely outcomes.
+\[
+\begin{array}{@{}lrr@{}}
+\toprule
+State & R_A & R_B \\
+\midrule
+1 & 0.10 & 0.06 \\
+2 & 0.02 & 0.01 \\
+3 & -0.04 & -0.02 \\
+\bottomrule
+\end{array}
+\]
+The means are
+\[
+\begin{aligned}
+    \E[R_A]&=\frac{0.10+0.02-0.04}{3}=0.0267,\\
+    \E[R_B]&=\frac{0.06+0.01-0.02}{3}=0.0167.
+\end{aligned}
+\]
+The covariance is
+\[
+\begin{aligned}
+    \Cov(R_A,R_B)
+    &=
+    \frac{1}{3}
+    \left[
+    (0.10-0.0267)(0.06-0.0167)\right.\\
+    &\quad
+    +(0.02-0.0267)(0.01-0.0167)\\
+    &\quad
+    \left.
+    +(-0.04-0.0267)(-0.02-0.0167)
+    \right]\\
+    &\approx 0.00189.
+\end{aligned}
+\]
+The covariance is positive because the returns move in the same direction across
+states.
+\end{exmp}
+
+\subsection{Conditional Probability and Conditional Expectation}
+
+Conditional probability updates probabilities after information is observed.
+The notation
+\[
+    \Prob(A\mid B)
+\]
+means the probability of event $A$ given that event $B$ has occurred.
+
+Conditional expectation is the expected value after conditioning on information:
+\[
+    \E[X\mid \mathcal{I}].
+\]
+In finance, $\mathcal{I}$ often represents current market information.
+
+\begin{exmp}[Conditional expectation]
+A commodity price can be high or low next month. If a storage report is normal,
+the expected price is 70. If the report shows a shortage, the expected price is
+82. Before seeing the report, the expectation averages over both possibilities.
+After seeing the report, the conditional expectation uses the relevant
+information set.
+\end{exmp}
+
+\subsection{Independent Events and Independent Random Variables}
+
+Events $A$ and $B$ are independent if
+\[
+    \Prob(A\cap B)=\Prob(A)\Prob(B).
+\]
+Random variables are independent if knowing one does not change the distribution
+of the other.
+
+\begin{boxF}
+\textbf{Warning.} Zero correlation is weaker than independence. If two variables
+are independent, their covariance is zero. But covariance can be zero even when
+the variables are not independent.
+\end{boxF}
+
+\section{Normal and Lognormal Distributions}
+
+\subsection{Normal Distribution}
+
+A normal random variable has the familiar bell-shaped distribution. We write
+\[
+    X\sim N(\mu,\sigma^2)
+\]
+to mean that $X$ is normally distributed with mean $\mu$ and variance
+$\sigma^2$.
+
+The standard normal distribution is
+\[
+    Z\sim N(0,1).
+\]
+Any normal variable can be standardized:
+\[
+    Z=\frac{X-\mu}{\sigma}.
+\]
+
+\begin{exmp}[Standardization]
+Suppose daily portfolio returns are approximately normal with mean 0.05\% and
+standard deviation 1.20\%. What is the standardized value of a return of
+$-2.35\%$?
+\[
+    z=\frac{-0.0235-0.0005}{0.0120}=-2.
+\]
+The return is two standard deviations below the mean.
+\end{exmp}
+
+\subsection{Why Normal Distributions Appear in Finance}
+
+Normal distributions are useful because sums of many small shocks are often
+approximately normal. This is the central limit theorem intuition. In the
+Black--Scholes--Merton model, continuously compounded returns over a fixed
+horizon are normally distributed.
+
+\begin{boxD}
+\textbf{Interpretation.} A normal distribution can take negative values. That is
+acceptable for returns, but not for stock prices. This is one reason the model
+uses normal log returns and lognormal prices.
+\end{boxD}
+
+\subsection{Lognormal Distribution}
+
+A positive random variable $S$ is lognormal if its logarithm is normal:
+\[
+    \ln S \sim N(\mu,\sigma^2).
+\]
+Equivalently,
+\[
+    S=e^X
+\]
+where $X$ is normal.
+
+Lognormal variables are always positive. This makes them natural for stock
+prices in the Black--Scholes--Merton model.
+
+\begin{exmp}[From normal log return to lognormal price]
+Suppose
+\[
+    \ln(S_T/S_0)\sim N(0.04,0.20^2).
+\]
+Then $S_T/S_0$ is lognormal, and $S_T$ is always positive. A one-standard
+deviation high log return is
+\[
+    0.04+0.20=0.24,
+\]
+which corresponds to a gross return
+\[
+    e^{0.24}\approx 1.271.
+\]
+That is a 27.1\% simple return.
+\end{exmp}
+
+\subsection{Simple Returns and Log Returns}
+
+The simple return from $0$ to $T$ is
+\[
+    R=\frac{S_T-S_0}{S_0}.
+\]
+The log return is
+\[
+    r=\ln\left(\frac{S_T}{S_0}\right).
+\]
+They are related by
+\[
+    r=\ln(1+R), \qquad R=e^r-1.
+\]
+For small returns, $r\approx R$.
+
+\begin{exmp}[Simple and log return]
+A stock rises from 50 to 55. The simple return is
+\[
+    R=\frac{55-50}{50}=0.10.
+\]
+The log return is
+\[
+    r=\ln(55/50)=\ln(1.10)\approx 0.0953.
+\]
+For a 10\% simple return, the log return is 9.53\%.
+\end{exmp}
+
+\begin{exmp}[Why log returns add]
+A stock rises from 100 to 110 and then falls from 110 to 99. The two simple
+returns are $10\%$ and $-10\%$, but the total simple return is $-1\%$.
+
+The log returns are
+\[
+    \ln(110/100)=\ln(1.10),
+    \qquad
+    \ln(99/110)=\ln(0.90).
+\]
+The total log return is
+\[
+    \ln(1.10)+\ln(0.90)=\ln(0.99),
+\]
+which is exactly the log return from 100 to 99.
+\end{exmp}
+
+\section{Calculus for Finance}
+
+\subsection{Derivatives as Slopes}
+
+The derivative of $f(x)$ is the instantaneous rate of change of $f$ with respect
+to $x$:
+\[
+    f'(x)=\frac{\dd f}{\dd x}.
+\]
+In finance, derivatives measure sensitivities. The option Greek Delta is
+\[
+    \Delta=\frac{\partial f}{\partial S},
+\]
+the sensitivity of option value to the underlying price.
+
+\begin{exmp}[Derivative of a linear payoff]
+For a long forward payoff
+\[
+    g(S_T)=S_T-K,
+\]
+the derivative with respect to $S_T$ is
+\[
+    g'(S_T)=1.
+\]
+The payoff changes one-for-one with the terminal spot price.
+\end{exmp}
+
+\begin{exmp}[Derivative of a bond price with respect to yield]
+A zero-coupon bond paying 100 at time $T$ has price
+\[
+    B(y)=100e^{-yT}.
+\]
+The derivative with respect to yield is
+\[
+    \frac{\dd B}{\dd y}=-T100e^{-yT}=-TB(y).
+\]
+The negative sign means that bond prices fall when yields rise.
+\end{exmp}
+
+\subsection{Common Derivative Rules}
+
+\[
+    \frac{\dd}{\dd x}x^n = nx^{n-1},
+    \qquad
+    \frac{\dd}{\dd x}e^x=e^x,
+    \qquad
+    \frac{\dd}{\dd x}\ln x=\frac{1}{x}.
+\]
+Product rule:
+\[
+    \frac{\dd}{\dd x}[f(x)g(x)]
+    =
+    f'(x)g(x)+f(x)g'(x).
+\]
+Chain rule:
+\[
+    \frac{\dd}{\dd x}f(g(x))=f'(g(x))g'(x).
+\]
+
+\begin{exmp}[Chain rule in discounting]
+Let
+\[
+    B(y)=e^{-yT}.
+\]
+Set $u=-yT$. Then $B=e^u$ and $\dd u/\dd y=-T$. The chain rule gives
+\[
+    \frac{\dd B}{\dd y}=e^u(-T)=-Te^{-yT}.
+\]
+\end{exmp}
+
+\subsection{Partial Derivatives}
+
+When a function has several inputs, a partial derivative changes one input while
+holding the others fixed. If an option value is
+\[
+    f=f(S,t,\sigma,r),
+\]
+then
+\[
+    \frac{\partial f}{\partial S}
+\]
+changes $S$ while holding $t,\sigma,r$ fixed.
+
+\begin{exmp}[Partial derivatives]
+Let
+\[
+    f(S,t)=S^2e^{-rt}.
+\]
+Then
+\[
+    \frac{\partial f}{\partial S}=2Se^{-rt},
+    \qquad
+    \frac{\partial f}{\partial t}=-rS^2e^{-rt}.
+\]
+The first derivative measures sensitivity to the price. The second measures
+sensitivity to time, holding $S$ fixed.
+\end{exmp}
+
+\subsection{Taylor Approximation}
+
+Taylor approximation replaces a nonlinear function with a local polynomial.
+First order:
+\[
+    f(x+\Delta x)\approx f(x)+f'(x)\Delta x.
+\]
+Second order:
+\[
+    f(x+\Delta x)
+    \approx
+    f(x)+f'(x)\Delta x+\frac{1}{2}f''(x)(\Delta x)^2.
+\]
+
+For an option value $f(S,t)$, the standard Greek approximation is
+\[
+    \Delta f
+    \approx
+    \Delta \Delta S
+    +\frac{1}{2}\Gamma(\Delta S)^2
+    +\Theta \Delta t.
+\]
+Here the first $\Delta$ on the right side is the Greek Delta, while $\Delta S$
+is the change in the underlying price.
+
+\begin{exmp}[Delta-Gamma approximation]
+An option has $\Delta=0.60$ and $\Gamma=0.04$. The stock price rises by 2. The
+Delta-Gamma approximation to the option-value change is
+\[
+    0.60(2)+\frac{1}{2}(0.04)(2)^2
+    =
+    1.20+0.08
+    =
+    1.28.
+\]
+The Gamma term matters because the option value is curved in the stock price.
+\end{exmp}
+
+\subsection{Optimization}
+
+Optimization chooses a variable to maximize or minimize an objective. In one
+dimension, an interior optimum usually satisfies the first-order condition
+\[
+    f'(x)=0.
+\]
+For a minimum, the second derivative should be positive:
+\[
+    f''(x)>0.
+\]
+
+\begin{exmp}[Minimum-variance hedge ratio]
+Let $\Delta S$ be the change in the spot price and $\Delta F$ the change in the
+futures price. A short hedge using hedge ratio $h$ has change
+\[
+    \Delta V=\Delta S-h\Delta F.
+\]
+The variance is
+\[
+    \Var(\Delta V)
+    =
+    \sigma_S^2+h^2\sigma_F^2-2h\Cov(\Delta S,\Delta F).
+\]
+Differentiate with respect to $h$:
+\[
+    \frac{\dd}{\dd h}\Var(\Delta V)
+    =
+    2h\sigma_F^2-2\Cov(\Delta S,\Delta F).
+\]
+Set this equal to zero:
+\[
+    h^*
+    =
+    \frac{\Cov(\Delta S,\Delta F)}{\sigma_F^2}
+    =
+    \rho\frac{\sigma_S}{\sigma_F}.
+\]
+This is the minimum-variance hedge ratio.
+\end{exmp}
+
+\section{Matrices and Portfolio Risk}
+
+\subsection{Vectors}
+
+A vector is an ordered list of numbers. A portfolio with weights
+\[
+    w=
+    \begin{pmatrix}
+    w_1\\
+    w_2\\
+    \vdots\\
+    w_n
+    \end{pmatrix}
+\]
+and asset returns
+\[
+    R=
+    \begin{pmatrix}
+    R_1\\
+    R_2\\
+    \vdots\\
+    R_n
+    \end{pmatrix}
+\]
+has portfolio return
+\[
+    R_p=w^\top R=\sum_{i=1}^{n}w_i R_i.
+\]
+
+\begin{exmp}[Portfolio return]
+A portfolio invests 40\% in asset A and 60\% in asset B. If returns are
+$R_A=8\%$ and $R_B=3\%$, then
+\[
+    R_p=0.4(0.08)+0.6(0.03)=0.05.
+\]
+The portfolio return is 5\%.
+\end{exmp}
+
+\subsection{Covariance Matrix}
+
+The covariance matrix collects variances and covariances:
+\[
+    \Sigma=
+    \begin{pmatrix}
+    \sigma_1^2 & \sigma_{12}\\
+    \sigma_{12} & \sigma_2^2
+    \end{pmatrix}.
+\]
+For portfolio weights $w$, portfolio variance is
+\[
+    \sigma_p^2=w^\top\Sigma w.
+\]
+For two assets,
+\[
+    \sigma_p^2
+    =
+    w_1^2\sigma_1^2+w_2^2\sigma_2^2+2w_1w_2\sigma_{12}.
+\]
+
+\begin{exmp}[Two-asset portfolio variance]
+Asset A has volatility 20\%, asset B has volatility 10\%, and their correlation
+is 0.30. The portfolio weights are 50\% and 50\%. The covariance is
+\[
+    \sigma_{AB}=\rho\sigma_A\sigma_B=0.30(0.20)(0.10)=0.006.
+\]
+The portfolio variance is
+\[
+    0.5^2(0.20)^2+0.5^2(0.10)^2+2(0.5)(0.5)(0.006)
+    =
+    0.0155.
+\]
+The portfolio volatility is
+\[
+    \sqrt{0.0155}\approx 0.1245.
+\]
+So the portfolio volatility is about 12.45\%.
+\end{exmp}
+
+\subsection{Diversification}
+
+Diversification works when assets are not perfectly correlated. If two assets
+have correlation less than 1, the portfolio volatility can be below the weighted
+average of individual volatilities.
+
+\begin{boxD}
+\textbf{Derivative connection.} A hedge is a portfolio designed so that one
+position offsets risk in another. The effectiveness of the hedge depends on
+covariance, not only on the size of the two positions.
+\end{boxD}
+
+\section{Statistics Used in the Course}
+
+\subsection{Sample Mean and Sample Variance}
+
+Given observations $x_1,\ldots,x_n$, the sample mean is
+\[
+    \bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i.
+\]
+The sample variance is
+\[
+    s^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2.
+\]
+The denominator $n-1$ adjusts for the fact that the mean is estimated from the
+same data.
+
+\begin{exmp}[Sample volatility]
+Suppose five daily returns are
+\[
+    0.4\%,\quad -0.6\%,\quad 1.0\%,\quad 0.2\%,\quad -0.5\%.
+\]
+In decimals:
+\[
+    0.004,\quad -0.006,\quad 0.010,\quad 0.002,\quad -0.005.
+\]
+The sample mean is
+\[
+    \bar{x}=0.001.
+\]
+The sample variance is
+\[
+\begin{aligned}
+    s^2
+    &=
+    \frac{1}{4}\left[
+    (0.004-0.001)^2+(-0.006-0.001)^2\right.\\
+    &\quad
+    +(0.010-0.001)^2+(0.002-0.001)^2\\
+    &\quad
+    \left.+(-0.005-0.001)^2
+    \right]\\
+    &=
+    0.000044.
+\end{aligned}
+\]
+The sample standard deviation is
+\[
+    s=\sqrt{0.000044}\approx 0.00663,
+\]
+or 0.663\% per day.
+\end{exmp}
+
+\subsection{Annualizing Volatility}
+
+If daily returns are independent with constant variance, annual variance is
+approximately daily variance times the number of trading days. With 252 trading
+days,
+\[
+    \sigma_{\text{annual}} \approx \sigma_{\text{daily}}\sqrt{252}.
+\]
+
+\begin{exmp}[Annualized volatility]
+If daily volatility is 1.2\%, annualized volatility is
+\[
+    0.012\sqrt{252}\approx 0.1905.
+\]
+So the annualized volatility is about 19.05\%.
+\end{exmp}
+
+\begin{boxF}
+\textbf{Assumption.} The square-root-of-time rule relies on weak dependence and
+roughly constant variance. It can be misleading during crises, for illiquid
+assets, or when volatility changes sharply.
+\end{boxF}
+
+\subsection{Regression Beta}
+
+A simple regression of asset returns on market returns is
+\[
+    R_i = \alpha + \beta R_m + \varepsilon.
+\]
+The slope is
+\[
+    \beta=\frac{\Cov(R_i,R_m)}{\Var(R_m)}.
+\]
+Beta measures market exposure.
+
+\begin{exmp}[Equity index hedge]
+A portfolio is worth USD 10 million and has beta 1.2 relative to an index. The
+index futures price is 5,000 and each futures contract is for 50 times the index.
+The notional per futures contract is
+\[
+    5{,}000\times 50=\$250{,}000.
+\]
+The number of contracts for a short hedge is
+\[
+    N^*=\beta\frac{V_A}{V_F}
+    =
+    1.2\frac{10{,}000{,}000}{250{,}000}
+    =
+    48.
+\]
+The portfolio manager shorts 48 futures contracts to reduce market exposure.
+\end{exmp}
+
+\section{Binomial Trees and Risk-Neutral Valuation}
+
+\subsection{One-Step Binomial Model}
+
+In a one-step binomial model, the stock price moves from $S_0$ to either
+\[
+    S_u=S_0u
+    \qquad \text{or} \qquad
+    S_d=S_0d,
+\]
+where $u>d$.
+
+For a derivative with payoffs $f_u$ and $f_d$, replication uses $\Delta$ shares
+and a bond position $B$:
+\[
+    \Delta S_0u + Be^{rT}=f_u,
+\]
+\[
+    \Delta S_0d + Be^{rT}=f_d.
+\]
+Subtract the second equation from the first:
+\[
+    \Delta=\frac{f_u-f_d}{S_0u-S_0d}.
+\]
+
+\begin{exmp}[One-step call by replication]
+Let $S_0=100$, $u=1.2$, $d=0.8$, $K=100$, $r=5\%$, and $T=1$. The stock prices
+are 120 and 80. The call payoffs are
+\[
+    f_u=20,\qquad f_d=0.
+\]
+The hedge ratio is
+\[
+    \Delta=\frac{20-0}{120-80}=0.5.
+\]
+Solve for the bond position using the down state:
+\[
+    0.5(80)+Be^{0.05}=0.
+\]
+Thus
+\[
+    B=-40e^{-0.05}\approx -38.05.
+\]
+The option value is
+\[
+    f_0=\Delta S_0+B=0.5(100)-38.05=11.95.
+\]
+\end{exmp}
+
+\subsection{Risk-Neutral Probability}
+
+The same price can be written as a discounted expected payoff under the
+risk-neutral probability
+\[
+    p=\frac{e^{rT}-d}{u-d}.
+\]
+Then
+\[
+    f_0=e^{-rT}[pf_u+(1-p)f_d].
+\]
+
+\begin{exmp}[One-step call by risk-neutral probability]
+Using the previous example,
+\[
+    p=\frac{e^{0.05}-0.8}{1.2-0.8}\approx 0.6282.
+\]
+The option price is
+\[
+    f_0=e^{-0.05}[0.6282(20)+(1-0.6282)(0)]
+    \approx 11.95.
+\]
+This matches the replication price.
+\end{exmp}
+
+\begin{boxD}
+\textbf{Interpretation.} Risk-neutral probabilities are pricing weights, not
+necessarily real-world probabilities. They are chosen so that discounted asset
+prices are consistent with no-arbitrage.
+\end{boxD}
+
+\subsection{Backward Induction}
+
+In a multi-step tree, start at maturity and move backward one node at a time:
+\[
+    f=e^{-r\Delta t}[pf_u+(1-p)f_d].
+\]
+For American options, compare continuation value with immediate exercise value
+at each node.
+
+\begin{exmp}[American put early exercise logic]
+At a node, suppose an American put has strike 50 and the stock price is 42.
+Immediate exercise pays
+\[
+    50-42=8.
+\]
+Suppose the discounted continuation value from holding the option is 7.40. The
+American value at the node is
+\[
+    \max(8,7.40)=8.
+\]
+Exercise is optimal at that node in the tree.
+\end{exmp}
+
+\section{Stochastic Processes}
+
+\subsection{From Random Variables to Processes}
+
+A stochastic process is a collection of random variables indexed by time:
+\[
+    \{S_t: t\geq 0\}.
+\]
+Instead of one uncertain future value, we model an uncertain path over time.
+
+\begin{exmp}[Daily price process]
+A stock price observed every day can be written as
+\[
+    S_0,S_1,S_2,\ldots.
+\]
+Before the future days arrive, $S_1,S_2,\ldots$ are random variables. After the
+days pass, they become observed values.
+\end{exmp}
+
+\subsection{Markov Property}
+
+A process is Markov if the future depends on the present state, not on the full
+history:
+\[
+    \Prob(S_{t+\Delta t}\leq x \mid S_t,S_{t-1},S_{t-2},\ldots)
+    =
+    \Prob(S_{t+\Delta t}\leq x \mid S_t).
+\]
+This is a simplifying assumption, not a universal truth.
+
+\begin{boxF}
+\textbf{Modeling warning.} The Markov property helps make pricing tractable. It
+does not mean real markets have no memory. Volatility clustering, liquidity
+stress, and institutional constraints often create path dependence.
+\end{boxF}
+
+\subsection{Brownian Motion}
+
+A standard Brownian motion, or Wiener process, is usually written $z_t$. It has:
+\begin{enumerate}
+    \item $z_0=0$,
+    \item independent increments,
+    \item normally distributed increments,
+    \item continuous paths.
+\end{enumerate}
+Over a small time interval $\Delta t$,
+\[
+    \Delta z = \varepsilon\sqrt{\Delta t},
+    \qquad
+    \varepsilon\sim N(0,1).
+\]
+Thus
+\[
+    \E[\Delta z]=0,
+    \qquad
+    \Var(\Delta z)=\Delta t.
+\]
+
+\begin{exmp}[Brownian increment]
+If $\Delta t=1/252$ year, then
+\[
+    \sqrt{\Delta t}=\sqrt{1/252}\approx 0.0630.
+\]
+A one-standard-deviation Brownian increment over one trading day is about
+0.0630 in annual time units.
+\end{exmp}
+
+\subsection{Geometric Brownian Motion}
+
+The Black--Scholes--Merton model assumes the stock price follows
+\[
+    dS = \mu S\,dt+\sigma S\,dz.
+\]
+This is geometric Brownian motion. The term $\mu S\,dt$ is drift. The term
+$\sigma S\,dz$ is random shock.
+
+Dividing by $S$ gives
+\[
+    \frac{dS}{S}=\mu\,dt+\sigma\,dz.
+\]
+So $\mu$ is expected continuously compounded return per unit time and $\sigma$
+is volatility per square-root unit of time.
+
+\begin{exmp}[Interpreting the GBM shock]
+Suppose annual volatility is $\sigma=20\%$ and $\Delta t=1/252$. A one-standard
+deviation daily price shock is approximately
+\[
+    \sigma\sqrt{\Delta t}=0.20\sqrt{1/252}\approx 0.0126.
+\]
+That is about 1.26\% of the stock price.
+\end{exmp}
+
+\subsection{Quadratic Variation Intuition}
+
+In ordinary calculus, terms like $(dt)^2$ are negligible. In stochastic
+calculus, Brownian increments satisfy
+\[
+    (dz)^2=dt,
+\]
+while
+\[
+    dt\,dz=0,
+    \qquad
+    (dt)^2=0.
+\]
+The informal reason is that $dz$ is of order $\sqrt{dt}$, so $(dz)^2$ is of
+order $dt$.
+
+\begin{boxD}
+\textbf{Key idea.} The rule $(dz)^2=dt$ is why It\^o's lemma has an extra
+second-derivative term. That term becomes central in the Black--Scholes--Merton
+PDE.
+\end{boxD}
+
+\subsection{It\^o's Lemma}
+
+If
+\[
+    dx=a(x,t)\,dt+b(x,t)\,dz,
+\]
+and $G=G(x,t)$, then It\^o's lemma says
+\[
+    dG=
+    \left(
+    \frac{\partial G}{\partial x}a
+    +\frac{\partial G}{\partial t}
+    +\frac{1}{2}\frac{\partial^2G}{\partial x^2}b^2
+    \right)dt
+    +
+    \frac{\partial G}{\partial x}b\,dz.
+\]
+
+\begin{exmp}[Log of a GBM stock price]
+Let
+\[
+    dS=\mu S\,dt+\sigma S\,dz
+\]
+and define
+\[
+    G(S)=\ln S.
+\]
+The derivatives are
+\[
+    G_S=\frac{1}{S},
+    \qquad
+    G_{SS}=-\frac{1}{S^2},
+    \qquad
+    G_t=0.
+\]
+It\^o's lemma gives
+\[
+\begin{aligned}
+    d\ln S
+    &=
+    \left[
+    \frac{1}{S}(\mu S)
+    +\frac{1}{2}\left(-\frac{1}{S^2}\right)(\sigma^2S^2)
+    \right]dt
+    +
+    \frac{1}{S}(\sigma S)\,dz\\
+    &=
+    \left(\mu-\frac{1}{2}\sigma^2\right)dt+\sigma\,dz.
+\end{aligned}
+\]
+The log price has drift $\mu-\frac{1}{2}\sigma^2$, not $\mu$.
+\end{exmp}
+
+\section{Black--Scholes--Merton Building Blocks}
+
+\subsection{Delta Hedging}
+
+If an option has value $f(S,t)$, its small change is approximately
+\[
+    df \approx f_S\,dS + f_t\,dt + \frac{1}{2}f_{SS}(dS)^2.
+\]
+The option's exposure to the stock over a small move is $f_S$, called Delta.
+A portfolio that is long one option and short $\Delta=f_S$ shares has stock
+exposure approximately canceled over a very short interval.
+
+\begin{exmp}[Delta-neutral position]
+An option has Delta 0.65. A trader is long 100 options, each written on one
+share. The stock exposure is approximately
+\[
+    100\times 0.65=65
+\]
+shares. To make the position delta-neutral, the trader shorts 65 shares.
+\end{exmp}
+
+\subsection{Greeks as Sensitivities}
+
+\begin{tabular}{@{}lll@{}}
+\toprule
+Greek & Formula & Interpretation \\
+\midrule
+Delta & $\Delta=\partial f/\partial S$ & sensitivity to underlying price \\
+Gamma & $\Gamma=\partial^2 f/\partial S^2$ & curvature in underlying price \\
+Theta & $\Theta=\partial f/\partial t$ & sensitivity to calendar time \\
+Vega & $\nu=\partial f/\partial \sigma$ & sensitivity to volatility \\
+Rho & $\rho=\partial f/\partial r$ & sensitivity to interest rate \\
+\bottomrule
+\end{tabular}
+
+\begin{exmp}[Greek-based scenario]
+A portfolio has Delta $-20{,}000$, Gamma 500, and Vega 75,000. The underlying
+price increases by 1 and implied volatility increases by 0.01. Ignoring time and
+interest-rate effects, the approximate value change is
+\[
+\begin{aligned}
+    -20{,}000(1)+\frac{1}{2}(500)(1)^2+75{,}000(0.01)
+    &=
+    -20{,}000+250+750
+    \\
+    &=
+    -19{,}000.
+\end{aligned}
+\]
+\end{exmp}
+
+\subsection{Risk-Neutral Valuation}
+
+Risk-neutral valuation says that, under no-arbitrage, derivative prices can be
+computed as discounted expected payoffs under a special probability measure:
+\[
+    f_0=e^{-rT}\E^Q[g(S_T)].
+\]
+The superscript $Q$ means the expectation is taken under risk-neutral
+probabilities.
+
+For a stock under the risk-neutral measure,
+\[
+    dS=rS\,dt+\sigma S\,dz^Q
+\]
+in the simplest no-dividend Black--Scholes--Merton model. The expected return
+changes from $\mu$ to $r$, but volatility remains $\sigma$.
+
+\begin{boxF}
+\textbf{Common confusion.} Risk-neutral valuation does not say investors are
+risk-neutral. It says derivative prices can be computed as if expected returns
+were the risk-free rate after risk has been correctly embedded in pricing
+probabilities.
+\end{boxF}
+
+\section{Alternative Investment Mathematics}
+
+\subsection{Internal Rate of Return}
+
+The internal rate of return is the discount rate that sets net present value to
+zero:
+\[
+    0=\sum_{t=0}^{T}\frac{CF_t}{(1+\mathrm{IRR})^t}.
+\]
+The initial investment is usually a negative cash flow.
+
+\begin{exmp}[IRR for a two-year investment]
+An investment costs 100 today, pays 30 after one year, and pays 90 after two
+years. The IRR solves
+\[
+    -100+\frac{30}{1+r}+\frac{90}{(1+r)^2}=0.
+\]
+Let $x=1+r$. Then
+\[
+    -100+\frac{30}{x}+\frac{90}{x^2}=0.
+\]
+Multiply by $x^2$:
+\[
+    -100x^2+30x+90=0.
+\]
+Equivalently,
+\[
+    100x^2-30x-90=0.
+\]
+The positive solution is
+\[
+    x=\frac{30+\sqrt{30^2+4(100)(90)}}{200}\approx 1.1105.
+\]
+Thus
+\[
+    r\approx 0.1105.
+\]
+The IRR is about 11.05\%.
+\end{exmp}
+
+\begin{boxF}
+\textbf{IRR warning.} IRR can be misleading when cash flows change signs more
+than once, when projects have different scale, or when interim cash flows cannot
+be reinvested at the IRR. NPV is usually the cleaner value measure.
+\end{boxF}
+
+\subsection{Money Multiples}
+
+Private equity often reports multiples:
+\[
+    \mathrm{TVPI}
+    =
+    \frac{\text{distributions}+\text{residual value}}{\text{paid-in capital}}.
+\]
+DPI uses distributions only. RVPI uses residual value only.
+
+\begin{exmp}[Private equity multiples]
+A fund has paid-in capital of 200, cumulative distributions of 90, and remaining
+net asset value of 170. Then
+\[
+    \mathrm{DPI}=\frac{90}{200}=0.45,
+    \qquad
+    \mathrm{RVPI}=\frac{170}{200}=0.85,
+\]
+and
+\[
+    \mathrm{TVPI}=0.45+0.85=1.30.
+\]
+The fund has generated total value equal to 1.30 times paid-in capital, but much
+of it remains unrealized.
+\end{exmp}
+
+\subsection{Real Options}
+
+A real option is managerial flexibility with option-like payoff. Examples:
+\begin{itemize}
+    \item option to delay investment,
+    \item option to expand,
+    \item option to abandon,
+    \item option to switch inputs or outputs,
+    \item option to stage financing.
+\end{itemize}
+
+\begin{exmp}[Option to abandon]
+A project has uncertain continuation value next year. If continued, it is worth
+either 150 or 60. The firm can abandon the project and sell assets for 80. The
+value next year is
+\[
+    \max(V,80).
+\]
+In the high state this is 150. In the low state this is 80, not 60. The
+abandonment option creates a floor, just like a put option creates downside
+protection.
+\end{exmp}
+
+\begin{exmp}[Option to delay]
+A firm can invest 100 today in a project whose value is uncertain next year. If
+the firm waits, it can invest only if the project value is high. Waiting has an
+opportunity cost because cash flows are delayed, but it also has option value
+because the firm avoids investing in bad states. The trade-off is the same logic
+as exercising versus holding an option.
+\end{exmp}
+
+\section{Common Mistakes and Diagnostic Checks}
+
+\subsection{Mistake 1: Mixing Percent and Decimal Units}
+
+Using 5 instead of 0.05 in an interest-rate formula changes the calculation from
+5\% to 500\%.
+
+\begin{exmp}[Unit error]
+The correct one-year growth factor at 5\% is
+\[
+    e^{0.05}=1.0513.
+\]
+The incorrect calculation
+\[
+    e^5=148.41
+\]
+would imply a 14,741\% return.
+\end{exmp}
+
+\subsection{Mistake 2: Treating Expected Payoff as Price}
+
+The expected payoff is not generally the price. A derivative price must account
+for discounting, risk, and replication.
+
+\begin{exmp}[Expected payoff is not enough]
+A risky payoff has expected value 100 in one year. If it is very risky, its
+price may be far below $100e^{-rT}$. If it can be perfectly replicated, its price
+is determined by the replication cost, not by a subjective expected payoff.
+\end{exmp}
+
+\subsection{Mistake 3: Ignoring Contract Size}
+
+Futures and options quotes are often quoted per unit, but contracts cover many
+units.
+
+\begin{exmp}[Contract multiplier]
+An index option quote changes by 3.20 index points. If the contract multiplier is
+100, the dollar change per contract is
+\[
+    3.20\times 100=\$320.
+\]
+For 25 contracts, the total change is
+\[
+    25\times 320=\$8{,}000.
+\]
+\end{exmp}
+
+\subsection{Mistake 4: Confusing Real-World and Risk-Neutral Probabilities}
+
+Real-world probabilities describe statistical beliefs about future states.
+Risk-neutral probabilities are pricing weights that make no-arbitrage valuation
+work.
+
+\begin{exmp}[Two different probabilities]
+In a one-step tree, the real-world probability of an up move may be 0.55. But
+the risk-neutral probability used for pricing may be 0.48. The derivative price
+uses 0.48 in the no-arbitrage formula, not because 0.48 is the true forecast,
+but because it is the pricing weight consistent with the stock and bond prices.
+\end{exmp}
+
+\section{Worked Review Problems}
+
+\begin{exmp}[Forward price with income]
+A stock is worth 80 today and will pay a known dividend with present value 2
+before maturity. The continuously compounded risk-free rate is 4\% and maturity
+is one year. The forward price is
+\[
+    F_0=(S_0-I)e^{rT}=(80-2)e^{0.04}\approx 81.18.
+\]
+The dividend lowers the forward price because the forward buyer does not receive
+the dividend before delivery.
+\end{exmp}
+
+\begin{exmp}[Put-call parity arbitrage direction]
+Let $S_0=40$, $K=40$, $r=5\%$, $T=1$, $c=4.50$, and $p=1.00$. Put-call parity
+requires
+\[
+    c+Ke^{-rT}=p+S_0.
+\]
+The left side is
+\[
+    4.50+40e^{-0.05}\approx 42.55.
+\]
+The right side is
+\[
+    1.00+40=41.00.
+\]
+The left side is expensive. Sell the left side and buy the right side:
+short the call, borrow the present value of 40 by shorting the bond, buy the put,
+and buy the stock. This locks in the price difference under the assumptions of
+European exercise, no dividends, and frictionless trading.
+\end{exmp}
+
+\begin{exmp}[Minimum-variance hedge]
+A firm has exposure to a spot commodity. The monthly standard deviation of spot
+price changes is 3.0, the monthly standard deviation of futures price changes is
+2.5, and the correlation is 0.80. The optimal hedge ratio is
+\[
+    h^*=\rho\frac{\sigma_S}{\sigma_F}
+    =
+    0.80\frac{3.0}{2.5}
+    =
+    0.96.
+\]
+If the firm wants to hedge 100,000 units and each futures contract is for 10,000
+units, the number of contracts is
+\[
+    N^*=0.96\frac{100{,}000}{10{,}000}=9.6.
+\]
+In practice the firm must choose 9 or 10 contracts, then consider transaction
+costs, liquidity, and basis risk.
+\end{exmp}
+
+\begin{exmp}[Discounted expected payoff under risk-neutral probability]
+A derivative pays 30 in the up state and 0 in the down state after one year.
+The risk-neutral probability of the up state is 0.40 and the risk-free rate is
+5\% continuously compounded. The price is
+\[
+    e^{-0.05}[0.40(30)+0.60(0)]
+    =
+    11.41.
+\]
+\end{exmp}
+
+\begin{exmp}[Delta-Gamma-Vega approximation]
+A trader owns an option portfolio with Delta 8,000, Gamma $-300$, and Vega
+45,000. The underlying falls by 1.5 and implied volatility rises by 0.02.
+Ignoring Theta and Rho, the approximate change is
+\[
+\begin{aligned}
+    8{,}000(-1.5)
+    +\frac{1}{2}(-300)(-1.5)^2
+    +45{,}000(0.02)
+    &=
+    -12{,}000-337.5+900
+    \\
+    &=
+    -11{,}437.5.
+\end{aligned}
+\]
+\end{exmp}
+
+\section{Checklist for Students}
+
+After reading this note, you should be able to:
+\begin{itemize}
+    \item convert percentages, decimals, and basis points;
+    \item use annual, periodic, and continuous compounding;
+    \item discount a single cash flow and a stream of cash flows;
+    \item compute zero rates, discount factors, and simple forward rates;
+    \item read payoff notation such as $(S_T-K)^+$;
+    \item distinguish payoff, profit, and value;
+    \item build payoff tables for forwards, calls, puts, and combinations;
+    \item state the law of one price and use it in no-arbitrage arguments;
+    \item compute expectation, variance, covariance, and correlation;
+    \item distinguish simple returns and log returns;
+    \item explain why lognormal prices are positive;
+    \item compute basic derivatives and partial derivatives;
+    \item use Taylor approximations to interpret Greeks;
+    \item derive the minimum-variance hedge ratio;
+    \item compute portfolio variance from variances and covariance;
+    \item annualize volatility using the square-root-of-time rule;
+    \item price a one-step binomial option by replication and risk-neutral
+    probability;
+    \item explain the intuition behind Brownian motion, GBM, and It\^o's lemma;
+    \item compute IRR and money multiples for simple alternative investment
+    examples.
+\end{itemize}
+
+\section{Practice Questions}
+
+\begin{enumerate}
+    \item Convert 125 basis points into a percentage and a decimal.
+    \item A cash flow of 10,000 arrives in 18 months. The continuously compounded
+    risk-free rate is 3.5\%. Compute its present value.
+    \item An investment grows from 75 to 90 over two years. Compute the simple
+    two-year return and the continuously compounded annual return.
+    \item A long forward has delivery price 62. Compute the payoff for
+    $S_T=45,62,70,88$.
+    \item A call has strike 100 and premium 6. Compute payoff and profit for
+    $S_T=80,100,106,125$, ignoring financing.
+    \item A put has strike 50 and premium 3. Compute payoff and profit for
+    $S_T=35,47,50,60$, ignoring financing.
+    \item Explain in words why a call option payoff is convex.
+    \item A non-dividend-paying stock has $S_0=120$, $r=4\%$, and $T=0.75$.
+    Compute the no-arbitrage forward price using continuous compounding.
+    \item If the market forward price in the previous question is 128, describe
+    the arbitrage strategy and compute the locked-in profit.
+    \item A European call has $S_0=75$, $K=70$, $r=3\%$, $T=1$, and price 3.50.
+    Does it violate the lower bound? Show the calculation.
+    \item Given $S_0=100$, $K=105$, $r=5\%$, $T=1$, and $c=8$, use put-call
+    parity to compute the European put price.
+    \item A random variable is 10 with probability 0.25 and 20 with probability
+    0.75. Compute its expectation and variance.
+    \item Asset A has volatility 25\%, asset B has volatility 15\%, and their
+    correlation is $-0.20$. Compute their covariance.
+    \item A portfolio has weights 30\% and 70\% in the two assets from the
+    previous question. Compute portfolio variance and volatility.
+    \item Daily volatility is 0.9\%. Annualize it using 252 trading days.
+    \item A regression beta is defined as
+    $\beta=\Cov(R_i,R_m)/\Var(R_m)$. If $\Cov(R_i,R_m)=0.0012$ and
+    $\Var(R_m)=0.0008$, compute beta.
+    \item In a one-step binomial tree, $S_0=50$, $u=1.3$, $d=0.8$, $K=55$,
+    $r=4\%$, and $T=1$. Price the European call by risk-neutral valuation.
+    \item For the previous question, compute the replicating Delta.
+    \item An option has Delta 0.40 and Gamma 0.03. Approximate the price change
+    when the underlying rises by 5, ignoring time and volatility changes.
+    \item A stock follows GBM with annual volatility 30\%. What is the
+    approximate one-standard-deviation daily percentage shock using 252 trading
+    days?
+    \item Use It\^o's lemma to explain why $d\ln S$ has drift
+    $\mu-\frac{1}{2}\sigma^2$ when $dS=\mu Sdt+\sigma Sdz$.
+    \item A private equity fund has paid-in capital of 500, distributions of
+    220, and residual value of 430. Compute DPI, RVPI, and TVPI.
+    \item A project costs 1,000 and pays 400, 450, and 500 over the next three
+    years. Compute NPV at a 9\% discount rate.
+    \item Give one example of a real option and map it to a financial option
+    payoff.
+\end{enumerate}
+
+\end{document}
