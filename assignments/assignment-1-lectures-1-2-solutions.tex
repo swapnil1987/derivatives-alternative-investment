@@ -1,0 +1,506 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\newcommand{\St}{S_T}
+\newcommand{\Szero}{S_0}
+\newcommand{\Fzero}{F_0}
+\newcommand{\Ft}{F_t}
+\newcommand{\K}{K}
+\newcommand{\pnl}{\mathrm{P\&L}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\E}{\mathbb{E}}
+
+\newenvironment{solution}{\par\noindent\textbf{Solution.}\ }{\par}
+
+\title{S181M116 Derivatives and Alternative Investments\\
+Practice Assignment 1 with Solutions}
+\author{Based on Lecture 1 and Lecture 2, Sections 1--3}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Instructions.} These questions move from basic definitions to integrated
+hedging and pricing problems. Unless otherwise stated, ignore transaction costs,
+taxes, bid-ask spreads, and default risk. Use continuous compounding when the
+question gives an exponential formula and simple compounding when the question
+explicitly says ``simple annual rate.''
+
+\section*{Questions}
+
+\subsection*{Question 1 (Easy): Identifying derivatives}
+For each item, say whether it is a derivative. If it is, identify the underlying
+variable.
+\begin{enumerate}
+    \item A contract that pays the holder $\max(S_T-100,0)$ in three months.
+    \item A share of common stock.
+    \item A contract to exchange EUR 1 million for USD at a fixed exchange rate
+    in six months.
+    \item A corporate bond.
+    \item A contract that pays when average temperature in July exceeds a fixed
+    threshold.
+\end{enumerate}
+
+\subsection*{Question 2 (Easy): Payoff, profit, and value}
+A student buys a European call option with strike $K=50$ for a premium of $4$.
+At maturity, the stock price is $S_T=55$.
+\begin{enumerate}
+    \item What is the call payoff?
+    \item Ignoring interest on the premium, what is the buyer's profit?
+    \item Explain in one sentence why payoff and profit are not the same.
+\end{enumerate}
+
+\subsection*{Question 3 (Easy): Market structure}
+Give two advantages and two disadvantages of exchange-traded derivatives
+relative to OTC derivatives. Your answer should mention standardization,
+clearing, liquidity, and customization.
+
+\subsection*{Question 4 (Easy): Forward payoffs}
+A forward contract has delivery price $K=50$. Compute the long and short forward
+payoffs at maturity when $S_T=42$, $S_T=50$, and $S_T=60$.
+
+\subsection*{Question 5 (Easy): Choosing the hedge direction}
+For each exposure, say whether the firm should use a short hedge or a long hedge.
+Briefly explain why.
+\begin{enumerate}
+    \item A farmer will sell wheat after harvest.
+    \item An airline will buy jet fuel in three months.
+    \item A U.S. importer must pay EUR 2 million in six months.
+    \item An oil producer will sell crude oil next quarter.
+\end{enumerate}
+
+\subsection*{Question 6 (Medium): Currency forward hedge}
+A U.S. firm must pay GBP 2 million in six months. It enters a long GBP forward
+at USD 1.2400 per GBP.
+\begin{enumerate}
+    \item What dollar payment has the firm locked in?
+    \item If the spot exchange rate at maturity is USD 1.3100 per GBP, what is
+    the payoff on the forward position?
+    \item What is the combined dollar cost of buying GBP in the spot market and
+    receiving the forward payoff?
+\end{enumerate}
+
+\subsection*{Question 7 (Medium): No-arbitrage forward price}
+A non-dividend-paying asset has $S_0=75$. The simple annual risk-free rate is
+$4\%$ and maturity is six months.
+\begin{enumerate}
+    \item Compute the no-arbitrage forward price using simple compounding.
+    \item If the quoted forward price is $78.20$, describe the arbitrage trade.
+    \item What is the locked-in profit per unit of the asset?
+\end{enumerate}
+
+\subsection*{Question 8 (Medium): Daily futures settlement and margin}
+A trader is long four gold futures contracts. Each contract is for 100 ounces.
+Yesterday's settlement price was USD 2,050 per ounce and today's settlement
+price is USD 2,038 per ounce. The trader's initial margin account balance was
+USD 20,000 and the maintenance margin is USD 16,000.
+\begin{enumerate}
+    \item Compute today's futures P\&L.
+    \item What is the margin account balance after daily settlement?
+    \item Is there a margin call? If so, how much must be deposited to restore
+    the account to the initial margin level?
+\end{enumerate}
+
+\subsection*{Question 9 (Medium): Option payoffs and profits}
+A call and a put have the same strike, $K=100$. The call premium is $6$ and the
+put premium is $4$. Fill in the payoff and profit for the buyer of each option
+when $S_T=92$, $S_T=100$, and $S_T=112$.
+
+\subsection*{Question 10 (Medium): Hedging, speculation, arbitrage, or convergence trading}
+Classify each trade as hedging, speculation, true arbitrage, or convergence
+trading. Briefly justify your answer.
+\begin{enumerate}
+    \item A farmer sells corn futures because she will sell corn after harvest.
+    \item A trader buys crude oil futures because he expects oil prices to rise.
+    \item A trader borrows cash, buys an asset, and shorts an overpriced forward
+    to lock in a riskless profit under the assumptions of the no-arbitrage model.
+    \item A fund buys a cheap bond and shorts a similar expensive bond, expecting
+    their prices to converge, but the trade can lose money before convergence.
+\end{enumerate}
+
+\subsection*{Question 11 (Hard): Effective sale price in a short hedge}
+A firm will sell a commodity at date 2. At date 1, it shorts futures at
+$F_1=6.20$. At date 2, the spot price is $S_2=5.85$ and the futures price is
+$F_2=5.95$.
+\begin{enumerate}
+    \item Compute the gain or loss on the short futures position.
+    \item Compute the effective sale price.
+    \item Compute the basis at date 2 and verify that the effective sale price is
+    $F_1+b_2$.
+    \item Explain why this hedge is not the same as selling the physical asset at
+    $F_1$ in advance.
+\end{enumerate}
+
+\subsection*{Question 12 (Hard): Effective purchase price in a long hedge}
+A manufacturer will buy copper at date 2. At date 1, it goes long futures at
+$F_1=3.70$. At date 2, the spot price is $S_2=3.92$ and the futures price is
+$F_2=3.88$.
+\begin{enumerate}
+    \item Compute the gain or loss on the long futures position.
+    \item Compute the effective purchase price.
+    \item Compute the basis at date 2 and verify that the effective purchase
+    price is $F_1+b_2$.
+    \item If the basis at date 2 had been negative, would the effective purchase
+    price have been above or below $F_1$?
+\end{enumerate}
+
+\subsection*{Question 13 (Hard): Cross hedge and minimum-variance hedge ratio}
+An airline will buy 2,100,000 gallons of jet fuel. It cross hedges with
+heating-oil futures because the heating-oil contract is more liquid. Each
+futures contract covers 42,000 gallons. Historical data give
+\[
+    \rho=0.75,\qquad \sigma_S=0.20,\qquad \sigma_F=0.16,
+\]
+where $\Delta S$ is the change in the jet-fuel price and $\Delta F$ is the
+change in the futures price.
+\begin{enumerate}
+    \item Compute the minimum-variance hedge ratio.
+    \item How many futures contracts should the airline use?
+    \item Should the airline go long or short futures?
+    \item Name two sources of residual risk that remain after the hedge.
+\end{enumerate}
+
+\subsection*{Question 14 (Hard): Forward pricing with income and contract value}
+\begin{enumerate}
+    \item A stock has $S_0=100$, the present value of known dividends during the
+    life of the forward is $I=2.50$, the continuously compounded risk-free rate
+    is $5\%$, and $T=1$. Compute the no-arbitrage forward price.
+    \item A stock index has $S_0=100$, continuous dividend yield $q=2\%$,
+    continuously compounded risk-free rate $r=5\%$, and $T=1$. Compute the
+    no-arbitrage futures/forward price.
+    \item You are long an old forward contract with delivery price $K=48$.
+    A new forward with the same maturity has delivery price $F_0=52$.
+    The continuously compounded risk-free rate is $3\%$ and remaining maturity
+    is six months. Compute the value of the old long forward.
+\end{enumerate}
+
+\subsection*{Question 15 (Hard): Commodity pricing, convenience yield, and expected spot prices}
+A consumption commodity has spot price $S_0=80$. The continuously compounded
+risk-free rate is $5\%$, proportional storage cost is $1\%$, convenience yield
+is $4\%$, and maturity is six months.
+\begin{enumerate}
+    \item Compute the futures price implied by
+    $F_0=S_0e^{(r+u-y)T}$.
+    \item Compute the futures price if the convenience yield were zero.
+    \item Explain why a futures price below the no-convenience-yield cost of
+    carry is not automatically an arbitrage opportunity for a consumption
+    commodity.
+    \item Separately, suppose $\E(S_T)=84$ and the required expected return on
+    the commodity is $k=7\%$. Using $F_0=\E(S_T)e^{(r-k)T}$, compute the futures
+    price implied by the risk-premium relation. Is it above or below the
+    expected future spot price?
+\end{enumerate}
+
+\newpage
+\section*{Solutions}
+
+\subsection*{Solution 1}
+\begin{solution}
+\begin{enumerate}
+    \item Derivative. The underlying is the stock price $S_T$.
+    \item Not a derivative. It is the underlying asset itself.
+    \item Derivative. The underlying is the EUR/USD exchange rate.
+    \item Not usually treated as a derivative in this course. It is a debt
+    security, though its value depends on interest rates and default risk.
+    \item Derivative. The underlying is the July temperature index or average
+    temperature measure specified in the contract.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Solution 2}
+\begin{solution}
+The call payoff is
+\[
+    \max(S_T-K,0)=\max(55-50,0)=5.
+\]
+The buyer's profit is payoff minus premium:
+\[
+    5-4=1.
+\]
+Payoff and profit differ because the payoff is only the terminal cash flow,
+whereas profit also subtracts the initial cost and any financing cost.
+\end{solution}
+
+\subsection*{Solution 3}
+\begin{solution}
+Exchange-traded derivatives are standardized and usually liquid. Standardization
+makes them easier to trade anonymously, and the clearing house reduces bilateral
+counterparty risk through margin, daily settlement, and default resources.
+
+The main disadvantages are lack of customization and possible basis mismatch.
+The exchange contract may not have the exact maturity, quantity, location,
+currency, or payoff that the hedger needs. OTC contracts can be tailored more
+closely, but they bring greater valuation, legal, liquidity, and counterparty
+risk complications.
+\end{solution}
+
+\subsection*{Solution 4}
+\begin{solution}
+The long forward payoff is $S_T-K$ and the short forward payoff is $K-S_T$.
+
+\begin{center}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+$S_T$ & Long payoff $S_T-K$ & Short payoff $K-S_T$ \\
+\midrule
+42 & $42-50=-8$ & $50-42=8$ \\
+50 & $50-50=0$ & $50-50=0$ \\
+60 & $60-50=10$ & $50-60=-10$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{solution}
+
+\subsection*{Solution 5}
+\begin{solution}
+\begin{enumerate}
+    \item Short hedge. The farmer will sell wheat later and is hurt by falling
+    wheat prices.
+    \item Long hedge. The airline will buy fuel later and is hurt by rising fuel
+    prices.
+    \item Long hedge in EUR. The importer must buy EUR later and is hurt if EUR
+    appreciates against USD.
+    \item Short hedge. The oil producer will sell crude oil later and is hurt by
+    falling oil prices.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Solution 6}
+\begin{solution}
+The locked-in dollar payment is
+\[
+    2{,}000{,}000\times 1.2400=\$2{,}480{,}000.
+\]
+If the terminal spot rate is 1.3100, the payoff on the long GBP forward is
+\[
+    (1.3100-1.2400)\times 2{,}000{,}000=\$140{,}000.
+\]
+Buying GBP in the spot market costs
+\[
+    2{,}000{,}000\times 1.3100=\$2{,}620{,}000.
+\]
+After the forward payoff, the net dollar cost is
+\[
+    2{,}620{,}000-140{,}000=\$2{,}480{,}000.
+\]
+\end{solution}
+
+\subsection*{Solution 7}
+\begin{solution}
+With simple compounding,
+\[
+    F_0=S_0(1+rT)=75(1+0.04\times 0.5)=75(1.02)=76.50.
+\]
+The quoted forward price 78.20 is too high relative to no-arbitrage value. The
+cash-and-carry arbitrage is:
+\begin{enumerate}
+    \item Borrow 75.
+    \item Buy the asset.
+    \item Short the forward at 78.20.
+    \item At maturity, deliver the asset into the forward, receive 78.20, and
+    repay $75(1.02)=76.50$.
+\end{enumerate}
+The locked-in profit per unit is
+\[
+    78.20-76.50=1.70.
+\]
+\end{solution}
+
+\subsection*{Solution 8}
+\begin{solution}
+The total position is
+\[
+    NQ=4\times 100=400
+\]
+ounces. For a long futures position,
+\[
+    \pnl=NQ(F_t-F_{t-1})=400(2038-2050)=400(-12)=-\$4{,}800.
+\]
+The margin account balance after settlement is
+\[
+    20{,}000-4{,}800=15{,}200.
+\]
+Since 15,200 is below the maintenance margin of 16,000, there is a margin call.
+To restore the account to the initial margin level of 20,000, the trader must
+deposit
+\[
+    20{,}000-15{,}200=\$4{,}800.
+\]
+\end{solution}
+
+\subsection*{Solution 9}
+\begin{solution}
+For the call, payoff is $\max(S_T-100,0)$ and profit is payoff minus 6. For the
+put, payoff is $\max(100-S_T,0)$ and profit is payoff minus 4.
+
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+$S_T$ & Call payoff & Call profit & Put payoff & Put profit \\
+\midrule
+92  & 0  & -6 & 8 & 4 \\
+100 & 0  & -6 & 0 & -4 \\
+112 & 12 & 6  & 0 & -4 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table also illustrates why option payoff and option profit are different:
+the buyer must first recover the premium.
+\end{solution}
+
+\subsection*{Solution 10}
+\begin{solution}
+\begin{enumerate}
+    \item Hedging. The farmer has an existing business exposure to a future sale
+    price and uses futures to reduce that risk.
+    \item Speculation. The trader is taking a directional view on crude oil
+    prices without an offsetting underlying business exposure.
+    \item True arbitrage under the model assumptions. The trade locks in a
+    positive profit with no price risk if the no-arbitrage assumptions hold.
+    \item Convergence trading. The trade depends on prices converging and can
+    lose money before convergence, so it is not true arbitrage.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Solution 11}
+\begin{solution}
+The short futures gain is
+\[
+    F_1-F_2=6.20-5.95=0.25.
+\]
+The effective sale price is the physical sale price plus the futures gain:
+\[
+    S_2+(F_1-F_2)=5.85+0.25=6.10.
+\]
+The date-2 basis is
+\[
+    b_2=S_2-F_2=5.85-5.95=-0.10.
+\]
+Therefore
+\[
+    F_1+b_2=6.20-0.10=6.10,
+\]
+which matches the effective sale price.
+
+This hedge is not the same as pre-selling the physical commodity at $F_1$.
+The firm still sells the physical commodity later at the spot price $S_2$. The
+futures position adds a gain or loss. If $b_2$ is uncertain, the effective price
+is uncertain even though the futures position reduces price risk.
+\end{solution}
+
+\subsection*{Solution 12}
+\begin{solution}
+The long futures gain is
+\[
+    F_2-F_1=3.88-3.70=0.18.
+\]
+The effective purchase price is the physical purchase price minus the futures
+gain:
+\[
+    S_2-(F_2-F_1)=3.92-0.18=3.74.
+\]
+The date-2 basis is
+\[
+    b_2=S_2-F_2=3.92-3.88=0.04.
+\]
+Therefore
+\[
+    F_1+b_2=3.70+0.04=3.74,
+\]
+which matches the effective purchase price.
+
+If $b_2$ had been negative, the effective purchase price would have been below
+$F_1$. For a long hedge, positive basis raises the effective purchase price
+above the initial futures price, while negative basis lowers it.
+\end{solution}
+
+\subsection*{Solution 13}
+\begin{solution}
+The minimum-variance hedge ratio is
+\[
+    h^*=\rho\frac{\sigma_S}{\sigma_F}
+    =0.75\frac{0.20}{0.16}
+    =0.9375.
+\]
+The number of contracts is
+\[
+    N^*=h^*\frac{Q_A}{Q_F}
+    =0.9375\frac{2{,}100{,}000}{42{,}000}
+    =0.9375(50)
+    =46.875.
+\]
+The airline should use about 47 contracts. Since the airline will buy fuel later
+and is worried about rising prices, it should go long futures.
+
+Residual risk remains because jet fuel and heating oil are not the same asset,
+so their prices may not move one-for-one. There can also be timing mismatch,
+location mismatch, changing correlations, contract-size rounding, and basis risk
+when the hedge is closed.
+\end{solution}
+
+\subsection*{Solution 14}
+\begin{solution}
+For known cash income,
+\[
+    F_0=(S_0-I)e^{rT}=(100-2.50)e^{0.05}
+    =97.50e^{0.05}\approx 102.50.
+\]
+For a known continuous yield,
+\[
+    F_0=S_0e^{(r-q)T}=100e^{(0.05-0.02)(1)}
+    =100e^{0.03}\approx 103.05.
+\]
+For the old long forward,
+\[
+    f=(F_0-K)e^{-rT}
+    =(52-48)e^{-0.03\times 0.5}
+    =4e^{-0.015}
+    \approx 3.94.
+\]
+The old long forward is valuable because it lets the holder buy at 48 when a new
+forward would lock in a purchase price of 52.
+\end{solution}
+
+\subsection*{Solution 15}
+\begin{solution}
+With storage cost and convenience yield,
+\[
+    F_0=S_0e^{(r+u-y)T}
+    =80e^{(0.05+0.01-0.04)(0.5)}
+    =80e^{0.01}
+    \approx 80.80.
+\]
+If the convenience yield were zero,
+\[
+    F_0=80e^{(0.05+0.01)(0.5)}
+    =80e^{0.03}
+    \approx 82.44.
+\]
+A futures price below the no-convenience-yield cost of carry is not automatically
+an arbitrage opportunity for a consumption commodity because physical ownership
+may provide convenience benefits. Also, reverse cash-and-carry can be difficult
+when the commodity is hard to short, hard to borrow, costly to store, or needed
+for production.
+
+Using the risk-premium relation,
+\[
+    F_0=\E(S_T)e^{(r-k)T}
+    =84e^{(0.05-0.07)(0.5)}
+    =84e^{-0.01}
+    \approx 83.16.
+\]
+This futures price is below the expected future spot price because the commodity
+has positive systematic risk, so $k>r$.
+\end{solution}
+
+\end{document}
