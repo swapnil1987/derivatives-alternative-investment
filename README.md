@@ -15,6 +15,7 @@ options.
 - [Mathematical Foundations](lectures/lecture-0-math-foundations-notes.pdf)
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-notes.pdf)
 - [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-notes.pdf)
+- [Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-notes.pdf)
 
 ## Lecture Slides
 
