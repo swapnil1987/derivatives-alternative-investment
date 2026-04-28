@@ -19,3 +19,4 @@ options.
 ## Lecture Slides
 
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-slides.pdf)
+- [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-slides.pdf)

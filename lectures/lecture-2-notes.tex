@@ -471,122 +471,6 @@ count should be based on values:
 This is useful for equity-index hedging, where beta is naturally defined using
 returns.
 
-\section{Stock Index Futures and Beta Hedging}
-
-\subsection{Index Futures}
-
-A stock index futures contract gives exposure to a diversified stock index. The
-contract value is
-\[
-    V_F = \text{futures price}\times \text{contract multiplier}.
-\]
-For example, if an index futures price is 5,200 and the multiplier is USD 50,
-one contract has notional value
-\[
-    5{,}200\times 50=\$260{,}000.
-\]
-
-\subsection{Hedging an Equity Portfolio}
-
-If a portfolio mirrors the index, the hedge ratio is approximately one. If the
-portfolio has beta $\beta$ relative to the index, the number of contracts to
-short is
-\[
-    N^*=\beta\frac{V_A}{V_F}.
-\]
-
-\begin{exmp}[Equity portfolio hedge]
-A portfolio is worth USD 40 million and has beta 1.25 relative to an index. The
-index futures price is 4,000 and the contract multiplier is USD 250. One
-contract has notional value
-\[
-    V_F=4{,}000\times 250=\$1{,}000{,}000.
-\]
-The number of contracts required to hedge market risk is
-\[
-    N^*=1.25\frac{40{,}000{,}000}{1{,}000{,}000}=50.
-\]
-The portfolio manager shorts 50 futures contracts.
-\end{exmp}
-
-\subsection{Changing Portfolio Beta}
-
-Futures can also change, rather than eliminate, market exposure. If the current
-portfolio beta is $\beta$ and the target beta is $\beta^*$, then
-\[
-    N^*=(\beta-\beta^*)\frac{V_A}{V_F}.
-\]
-If $N^*>0$, short futures. If $N^*<0$, go long futures.
-
-\begin{exmp}[Reducing beta without selling stocks]
-A manager has a USD 25 million portfolio with beta 1.40 and wants beta 0.80 for
-the next month. Each index futures contract has notional value USD 250,000. The
-number of contracts is
-\[
-    N^*=(1.40-0.80)\frac{25{,}000{,}000}{250{,}000}
-    =
-    60.
-\]
-The manager shorts 60 contracts.
-\end{exmp}
-
-\begin{exmp}[Increasing beta]
-A manager has a USD 10 million portfolio with beta 0.70 and wants beta 1.10. One
-futures contract has notional value USD 200,000:
-\[
-    N^*=(0.70-1.10)\frac{10{,}000{,}000}{200{,}000}
-    =
-    -20.
-\]
-The negative sign means the manager should go long 20 contracts.
-\end{exmp}
-
-\subsection{Reasons to Use Index Futures}
-
-Index futures can:
-\begin{itemize}
-    \item temporarily reduce market exposure without selling the underlying
-    stocks;
-    \item equitize cash during portfolio transitions;
-    \item change beta quickly and cheaply;
-    \item separate stock selection from market timing.
-\end{itemize}
-
-\begin{boxF}
-\textbf{Residual risk.} A beta hedge removes exposure to broad market moves only
-approximately. The portfolio can still underperform because of stock selection,
-sector tilts, changing beta, dividends, liquidity, and futures basis risk.
-\end{boxF}
-
-\section{Stack-and-Roll Hedging}
-
-\subsection{The Problem}
-
-Sometimes the exposure lasts longer than the liquid futures contracts available.
-The firm then hedges with a nearby contract and rolls the hedge forward as the
-nearby contract approaches maturity. This is called \emph{stack and roll}.
-
-\begin{exmp}[Rolling a short hedge]
-An oil producer wants to hedge sales over the next 18 months, but the most
-liquid futures contracts are in the first six months. The firm may short nearby
-contracts, close them as they approach maturity, and open new short positions in
-later contracts. The hedge is repeatedly rolled forward.
-\end{exmp}
-
-\subsection{Roll Risk}
-
-Rolling creates risk because the contract being closed and the new contract
-being opened may have changed in relative price. If the term structure moves
-unfavorably, the firm can suffer large cash-flow losses even when the long-run
-economics of the hedge are defensible.
-
-\begin{boxF}
-\textbf{Risk-management lesson.} A stack-and-roll hedge can transform price risk
-into liquidity and funding risk. Daily settlement matters because losses on the
-futures position require cash before the physical exposure generates offsetting
-cash flows.
-\end{boxF}
-
 \section{Forward Prices for Investment Assets}
 
 \subsection{Investment Assets and Consumption Assets}
@@ -990,6 +874,122 @@ seasonality, mean reversion, and convenience yield.}
 \textbf{Modeling caution.} Equity models often begin with geometric Brownian
 motion. Commodity models often need storage, seasonality, mean reversion, jumps,
 and convenience yields. The economic structure of the underlying asset matters.
+\end{boxF}
+
+\section{Stock Index Futures and Beta Hedging}
+
+\subsection{Index Futures}
+
+A stock index futures contract gives exposure to a diversified stock index. The
+contract value is
+\[
+    V_F = \text{futures price}\times \text{contract multiplier}.
+\]
+For example, if an index futures price is 5,200 and the multiplier is USD 50,
+one contract has notional value
+\[
+    5{,}200\times 50=\$260{,}000.
+\]
+
+\subsection{Hedging an Equity Portfolio}
+
+If a portfolio mirrors the index, the hedge ratio is approximately one. If the
+portfolio has beta $\beta$ relative to the index, the number of contracts to
+short is
+\[
+    N^*=\beta\frac{V_A}{V_F}.
+\]
+
+\begin{exmp}[Equity portfolio hedge]
+A portfolio is worth USD 40 million and has beta 1.25 relative to an index. The
+index futures price is 4,000 and the contract multiplier is USD 250. One
+contract has notional value
+\[
+    V_F=4{,}000\times 250=\$1{,}000{,}000.
+\]
+The number of contracts required to hedge market risk is
+\[
+    N^*=1.25\frac{40{,}000{,}000}{1{,}000{,}000}=50.
+\]
+The portfolio manager shorts 50 futures contracts.
+\end{exmp}
+
+\subsection{Changing Portfolio Beta}
+
+Futures can also change, rather than eliminate, market exposure. If the current
+portfolio beta is $\beta$ and the target beta is $\beta^*$, then
+\[
+    N^*=(\beta-\beta^*)\frac{V_A}{V_F}.
+\]
+If $N^*>0$, short futures. If $N^*<0$, go long futures.
+
+\begin{exmp}[Reducing beta without selling stocks]
+A manager has a USD 25 million portfolio with beta 1.40 and wants beta 0.80 for
+the next month. Each index futures contract has notional value USD 250,000. The
+number of contracts is
+\[
+    N^*=(1.40-0.80)\frac{25{,}000{,}000}{250{,}000}
+    =
+    60.
+\]
+The manager shorts 60 contracts.
+\end{exmp}
+
+\begin{exmp}[Increasing beta]
+A manager has a USD 10 million portfolio with beta 0.70 and wants beta 1.10. One
+futures contract has notional value USD 200,000:
+\[
+    N^*=(0.70-1.10)\frac{10{,}000{,}000}{200{,}000}
+    =
+    -20.
+\]
+The negative sign means the manager should go long 20 contracts.
+\end{exmp}
+
+\subsection{Reasons to Use Index Futures}
+
+Index futures can:
+\begin{itemize}
+    \item temporarily reduce market exposure without selling the underlying
+    stocks;
+    \item equitize cash during portfolio transitions;
+    \item change beta quickly and cheaply;
+    \item separate stock selection from market timing.
+\end{itemize}
+
+\begin{boxF}
+\textbf{Residual risk.} A beta hedge removes exposure to broad market moves only
+approximately. The portfolio can still underperform because of stock selection,
+sector tilts, changing beta, dividends, liquidity, and futures basis risk.
+\end{boxF}
+
+\section{Stack-and-Roll Hedging}
+
+\subsection{The Problem}
+
+Sometimes the exposure lasts longer than the liquid futures contracts available.
+The firm then hedges with a nearby contract and rolls the hedge forward as the
+nearby contract approaches maturity. This is called \emph{stack and roll}.
+
+\begin{exmp}[Rolling a short hedge]
+An oil producer wants to hedge sales over the next 18 months, but the most
+liquid futures contracts are in the first six months. The firm may short nearby
+contracts, close them as they approach maturity, and open new short positions in
+later contracts. The hedge is repeatedly rolled forward.
+\end{exmp}
+
+\subsection{Roll Risk}
+
+Rolling creates risk because the contract being closed and the new contract
+being opened may have changed in relative price. If the term structure moves
+unfavorably, the firm can suffer large cash-flow losses even when the long-run
+economics of the hedge are defensible.
+
+\begin{boxF}
+\textbf{Risk-management lesson.} A stack-and-roll hedge can transform price risk
+into liquidity and funding risk. Daily settlement matters because losses on the
+futures position require cash before the physical exposure generates offsetting
+cash flows.
 \end{boxF}
 
 \section{Worked Problems}
