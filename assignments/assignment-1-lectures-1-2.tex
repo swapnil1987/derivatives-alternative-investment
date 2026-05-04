@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\newcommand{\pts}[1]{\hspace{0.35em}\textnormal{\textbf{[#1 points]}}}
+\newcommand{\St}{S_T}
+\newcommand{\Fzero}{F_0}
+\newcommand{\Fone}{F_1}
+\newcommand{\Ftwo}{F_2}
+\newcommand{\K}{K}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+
+\title{S181M116 Derivatives and Alternative Investments\\
+Assignment 1: Derivative Basics, Futures Markets, Hedging, and Forward Pricing}
+\author{Based on Lecture 1 and Lecture 2, Sections 1--3}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Instructions.} Submit one PDF file on Moodle. Show your calculations and
+briefly explain the economic intuition behind numerical answers. Unless stated
+otherwise, ignore transaction costs, taxes, bid-ask spreads, and default risk.
+Use continuous compounding whenever an exponential formula is required. Round
+monetary answers to two decimals and hedge ratios to four decimals.
+
+\textbf{Total: 20 points.} This assignment covers Lecture 1 and the first three
+sections of the Lecture 2 slides: hedge mechanics, basis risk, and forward/futures
+pricing. The later Lecture 2 material on commodity behavior, stock-index futures
+and beta hedging, and stack-and-roll hedging is not assessed here.
+
+\section*{Question 1: Concepts, Market Structure, and Risk Controls \pts{3}}
+
+\begin{enumerate}
+    \item For each item below, state whether it is a derivative. If it is a
+    derivative, identify the underlying variable.
+    \begin{enumerate}
+        \item A contract that pays $\max(\St-75,0)$ in three months.
+        \item A share of common stock.
+        \item A six-month agreement to exchange EUR 1 million for USD at a fixed
+        exchange rate.
+        \item A weather contract that pays when average July temperature exceeds
+        a fixed threshold.
+    \end{enumerate}
+    \item A mining company wants to lock in a customized sale price for a
+    non-standard grade of metal to be delivered in nine months. Would an
+    exchange-traded futures contract or an OTC forward contract be the natural
+    starting point? Explain one benefit and one risk of your choice.
+    \item In one or two sentences, explain why separating front office, middle
+    office, and back office functions matters for derivatives risk management.
+\end{enumerate}
+
+\section*{Question 2: Payoff, Profit, and Option Logic \pts{3}}
+
+A European call and a European put have the same strike price, $\K=100$. The call
+premium is 7 and the put premium is 5. Ignore interest on the option premia.
+
+\begin{enumerate}
+    \item Complete the table below for the buyer of each option.
+
+    \begin{center}
+    \begin{tabular}{@{}ccccc@{}}
+    \toprule
+    $\St$ & Call payoff & Call profit & Put payoff & Put profit \\
+    \midrule
+    88  & & & & \\
+    100 & & & & \\
+    116 & & & & \\
+    \bottomrule
+    \end{tabular}
+    \end{center}
+
+    \item Explain briefly why an option can have a positive payoff and still
+    produce a negative profit.
+    \item Compare the buyer's downside in a long call with the downside in a long
+    forward on the same underlying.
+\end{enumerate}
+
+\section*{Question 3: Futures Settlement, Margin, and Liquidity Risk \pts{3}}
+
+A trader is \textbf{short} six wheat futures contracts. Each contract is for
+5,000 bushels. Yesterday's settlement price was 580.25 cents per bushel and
+today's settlement price is 592.75 cents per bushel. The margin account balance
+before today's settlement was USD 21,000. The maintenance margin is USD 16,000
+and the initial margin is USD 21,000.
+
+\begin{enumerate}
+    \item Compute today's futures profit or loss.
+    \item Compute the margin account balance after daily settlement.
+    \item Is there a margin call? If so, how much must be deposited?
+    \item Briefly explain why daily settlement can create liquidity risk even
+    for a hedge that reduces the firm's underlying price risk.
+\end{enumerate}
+
+\section*{Question 4: Hedge Direction, Basis Risk, and Effective Prices \pts{4}}
+
+A firm will sell a commodity in three months. It hedges today by shorting futures
+at $\Fone=47.80$. Three months later, it sells the physical commodity in the spot
+market at $S_2=45.90$ and closes the futures position at $\Ftwo=46.20$.
+
+\begin{enumerate}
+    \item Why is a short hedge the appropriate hedge direction for this exposure?
+    \item Compute the gain or loss on the futures position per unit.
+    \item Compute the effective sale price per unit.
+    \item Compute the basis at hedge close, $b_2=S_2-\Ftwo$, and verify that the
+    effective sale price equals $\Fone+b_2$.
+    \item Suppose the firm originally expected the closing basis to be $-0.60$.
+    Was the realized effective sale price better or worse than expected? Explain.
+\end{enumerate}
+
+\section*{Question 5: Cross Hedging and the Minimum-Variance Hedge Ratio \pts{4}}
+
+An airline will buy 1,680,000 gallons of jet fuel in three months. It cross
+hedges with heating-oil futures because the futures contract is more liquid.
+Each futures contract covers 42,000 gallons. Historical data give
+\[
+    \rho=0.82,\qquad \sigma_S=0.24,\qquad \sigma_F=0.20,
+\]
+where $\Delta S$ is the change in the jet-fuel spot price and $\Delta F$ is the
+change in the heating-oil futures price.
+
+\begin{enumerate}
+    \item Compute the minimum-variance hedge ratio
+    \[
+        h^*=\rho\frac{\sigma_S}{\sigma_F}.
+    \]
+    \item Compute the number of futures contracts implied by the hedge ratio.
+    Should the airline round up or down? Give a practical recommendation.
+    \item Should the airline go long or short futures? Explain.
+    \item Name two sources of residual risk that remain after this hedge.
+\end{enumerate}
+
+\section*{Question 6: Forward Pricing and Contract Value \pts{3}}
+
+\begin{enumerate}
+    \item A stock has current price $S_0=96$. The present value of known
+    dividends paid during the life of a nine-month forward contract is 1.80. The
+    continuously compounded risk-free rate is 4\% per year. Compute the
+    no-arbitrage forward price.
+    \item A dealer quotes a forward price of 99.50 for the same contract. Is the
+    quote too high or too low relative to no-arbitrage? Describe the arbitrage
+    trade and compute the locked-in profit per share.
+    \item You are long an old six-month forward contract with delivery price
+    $\K=92$. A new forward contract with the same maturity has delivery price
+    $\Fzero=94$. The continuously compounded risk-free rate is 4\% per year.
+    Compute the current value of the old long forward.
+\end{enumerate}
+
+\end{document}

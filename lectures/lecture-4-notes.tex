@@ -1,0 +1,1435 @@
+\input{tufte-style.tex}
+
+\title{S181M116 Derivatives and Alternative Investments: Lecture 4}
+\author{Swapnil Singh}
+\date{}
+
+\hypersetup{
+  pdftitle={S181M116 Derivatives and Alternative Investments: Lecture 4},
+  pdfauthor={Swapnil Singh},
+  pdfkeywords={derivatives, options, put-call parity, option bounds, early exercise, binomial trees, delta hedging}
+}
+
+\setlength{\headheight}{26pt}
+
+\newcommand{\St}{S_T}
+\newcommand{\Szero}{S_0}
+\newcommand{\K}{K}
+\newcommand{\T}{T}
+\newcommand{\dt}{\Delta t}
+\newcommand{\erT}{e^{-rT}}
+\newcommand{\erdt}{e^{-r\Delta t}}
+\newcommand{\PV}{\mathrm{PV}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\EQ}{\mathbb{E}^{Q}}
+\newcommand{\pstar}{p^*}
+\newcommand{\Div}{D}
+\newcommand{\Ncontracts}{N}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This lecture introduces options as asymmetric derivative contracts and develops
+the first no-arbitrage restrictions on their prices. We begin with option market
+mechanics, option positions, contract specifications, exchange trading, margin,
+clearing, and over-the-counter markets. We then study the determinants of option
+prices, upper and lower bounds, put-call parity, and early exercise. The final
+part introduces binomial trees, risk-neutral valuation, American exercise, delta,
+and the link between tree parameters and volatility. Sections 13.10 and 13.11
+from the source material are intentionally omitted.
+\end{abstract}
+
+\begin{boxD}
+\textbf{Reading.} Hull, Chapters 10, 11, and Chapter 13 through Section 13.9.
+The practical goal is to read option contracts and option quotes correctly. The
+pricing goal is to see how no-arbitrage turns payoffs into restrictions,
+relations, and eventually full valuation methods.
+\end{boxD}
+
+\section{Roadmap}
+
+Lectures 1--3 studied forwards, futures, and interest-rate instruments. Those
+contracts are symmetric commitments: both sides are obligated to transact later.
+Options introduce a different structure. The holder has a right but not an
+obligation, while the writer has a contingent obligation.
+
+The lecture has three blocks:
+\begin{enumerate}
+    \item \textbf{Option contracts and markets.} Define calls, puts, long and
+    short positions, moneyness, contract specifications, margin, clearing, and
+    trading arrangements.
+    \item \textbf{Static no-arbitrage restrictions.} Derive bounds and parity
+    relations before introducing a full probability model.
+    \item \textbf{Binomial valuation.} Price options by building riskless
+    portfolios and by using risk-neutral probabilities on one-step and
+    multi-step trees.
+\end{enumerate}
+
+\begin{boxF}
+\textbf{Main lesson.} The option premium is not the expected payoff discounted
+at an arbitrary risky discount rate. No-arbitrage prices options by comparing
+them with dynamically chosen positions in the underlying asset and the risk-free
+asset.
+\end{boxF}
+
+\section{Option Basics}
+
+\subsection{Rights versus Obligations}
+
+An option gives its holder a choice. A forward or futures contract locks both
+parties into an exchange, but an option allows the holder to walk away when
+exercise is unfavorable.
+
+\begin{defN}[Call option]
+A call option gives the holder the right to buy the underlying asset at a fixed
+strike price $\K$ on or before a fixed maturity date.
+\end{defN}
+
+\begin{defN}[Put option]
+A put option gives the holder the right to sell the underlying asset at a fixed
+strike price $\K$ on or before a fixed maturity date.
+\end{defN}
+
+\begin{defN}[Strike and maturity]
+The \emph{strike price}, or exercise price, is the price at which the underlying
+asset can be bought or sold if the option is exercised. The \emph{maturity} or
+expiration date is the last date relevant for exercise.
+\end{defN}
+
+The right is valuable because exercise is selective. A call holder exercises only
+when buying at $\K$ is better than buying in the market. A put holder exercises
+only when selling at $\K$ is better than selling in the market. The writer
+receives the premium up front, but must honor the holder's choice.
+
+\subsection{European and American Exercise}
+
+\begin{defN}[European option]
+A European option can be exercised only at maturity.
+\end{defN}
+
+\begin{defN}[American option]
+An American option can be exercised at any time up to and including maturity.
+\end{defN}
+
+These names describe exercise style, not geography. European options are easier
+to analyze because the exercise date is fixed. American options are usually more
+valuable, or at least no less valuable, because they include all European
+exercise opportunities plus the possibility of early exercise.
+
+\[
+    C \geq c,
+    \qquad
+    P \geq p,
+\]
+where $C$ and $P$ denote American call and put prices, and $c$ and $p$ denote
+European call and put prices with the same underlying, strike, and maturity.
+
+\subsection{Payoff versus Profit}
+
+The payoff is the value received at expiration before subtracting the initial
+premium. The profit subtracts the initial premium, usually ignoring the time
+value of money in payoff diagrams.
+
+For a European call:
+\[
+    \text{payoff}=\max(\St-\K,0).
+\]
+For a European put:
+\[
+    \text{payoff}=\max(\K-\St,0).
+\]
+
+If the call premium is $c_0$, the call profit at maturity is
+\[
+    \max(\St-\K,0)-c_0.
+\]
+If the put premium is $p_0$, the put profit at maturity is
+\[
+    \max(\K-\St,0)-p_0.
+\]
+
+\begin{boxD}
+\textbf{Exercise can reduce a loss.} Suppose a call has strike 100 and was
+bought for 5. If the stock finishes at 102, the holder exercises. The payoff is
+2 and the total profit is $-3$. Exercising does not make the trade profitable,
+but it is better than letting the option expire worthless and losing 5.
+\end{boxD}
+
+\section{The Four Basic Option Positions}
+
+Every option has a buyer and a writer. The buyer is long the option; the writer
+is short the option.
+
+\subsection{Long Call}
+
+A long call benefits from increases in the underlying price. Its payoff is
+\[
+    \max(\St-\K,0).
+\]
+The downside is limited to the premium. The upside is potentially unlimited for
+a stock because the stock price can in principle rise without bound.
+
+\subsection{Short Call}
+
+A short call is the writer's side of the same contract:
+\[
+    -\max(\St-\K,0)=\min(\K-\St,0).
+\]
+The writer receives the premium, but faces losses when the underlying price
+rises above the strike. A naked short call is therefore a high-risk position.
+
+\subsection{Long Put}
+
+A long put benefits from decreases in the underlying price:
+\[
+    \max(\K-\St,0).
+\]
+The downside is limited to the premium. The payoff is largest when the
+underlying price is very low. For a stock, the maximum payoff is approximately
+$\K$ because the stock price cannot fall below zero.
+
+\subsection{Short Put}
+
+A short put has payoff
+\[
+    -\max(\K-\St,0)=\min(\St-\K,0).
+\]
+The writer receives the premium and loses when the underlying price falls below
+the strike. The writer may be forced to buy the asset at $\K$ even when its
+market value is much lower.
+
+\begin{boxF}
+\textbf{Mnemonic.} Long option positions have rights and pay premiums. Short
+option positions receive premiums and carry contingent obligations.
+\end{boxF}
+
+\section{Underlying Assets and Contract Design}
+
+\subsection{Stock Options}
+
+Exchange-traded stock options are standardized contracts. In the United States,
+one stock option contract typically covers 100 shares. A quoted option price is
+usually the price per share, so a quote of 4.20 corresponds to a premium of
+\[
+    4.20 \times 100 = 420
+\]
+for one contract.
+
+\subsection{Other Underlyings}
+
+Options can be written on many assets:
+\begin{description}
+    \item[Exchange-traded products.] Options on ETFs and other listed products
+    allow investors to take option exposure to broad equity, bond, commodity, or
+    currency baskets.
+    \item[Foreign currencies.] Currency options give the right to exchange one
+    currency for another at a specified exchange rate.
+    \item[Stock indices.] Index options settle in cash because delivering the
+    entire index portfolio would be inconvenient.
+    \item[Futures contracts.] A futures option gives the right to enter a
+    futures position at the strike. Exercise gains depend on the futures price
+    relative to the strike.
+\end{description}
+
+\subsection{Expiration Dates and Strike Prices}
+
+An exchange must specify which option contracts trade. For stock options this
+includes the underlying stock, exercise style, contract size, expiration date,
+strike price, and adjustment rules.
+
+Standard U.S. equity options often expire on the third Friday of the expiration
+month, while weekly options expire on other Fridays. Longer-dated equity options
+are often called LEAPS. Strike spacing is chosen by exchanges and is typically
+finer for low-price stocks and wider for high-price stocks.
+
+\subsection{Option Class and Option Series}
+
+\begin{defN}[Option class]
+An option class consists of all options of the same type on the same underlying,
+such as all IBM calls or all IBM puts.
+\end{defN}
+
+\begin{defN}[Option series]
+An option series consists of options of a given class with the same strike and
+same expiration date, such as October calls with strike 160.
+\end{defN}
+
+This distinction matters operationally. A trader may discuss the whole option
+class when talking about liquidity in a stock's options, but a trade is in a
+specific option series.
+
+\subsection{Moneyness}
+
+Moneyness describes whether immediate exercise would produce a positive payoff.
+For stock price $S$ and strike $\K$:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & Call & Put \\
+\midrule
+In the money & $S>\K$ & $S<\K$ \\
+At the money & $S=\K$ & $S=\K$ \\
+Out of the money & $S<\K$ & $S>\K$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{defN}[Intrinsic value]
+The intrinsic value is the payoff from immediate exercise:
+\[
+    \begin{aligned}
+    \text{call intrinsic value} &= \max(S-\K,0),\\
+    \text{put intrinsic value}  &= \max(\K-S,0).
+    \end{aligned}
+\]
+\end{defN}
+
+\begin{defN}[Time value]
+The time value of an option is its market price minus its intrinsic value.
+\end{defN}
+
+An American option cannot sell for less than its intrinsic value because the
+holder can exercise immediately. A European option need not satisfy this
+immediate-exercise bound because immediate exercise is not allowed.
+
+\subsection{Dividends, Stock Splits, and Contract Adjustments}
+
+Exchange-traded stock options are usually not adjusted for ordinary cash
+dividends. The stock price falls on the ex-dividend date, and option prices
+reflect expected dividends through valuation.
+
+By contrast, stock splits and stock dividends generally lead to contract
+adjustments. The goal is to keep the economic position of the option buyer and
+writer unchanged.
+
+\begin{exmp}[Two-for-one stock split]
+A call option gives the holder the right to buy 100 shares at 30. After a
+two-for-one stock split, the option is adjusted to cover 200 shares at a strike
+of 15. The total exercise cost remains
+\[
+    100 \times 30 = 200 \times 15 = 3000.
+\]
+\end{exmp}
+
+\begin{exmp}[Stock dividend]
+A put option gives the holder the right to sell 100 shares at 15. A 25\% stock
+dividend is equivalent to a 5-for-4 split. The adjusted option covers 125 shares
+at a strike of 12, keeping total exercise proceeds equal to
+\[
+    100 \times 15 = 125 \times 12 = 1500.
+\]
+\end{exmp}
+
+\section{Trading, Margin, Clearing, and Regulation}
+
+\subsection{Market Makers and Bid-Ask Spreads}
+
+Option markets require liquidity across many strikes and maturities. Market
+makers quote bid and ask prices and stand ready to trade at those quotes, within
+specified size limits. They earn compensation through the bid-ask spread and
+manage inventory risk by hedging.
+
+\[
+    \text{bid} \leq \text{mid} \leq \text{ask}.
+\]
+
+For illiquid option series, the spread can be large relative to the option's
+premium. This is especially important for low-priced out-of-the-money options.
+
+\subsection{Offsetting Trades}
+
+Most traders close option positions by entering an offsetting order rather than
+by exercising. A trader who bought a call can sell the same call series. A trader
+who wrote a put can buy back the same put series. The economic exposure is then
+closed through the market.
+
+\subsection{Trading Costs}
+
+Option trades involve more than the model price:
+\begin{itemize}
+    \item bid-ask spreads;
+    \item brokerage commissions and exchange fees;
+    \item market impact for large orders;
+    \item financing and collateral costs;
+    \item tax and accounting treatment, where relevant.
+\end{itemize}
+
+Trading costs are small in many textbook derivations, but they matter for
+strategy design and for deciding whether an apparent arbitrage can actually be
+implemented.
+
+\subsection{Margin for Option Writers}
+
+Buying an option creates no future obligation beyond the premium already paid.
+Writing an option creates a possible future obligation, so brokers and clearing
+organizations require margin from writers.
+
+For a naked option, the margin protects against adverse movements in the
+underlying. For covered or spread positions, margin can be lower because another
+position partly offsets the written option's exposure.
+
+\begin{boxF}
+\textbf{Economic interpretation.} Margin is not the option's price. It is
+collateral against future performance. The writer keeps the option premium but
+must post enough collateral to reduce counterparty and clearing risk.
+\end{boxF}
+
+\subsection{The Options Clearing Corporation}
+
+For exchange-traded options in the United States, the Options Clearing
+Corporation acts as the central clearing counterparty. It records positions,
+handles exercises, and guarantees performance by standing between buyers and
+writers after trades are cleared.
+
+This clearing structure makes exchange-traded options different from bilateral
+over-the-counter options. In an OTC contract, the option holder faces the credit
+risk of the writer unless the contract is collateralized or centrally cleared.
+
+\subsection{Exercise Assignment}
+
+When an option holder exercises, the clearing system assigns the exercise to a
+writer. The writer usually does not know in advance whether a particular short
+option will be assigned, only that assignment can occur if the option is
+exercised.
+
+\subsection{Position and Exercise Limits}
+
+Exchanges impose position limits and exercise limits to reduce the chance that a
+single trader can dominate a market or create disorderly exercise activity.
+Long calls and short puts are typically treated as one side of the market
+because both benefit from price increases. Short calls and long puts are treated
+as the opposite side.
+
+\subsection{Taxation and Related Instruments}
+
+Tax rules can materially affect option trading incentives. Wash sale rules,
+constructive sale rules, and the classification of option gains can matter for
+real investors. These rules are jurisdiction-specific and can change, so they
+should be treated as institutional background rather than as universal pricing
+logic.
+
+Options are also related to warrants, employee stock options, and convertible
+bonds:
+\begin{description}
+    \item[Warrants] are call-like securities issued by a company. Exercise
+    usually creates new shares and can dilute existing shareholders.
+    \item[Employee stock options] are compensation contracts designed to align
+    incentives. They are often at-the-money at grant and subject to vesting
+    restrictions.
+    \item[Convertible bonds] combine debt with an embedded option to convert
+    into equity.
+\end{description}
+
+\subsection{Over-the-Counter Options}
+
+OTC options are negotiated bilaterally and can be tailored to a client's exact
+needs. They may differ from exchange-traded options in strike, maturity,
+underlying, exercise dates, payoff shape, collateral terms, and settlement
+rules. Tailoring is valuable, but it introduces greater counterparty credit,
+documentation, model, and liquidity risk.
+
+\section{Factors Affecting Option Prices}
+
+\subsection{The Six Main Inputs}
+
+The value of a stock option depends on:
+\begin{enumerate}
+    \item current stock price $S_0$;
+    \item strike price $\K$;
+    \item time to expiration $\T$;
+    \item stock price volatility $\sigma$;
+    \item risk-free interest rate $r$;
+    \item dividends expected during the option's life.
+\end{enumerate}
+
+These inputs affect calls and puts differently.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Increase in input & Call value & Put value \\
+\midrule
+Current stock price $S_0$ & Increases & Decreases \\
+Strike price $\K$ & Decreases & Increases \\
+Volatility $\sigma$ & Increases & Increases \\
+Risk-free rate $r$ & Usually increases & Usually decreases \\
+Expected dividends & Decreases & Increases \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Stock Price and Strike Price}
+
+A call is more valuable when the stock price is higher and less valuable when
+the strike is higher:
+\[
+    \max(S_T-K,0)
+\]
+increases with $S_T$ and decreases with $K$.
+
+A put has the opposite directional exposure:
+\[
+    \max(K-S_T,0)
+\]
+increases with $K$ and decreases with $S_T$.
+
+\subsection{Time to Expiration}
+
+For American options, more time cannot reduce value because the longer-dated
+option contains every exercise opportunity available to the shorter-dated
+option. Thus, for otherwise identical American options, more time generally
+means a weakly higher price.
+
+For European options, the effect of time is subtler. A longer-maturity European
+option does not permit exercise at the shorter maturity. Large expected
+dividends or interest-rate effects can make a shorter European option more
+valuable in special cases.
+
+\subsection{Volatility}
+
+Volatility increases both call and put values. An option has limited downside
+for the holder but retains upside from favorable movements. Higher volatility
+therefore increases the chance that the option finishes deep in the money.
+
+This does not mean volatility makes the underlying asset itself more valuable.
+For a stock holder, upside and downside movements both matter. For an option
+holder, the payoff truncates the bad side.
+
+\subsection{Risk-Free Interest Rate}
+
+Holding the stock price fixed, a higher risk-free rate tends to increase call
+values and decrease put values. Intuitively:
+\begin{itemize}
+    \item a call delays payment of the strike, so a higher rate makes that
+    delayed payment less costly in present-value terms;
+    \item a put delivers the strike in the future, so a higher rate reduces the
+    present value of that future receipt.
+\end{itemize}
+
+\subsection{Dividends}
+
+Expected dividends reduce the stock price when the stock goes ex-dividend. This
+hurts calls and benefits puts, all else equal. Dividend timing is also central
+to early exercise decisions for American calls.
+
+\section{Assumptions and Notation for No-Arbitrage Results}
+
+We use the following notation:
+\[
+\begin{aligned}
+    S_0 & = \text{current stock price},\\
+    K & = \text{strike price},\\
+    T & = \text{time to maturity},\\
+    r & = \text{continuously compounded risk-free rate},\\
+    c & = \text{European call price},\\
+    p & = \text{European put price},\\
+    C & = \text{American call price},\\
+    P & = \text{American put price}.
+\end{aligned}
+\]
+
+The standard static no-arbitrage arguments assume that large market
+participants can borrow and lend at the risk-free rate, short sell where needed,
+trade without material transaction costs, and exploit arbitrage opportunities
+quickly.
+
+\begin{boxF}
+\textbf{Role of assumptions.} These assumptions are not claims that markets are
+frictionless in every detail. They identify benchmark restrictions. If a price
+violates them by more than trading costs and constraints, arbitrage pressure
+should push it back.
+\end{boxF}
+
+\section{Upper and Lower Bounds}
+
+\subsection{Upper Bounds}
+
+A call option cannot be worth more than the underlying stock:
+\[
+    c \leq S_0,
+    \qquad
+    C \leq S_0.
+\]
+The call is a right to buy the stock, not ownership of more than the stock.
+
+A European or American put cannot be worth more than the strike:
+\[
+    p \leq K,
+    \qquad
+    P \leq K.
+\]
+For a European put, a sharper bound is
+\[
+    p \leq K e^{-rT},
+\]
+because the maximum payoff $K$ occurs at maturity and must be discounted.
+
+\subsection{Lower Bound for a European Call}
+
+For a non-dividend-paying stock, a European call satisfies
+\[
+    c \geq S_0 - K e^{-rT}.
+\]
+It also cannot have negative value, so
+\[
+    c \geq \max(S_0 - K e^{-rT},0).
+\]
+
+\begin{proof}
+Compare two portfolios:
+\begin{description}
+    \item[Portfolio A:] one European call plus cash $K e^{-rT}$;
+    \item[Portfolio B:] one share of stock.
+\end{description}
+At maturity, Portfolio A is worth
+\[
+    \max(S_T-K,0)+K.
+\]
+If $S_T>K$, this is $S_T$. If $S_T\leq K$, this is $K$, which is at least
+$S_T$. Portfolio A is therefore always worth at least as much as Portfolio B at
+maturity. It must be worth at least as much today:
+\[
+    c + K e^{-rT} \geq S_0.
+\]
+\end{proof}
+
+\begin{exmp}[Call lower bound]
+Suppose $S_0=20$, $K=18$, $r=10\%$, and $T=1$. Then
+\[
+    c \geq 20-18e^{-0.10}
+    \approx 20-16.29
+    =3.71.
+\]
+If the call traded for less than 3.71, buying the call and lending the present
+value of the strike would dominate owning the stock.
+\end{exmp}
+
+\subsection{Lower Bound for a European Put}
+
+For a non-dividend-paying stock, a European put satisfies
+\[
+    p \geq K e^{-rT}-S_0.
+\]
+Combining with non-negativity:
+\[
+    p \geq \max(K e^{-rT}-S_0,0).
+\]
+
+\begin{proof}
+Compare:
+\begin{description}
+    \item[Portfolio A:] one European put plus one share;
+    \item[Portfolio B:] cash $K e^{-rT}$.
+\end{description}
+At maturity, Portfolio A is
+\[
+    \max(K-S_T,0)+S_T.
+\]
+If $S_T<K$, this equals $K$. If $S_T\geq K$, this equals $S_T$, which is at
+least $K$. Portfolio A dominates a risk-free payoff of $K$, so
+\[
+    p+S_0\geq K e^{-rT}.
+\]
+\end{proof}
+
+\begin{exmp}[Put lower bound]
+Suppose $S_0=37$, $K=40$, $r=5\%$, and $T=0.5$. Then
+\[
+    p \geq 40e^{-0.05(0.5)}-37
+    \approx 39.01-37
+    =2.01.
+\]
+\end{exmp}
+
+\section{Put-Call Parity}
+
+\subsection{European Parity for Non-Dividend-Paying Stocks}
+
+Put-call parity is the central static-arbitrage relation for European options:
+\[
+    c + K e^{-rT} = p + S_0.
+\]
+
+The left side is a fiduciary call: a call plus enough cash to pay the strike at
+maturity. The right side is a protective put: a stock plus a put. Both portfolios
+pay exactly
+\[
+    \max(S_T,K)
+\]
+at maturity.
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+State at $T$ & Call + cash & Stock + put & Common payoff \\
+\midrule
+$S_T>K$ & $S_T-K+K$ & $S_T+0$ & $S_T$ \\
+$S_T\leq K$ & $0+K$ & $S_T+K-S_T$ & $K$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Because the terminal payoffs are identical, the current values must be identical
+in an arbitrage-free market.
+
+\subsection{Using Parity to Detect Mispricing}
+
+Parity can be rewritten as
+\[
+    c-p = S_0 - K e^{-rT}.
+\]
+The difference between the call and put price equals the forward-like value of
+buying the stock and financing the strike.
+
+\begin{exmp}[Parity-implied put price]
+Suppose $S_0=31$, $K=30$, $r=6\%$, $T=0.25$, and the European call costs 3.
+Then parity gives
+\[
+    p = c + K e^{-rT} - S_0
+      = 3 + 30e^{-0.06(0.25)} - 31
+      \approx 1.55.
+\]
+\end{exmp}
+
+\subsection{Arbitrage Logic When Parity Fails}
+
+If
+\[
+    c+K e^{-rT} > p+S_0,
+\]
+the fiduciary call is too expensive relative to the protective put. An arbitrage
+trader sells the expensive side and buys the cheap side:
+\[
+    \text{short call, borrow } K e^{-rT}, \text{ buy put, buy stock}.
+\]
+
+If
+\[
+    c+K e^{-rT} < p+S_0,
+\]
+the protective put is too expensive relative to the fiduciary call. The trader
+buys the fiduciary call and sells the protective put:
+\[
+    \text{buy call, lend } K e^{-rT}, \text{ short put, short stock}.
+\]
+
+\subsection{American Options and Parity Inequalities}
+
+American options allow early exercise, so exact European parity does not
+generally hold. For a non-dividend-paying stock, the following inequality is the
+standard restriction:
+\[
+    S_0-K \leq C-P \leq S_0-K e^{-rT}.
+\]
+
+The upper bound is related to the European parity relation and the fact that an
+American put is at least as valuable as a European put. The lower bound reflects
+the immediate-exercise value embedded in American contracts.
+
+\section{Early Exercise}
+
+\subsection{American Calls on Non-Dividend-Paying Stocks}
+
+It is never optimal to exercise an American call early when the stock pays no
+dividends. The holder gives up two valuable things by exercising:
+\begin{enumerate}
+    \item the time value of the option;
+    \item the interest that could be earned by delaying payment of the strike.
+\end{enumerate}
+
+The call holder can participate in upside without paying the strike until
+exercise. Exercising early converts the option into stock and unnecessarily pays
+$K$ before it is required.
+
+\[
+    C = c
+\]
+for a non-dividend-paying stock when the call is otherwise identical.
+
+\subsection{American Puts on Non-Dividend-Paying Stocks}
+
+Early exercise of an American put can be optimal. A deep-in-the-money put pays
+approximately $K-S$ when exercised. If $S$ is very low, exercising allows the
+holder to receive $K$ early and earn interest on it.
+
+This early-exercise possibility makes American puts more valuable than European
+puts in some cases:
+\[
+    P \geq p.
+\]
+
+The American put lower bound is its intrinsic value:
+\[
+    P \geq \max(K-S_0,0).
+\]
+
+\subsection{Effect of Dividends on Early Exercise}
+
+Dividends can make early exercise of American calls optimal. A call holder does
+not receive dividends unless the option is exercised and converted into stock.
+Just before a large ex-dividend date, a deep-in-the-money American call may be
+exercised to capture the dividend.
+
+For puts, dividends make the underlying stock less valuable after the
+ex-dividend date, which can reduce the incentive to exercise immediately before
+the dividend. The exact early-exercise decision depends on interest rates,
+dividends, moneyness, and remaining time value.
+
+\section{Dividends and Static Bounds}
+
+\subsection{Known Cash Dividends}
+
+Let $D$ be the present value of known cash dividends paid during the option's
+life. A stock plus its dividends is economically different from a stock without
+dividends. The no-arbitrage bounds adjust by subtracting $D$ from the stock
+component.
+
+For European calls:
+\[
+    c \geq \max(S_0-D-K e^{-rT},0).
+\]
+
+For European puts:
+\[
+    p \geq \max(K e^{-rT}+D-S_0,0).
+\]
+
+\subsection{Put-Call Parity with Known Dividends}
+
+With known dividends, European put-call parity becomes
+\[
+    c + D + K e^{-rT} = p + S_0,
+\]
+or equivalently
+\[
+    c-p = S_0-D-K e^{-rT}.
+\]
+
+\begin{boxF}
+\textbf{Interpretation.} The dividend-adjusted stock price $S_0-D$ is the part
+of the stock value that remains attached to the share price at option maturity.
+The dividends paid before maturity are not received by the option holder unless
+the option is exercised.
+\end{boxF}
+
+\section{One-Step Binomial Model}
+
+\subsection{Tree Setup}
+
+The binomial model assumes that over a short period the stock price has only two
+possible movements. Starting from $S_0$, the stock moves to
+\[
+    S_u=S_0u
+    \qquad \text{or} \qquad
+    S_d=S_0d,
+\]
+where
+\[
+    u>1,
+    \qquad
+    d<1.
+\]
+
+Let the option value after an up move be $f_u$ and after a down move be $f_d$.
+The goal is to compute the current option value $f$.
+
+\subsection{Riskless Portfolio Argument}
+
+Construct a portfolio with:
+\[
+    \Delta \text{ shares of stock}
+    \quad \text{and} \quad
+    -1 \text{ option}.
+\]
+
+Its value after an up move is
+\[
+    S_0u\Delta - f_u.
+\]
+Its value after a down move is
+\[
+    S_0d\Delta - f_d.
+\]
+
+Choose $\Delta$ so the two values are equal:
+\[
+    S_0u\Delta - f_u
+    =
+    S_0d\Delta - f_d.
+\]
+Solving gives
+\[
+    \Delta
+    =
+    \frac{f_u-f_d}{S_0u-S_0d}.
+\]
+
+\begin{defN}[Delta in a one-step tree]
+Delta is the number of shares needed per option shorted to make the
+stock-option portfolio locally riskless:
+\[
+    \Delta
+    =
+    \frac{\text{change in option value}}{\text{change in stock value}}.
+\]
+\end{defN}
+
+Because the portfolio is riskless, it must earn the risk-free rate. Discounting
+the certain terminal value back to today determines $f$.
+
+\subsection{Risk-Neutral Probability}
+
+The same value can be written in risk-neutral form:
+\[
+    f = e^{-rT}\left[p f_u+(1-p)f_d\right],
+\]
+where
+\[
+    p=\frac{e^{rT}-d}{u-d}.
+\]
+
+The parameter $p$ is not generally the real-world probability of an up move. It
+is the probability that makes the expected stock return equal to the risk-free
+rate:
+\[
+    pS_0u+(1-p)S_0d = S_0e^{rT}.
+\]
+
+\begin{boxD}
+\textbf{Risk-neutral valuation.} To price the option, replace the stock's
+expected return by the risk-free rate, compute the expected option payoff under
+that adjusted probability, and discount at the risk-free rate.
+\end{boxD}
+
+\subsection{Numerical One-Step Example}
+
+Suppose
+\[
+    S_0=20,\quad u=1.10,\quad d=0.90,\quad K=21,\quad r=12\%,
+    \quad T=0.25.
+\]
+The possible stock prices are
+\[
+    S_u=22,
+    \qquad
+    S_d=18.
+\]
+For a European call,
+\[
+    f_u=\max(22-21,0)=1,
+    \qquad
+    f_d=\max(18-21,0)=0.
+\]
+The risk-neutral probability is
+\[
+    p=
+    \frac{e^{0.12(0.25)}-0.90}{1.10-0.90}
+    \approx
+    \frac{1.03045-0.90}{0.20}
+    =0.6523.
+\]
+The option value is
+\[
+    f=e^{-0.12(0.25)}[0.6523(1)+0.3477(0)]
+    \approx 0.633.
+\]
+
+The hedge ratio is
+\[
+    \Delta=\frac{1-0}{22-18}=0.25.
+\]
+Thus a trader who is short one call hedges the one-step risk by buying 0.25
+shares.
+
+\section{Why the Real-World Expected Return Drops Out}
+
+The option is risky, so it is tempting to discount its expected payoff using a
+risky expected return. The binomial argument shows why this is not the right
+primitive. The option is priced relative to the stock. Once the stock price
+$S_0$ is observed, the stock already embeds the market's required compensation
+for risk.
+
+The no-arbitrage relation between the option and the stock does not require the
+stock's expected real-world return $\mu$. Different investors may disagree about
+$\mu$, but if they agree on $S_0$, $u$, $d$, $r$, and the payoff, the
+arbitrage-free option price is pinned down.
+
+\begin{boxF}
+\textbf{Key distinction.} Risk-neutral valuation does not say investors are
+risk-neutral in reality. It says that for pricing derivatives relative to traded
+underlyings, we may use risk-neutral probabilities because the risk adjustment is
+already reflected in traded asset prices.
+\end{boxF}
+
+\section{Two-Step Binomial Trees}
+
+\subsection{Backward Induction}
+
+In a two-step tree, the stock can move up or down in each step. Starting from
+$S_0$, the terminal stock prices are
+\[
+    S_0u^2,
+    \qquad
+    S_0ud,
+    \qquad
+    S_0d^2.
+\]
+If $ud=du$, the middle node is recombining: one up then one down gives the same
+stock price as one down then one up.
+
+The valuation procedure is:
+\begin{enumerate}
+    \item compute terminal option payoffs;
+    \item value the option one step earlier using the one-step formula;
+    \item continue backward until reaching the initial node.
+\end{enumerate}
+
+For time step $\dt$, the one-step recursion is
+\[
+    f=e^{-r\dt}\left[p f_u+(1-p)f_d\right],
+\]
+where
+\[
+    p=\frac{e^{r\dt}-d}{u-d}.
+\]
+
+\subsection{Two-Step Formula for a European Option}
+
+Let the terminal option payoffs be $f_{uu}$, $f_{ud}$, and $f_{dd}$. Then
+\[
+\begin{aligned}
+    f_u &= e^{-r\dt}\left[p f_{uu}+(1-p)f_{ud}\right],\\
+    f_d &= e^{-r\dt}\left[p f_{ud}+(1-p)f_{dd}\right],\\
+    f   &= e^{-r\dt}\left[p f_u+(1-p)f_d\right].
+\end{aligned}
+\]
+Substituting gives
+\[
+    f=e^{-2r\dt}
+    \left[
+        p^2 f_{uu}
+        +2p(1-p)f_{ud}
+        +(1-p)^2 f_{dd}
+    \right].
+\]
+
+\subsection{European Put Example}
+
+Consider a two-year European put with
+\[
+    S_0=50,\quad K=52,\quad u=1.2,\quad d=0.8,\quad r=5\%,
+    \quad \dt=1.
+\]
+The risk-neutral probability is
+\[
+    p=\frac{e^{0.05}-0.8}{1.2-0.8}
+    \approx 0.6282.
+\]
+The terminal stock prices are
+\[
+    72,\quad 48,\quad 32.
+\]
+The terminal put payoffs are
+\[
+    f_{uu}=0,\quad f_{ud}=4,\quad f_{dd}=20.
+\]
+Thus
+\[
+\begin{aligned}
+    f
+    &=
+    e^{-0.10}
+    \left[
+        (0.6282)^2(0)
+        +2(0.6282)(0.3718)(4)
+        +(0.3718)^2(20)
+    \right] \\
+    &\approx
+    4.19.
+\end{aligned}
+\]
+
+\section{American Options in Trees}
+
+\subsection{Exercise Check at Each Node}
+
+For American options, backward induction must include an exercise decision at
+every node before maturity. At a node with stock price $S$, the value is
+\[
+    \max\{\text{intrinsic value},\text{continuation value}\}.
+\]
+
+For an American put:
+\[
+    \text{node value}
+    =
+    \max\left[
+        K-S,\,
+        e^{-r\dt}\left(p f_u+(1-p)f_d\right)
+    \right].
+\]
+
+For an American call:
+\[
+    \text{node value}
+    =
+    \max\left[
+        S-K,\,
+        e^{-r\dt}\left(p f_u+(1-p)f_d\right)
+    \right].
+\]
+
+\subsection{Early Exercise Example Logic}
+
+Return to the put with $S_0=50$, $K=52$, $u=1.2$, $d=0.8$, $r=5\%$, and
+$\dt=1$. At the lower node after one down move, the stock price is 40. Immediate
+exercise gives
+\[
+    K-S=52-40=12.
+\]
+The continuation value is the discounted risk-neutral expectation of next
+period's values. If continuation is less than 12, the American put is exercised
+at that node.
+
+\begin{boxD}
+\textbf{Backward induction with American exercise.} First compute continuation
+value as if the option were European from that node onward. Then compare it with
+immediate exercise. The node value is the larger of the two.
+\end{boxD}
+
+\section{Delta Hedging}
+
+\subsection{Delta as Local Sensitivity}
+
+Delta measures the sensitivity of the option price to the underlying price:
+\[
+    \Delta
+    =
+    \frac{\partial f}{\partial S}
+\]
+in continuous models, and
+\[
+    \Delta
+    =
+    \frac{f_u-f_d}{S_u-S_d}
+\]
+in a one-step binomial tree.
+
+Call deltas are positive. Put deltas are negative. A deeply in-the-money call
+has delta close to 1, while a deeply out-of-the-money call has delta close to 0.
+A deeply in-the-money put has delta close to $-1$, while a deeply
+out-of-the-money put has delta close to 0.
+
+\subsection{Delta Changes Over Time}
+
+In a multi-step tree, delta is not constant. It differs by node because the
+option's moneyness and remaining time differ by node. A hedge that is riskless
+over one small interval must be rebalanced as the stock price and time to
+maturity change.
+
+\begin{boxF}
+\textbf{Dynamic hedging.} Option hedging is dynamic. The portfolio that is
+riskless over one short interval is not usually riskless over the next interval
+unless the stock position is adjusted.
+\end{boxF}
+
+\section{Matching Binomial Trees to Volatility}
+
+\subsection{Choosing $u$ and $d$}
+
+A binomial tree needs three parameters per time step:
+\[
+    u,\quad d,\quad p.
+\]
+Once $u$ and $d$ are chosen, no-arbitrage fixes $p$:
+\[
+    p=\frac{e^{r\dt}-d}{u-d}.
+\]
+
+The up and down multipliers are chosen to match volatility. If annual volatility
+is $\sigma$ and the time step is $\dt$, the standard binomial choice is
+\[
+    u=e^{\sigma\sqrt{\dt}},
+    \qquad
+    d=e^{-\sigma\sqrt{\dt}}=\frac{1}{u}.
+\]
+
+Then
+\[
+    p=\frac{e^{r\dt}-d}{u-d}.
+\]
+
+\subsection{Why Volatility Is Preserved Under Risk-Neutral Valuation}
+
+Moving from the real-world measure to the risk-neutral measure changes expected
+returns. The real-world expected stock growth rate $\mu$ is replaced by the
+risk-free rate $r$. Volatility is not changed. The tree should therefore match
+the asset's volatility under both the real-world and risk-neutral measures, but
+use a risk-neutral probability when pricing.
+
+\begin{boxD}
+\textbf{Connection to measure changes.} In more advanced notation, the
+real-world probability measure is often called $P$, while the risk-neutral
+measure is called $Q$. The change from $P$ to $Q$ changes drifts, not the local
+volatility parameter used to build the tree.
+\end{boxD}
+
+\subsection{Numerical Tree Parameters}
+
+Suppose a two-year option is valued with two time steps, so $\dt=1$. Let
+\[
+    \sigma=30\%,
+    \qquad
+    r=5\%.
+\]
+Then
+\[
+    u=e^{0.30}=1.3499,
+    \qquad
+    d=e^{-0.30}=0.7408,
+\]
+and
+\[
+    p=
+    \frac{e^{0.05}-0.7408}{1.3499-0.7408}
+    \approx
+    0.5097.
+\]
+
+These parameters define the tree. For an American option, each node then uses
+the continuation-versus-exercise comparison.
+
+\section{Increasing the Number of Steps}
+
+\subsection{More Steps Means a Finer Approximation}
+
+The same tree formulas apply for any number of steps $n$. If the option life is
+$T$, then
+\[
+    \dt=\frac{T}{n}.
+\]
+The parameters are
+\[
+    u=e^{\sigma\sqrt{\dt}},
+    \qquad
+    d=e^{-\sigma\sqrt{\dt}},
+    \qquad
+    p=\frac{e^{r\dt}-d}{u-d}.
+\]
+
+As $n$ increases, the tree has a finer time grid and a richer set of possible
+terminal stock prices. For European options on non-dividend-paying stocks, the
+binomial price converges to the Black-Scholes-Merton price as the number of
+steps becomes large.
+
+\subsection{Five-Step Illustration}
+
+Suppose $T=2$, $n=5$, $r=5\%$, and $\sigma=30\%$. Then
+\[
+    \dt=\frac{2}{5}=0.4.
+\]
+The tree parameters are
+\[
+    u=e^{0.30\sqrt{0.4}}\approx 1.2089,
+    \qquad
+    d=\frac{1}{u}\approx 0.8272,
+\]
+\[
+    e^{r\dt}=e^{0.05(0.4)}\approx 1.0202,
+    \qquad
+    p=\frac{1.0202-0.8272}{1.2089-0.8272}\approx 0.5056.
+\]
+
+The pricing algorithm does not change. Compute terminal payoffs, work backward
+one step at a time, and for American options compare continuation value with
+exercise value at each node.
+
+\section{What Is Omitted}
+
+The source material includes Section 13.10 on DerivaGem software and Section
+13.11 on options on other assets. These notes intentionally exclude those two
+sections. The binomial-tree discussion here is limited to stock options through
+the increasing-number-of-steps material in Section 13.9.
+
+\section{Worked Examples}
+
+\begin{exmp}[Payoff and profit of a long call]
+A call has strike 100 and premium 6. At maturity the stock price is 114. The
+payoff is
+\[
+    \max(114-100,0)=14.
+\]
+The profit per share is
+\[
+    14-6=8.
+\]
+For one standard contract on 100 shares, the profit is 800.
+\end{exmp}
+
+\begin{exmp}[Payoff and profit of a long put]
+A put has strike 70 and premium 4. At maturity the stock price is 58. The payoff
+is
+\[
+    \max(70-58,0)=12.
+\]
+The profit per share is
+\[
+    12-4=8.
+\]
+\end{exmp}
+
+\begin{exmp}[Intrinsic and time value]
+A call has strike 50, the stock price is 56, and the call price is 8.50. The
+intrinsic value is
+\[
+    \max(56-50,0)=6.
+\]
+The time value is
+\[
+    8.50-6=2.50.
+\]
+\end{exmp}
+
+\begin{exmp}[European parity arbitrage check]
+Suppose $S_0=40$, $K=40$, $r=5\%$, $T=1$, $c=4.00$, and $p=2.00$. Parity
+requires
+\[
+    c+Ke^{-rT}
+    =
+    p+S_0.
+\]
+The left side is
+\[
+    4+40e^{-0.05}=42.05.
+\]
+The right side is
+\[
+    2+40=42.00.
+\]
+The apparent mispricing is 0.05 per share before transaction costs. In practice,
+this would likely be too small to exploit after bid-ask spreads and fees.
+\end{exmp}
+
+\begin{exmp}[American put node decision]
+At a node in an American put tree, $S=38$, $K=45$, $r=4\%$, $\dt=0.5$, $p=0.55$,
+$f_u=5$, and $f_d=12$. The continuation value is
+\[
+    e^{-0.04(0.5)}[0.55(5)+0.45(12)]
+    =
+    e^{-0.02}(8.15)
+    \approx 7.99.
+\]
+Immediate exercise gives
+\[
+    K-S=45-38=7.
+\]
+The node value is 7.99, so the put is not exercised at this node.
+\end{exmp}
+
+\begin{exmp}[Delta in a tree]
+At a node, the stock can move to 66 or 54. A call will be worth 9 after the up
+move and 1 after the down move. Its delta is
+\[
+    \Delta=\frac{9-1}{66-54}=\frac{8}{12}=0.6667.
+\]
+A trader short 100 calls would buy approximately 66.67 shares to create the
+one-step delta hedge.
+\end{exmp}
+
+\section{Checklist for Students}
+
+After this lecture you should be able to:
+\begin{itemize}
+    \item distinguish option rights from forward and futures obligations;
+    \item define calls, puts, strike price, expiration, European exercise, and
+    American exercise;
+    \item compute payoffs and profits for long and short calls and puts;
+    \item explain why option writers face margin requirements;
+    \item distinguish option class, option series, intrinsic value, time value,
+    and moneyness;
+    \item describe how stock splits and stock dividends affect option contract
+    terms;
+    \item explain the roles of exchanges, market makers, brokers, clearing
+    members, and the Options Clearing Corporation;
+    \item list the main factors affecting stock option prices and sign their
+    effects on calls and puts;
+    \item derive and use upper and lower bounds for European and American
+    options;
+    \item derive put-call parity for European options on non-dividend-paying
+    stocks;
+    \item adapt parity and bounds for known dividends;
+    \item explain why an American call on a non-dividend-paying stock should not
+    be exercised early;
+    \item explain why an American put may be exercised early;
+    \item set up a one-step binomial tree and compute the risk-neutral
+    probability;
+    \item value a European option by risk-neutral expectation on a tree;
+    \item construct the one-step delta hedge;
+    \item value a two-step European option by backward induction;
+    \item value an American option by comparing continuation and exercise values
+    at each node;
+    \item choose $u$, $d$, and $p$ from volatility, the risk-free rate, and the
+    time step;
+    \item explain why the real-world expected stock return does not enter the
+    no-arbitrage option price;
+    \item explain why binomial prices converge as the number of steps increases.
+\end{itemize}
+
+\section{Practice Questions}
+
+\begin{enumerate}
+    \item A call has strike 60 and premium 4. Compute the payoff and profit when
+    the terminal stock price is 52, 60, and 71.
+    \item A put has strike 45 and premium 3.50. Compute the payoff and profit
+    when the terminal stock price is 35, 45, and 52.
+    \item Draw the payoff diagrams for a long call, short call, long put, and
+    short put. Label the strike and the break-even points after including
+    premiums.
+    \item One equity option contract covers 100 shares. If a call is quoted at
+    2.75, what premium is paid for 12 contracts?
+    \item A stock is at 84. Classify a call with strike 80, a call with strike
+    90, a put with strike 80, and a put with strike 90 as in, at, or out of the
+    money.
+    \item A put with strike 100 is priced at 13 when the stock is 91. Compute
+    intrinsic value and time value.
+    \item A company has a 3-for-2 stock split. How should the terms of a call on
+    100 shares with strike 48 be adjusted?
+    \item Explain why a naked short call requires margin but a purchased call
+    does not.
+    \item List the six main factors affecting stock option prices. For each,
+    state whether an increase usually raises or lowers a call and a put.
+    \item A non-dividend-paying stock is 72, the strike is 70, $r=4\%$, and
+    $T=0.5$. Compute the lower bound for the European call.
+    \item A non-dividend-paying stock is 38, the strike is 40, $r=3\%$, and
+    $T=1$. Compute the lower bound for the European put.
+    \item A European call costs 6.20. The stock is 50, the strike is 52,
+    $r=5\%$, and $T=0.75$. Use put-call parity to compute the corresponding
+    European put price.
+    \item Suppose $c+Ke^{-rT}>p+S_0$. Describe the arbitrage trade and verify
+    that the terminal payoff is nonnegative.
+    \item Why is it generally suboptimal to exercise an American call early
+    when the stock pays no dividends?
+    \item Why can it be optimal to exercise a deep-in-the-money American put
+    early?
+    \item A stock is 30 and can move to 36 or 24 in one year. A one-year call
+    has strike 32 and $r=5\%$. Compute $p$ and the call price.
+    \item In the previous question, compute the hedge ratio $\Delta$.
+    \item A two-step tree has $S_0=100$, $u=1.1$, $d=0.9$, $r=4\%$, and
+    $\dt=0.5$. Compute the risk-neutral probability.
+    \item Use the tree in the previous question to value a European put with
+    strike 100.
+    \item At an American put node, $S=42$, $K=50$, $r=6\%$, $\dt=0.25$,
+    $p=0.52$, $f_u=5$, and $f_d=11$. Should the option be exercised?
+    \item Compute $u$, $d$, and $p$ for a stock option tree when
+    $\sigma=25\%$, $r=4\%$, and $\dt=1/12$.
+    \item Explain in words why risk-neutral probabilities are not generally the
+    same as real-world probabilities.
+    \item If the number of tree steps is increased from 10 to 500 for a fixed
+    option maturity, what happens to $\dt$? Why does this improve the
+    approximation?
+    \item State clearly which parts of the source material are omitted from
+    these notes and why.
+\end{enumerate}
+
+\end{document}
