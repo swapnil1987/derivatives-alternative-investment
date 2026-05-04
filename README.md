@@ -6,6 +6,11 @@ and Other Derivatives*, with coverage of forwards, futures, options,
 Black-Scholes-Merton, Ito's lemma, Greeks, volatility, private equity, and real
 options.
 
+## News
+
+- Assignment 1 has been posted and is due on May 11.
+- Lecture 3 notes and slides were not covered in class.
+
 ## Syllabus
 
 - [Syllabus PDF](lectures/syllabus.pdf)
@@ -15,14 +20,14 @@ options.
 - [Mathematical Foundations](lectures/lecture-0-math-foundations-notes.pdf)
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-notes.pdf)
 - [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-notes.pdf)
-- [Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-notes.pdf)
+- ~~[Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-notes.pdf)~~ (not covered in class)
 - [Lecture 4: Options, Put-Call Parity, and Binomial Trees](lectures/lecture-4-notes.pdf)
 
 ## Lecture Slides
 
 - [Lecture 1: Introduction, Futures Markets, and Risk Lessons](lectures/lecture-1-slides.pdf)
 - [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-slides.pdf)
-- [Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-slides.pdf)
+- ~~[Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-slides.pdf)~~ (not covered in class)
 - [Lecture 4: Options, Put-Call Parity, and Binomial Trees](lectures/lecture-4-slides.pdf)
 
 ## Assignments
