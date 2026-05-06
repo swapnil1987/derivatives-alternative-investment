@@ -1,0 +1,424 @@
+\documentclass[10pt]{article}
+
+\usepackage[a4paper,margin=0.65in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.25em}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.12em,topsep=0.15em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=0.12em,topsep=0.15em}
+\renewcommand{\arraystretch}{1.12}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\E}{E}
+\newcommand{\dd}{\Delta}
+\newcommand{\pnl}{\mathrm{P\&L}}
+
+\definecolor{accent}{HTML}{204A87}
+\definecolor{soft}{HTML}{EEF4FB}
+
+\newcommand{\formula}[1]{\[
+    \boxed{\displaystyle #1}
+\]}
+\newcommand{\note}[1]{\textcolor{accent}{\textbf{Check:}} #1}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Derivatives and Alternative Investments}}\\
+    \vspace{0.2em}
+    {\large Exam Formula-Check Notes}\\
+    \vspace{0.2em}
+    \small Coverage: Lecture 1, Lecture 2 sections 1--3 only, Lecture 4. Lecture 3 is excluded.
+\end{center}
+
+\vspace{0.4em}
+
+\begin{multicols}{2}
+
+\section*{Notation}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Symbol & Meaning \\
+\midrule
+$S_t$ & Spot price at time $t$ \\
+$S_T$ & Spot price at maturity/expiration \\
+$F_t$ & Forward or futures price at time $t$ \\
+$F_0$ & Initial forward/futures price \\
+$K$ & Delivery price or option strike \\
+$T$ & Time to maturity, in years \\
+$r$ & Continuously compounded risk-free rate \\
+$q$ & Continuous income/dividend yield \\
+$I$ & Present value of known cash income \\
+$U$ & Present value of known storage cost \\
+$u$ & Proportional storage-cost rate \\
+$y$ & Convenience yield \\
+$c,p$ & European call and put values \\
+$C,P$ & American call and put values \\
+$N$ & Number of futures contracts \\
+$Q$ & Contract size \\
+$h$ & Hedge ratio \\
+\bottomrule
+\end{tabular}
+
+\note{Most pricing formulas below assume continuous compounding unless stated otherwise.}
+
+\section*{1. Payoffs and Contract Values}
+
+\subsection*{Derivative Basics}
+A derivative payoff can be written generally as
+\formula{\text{payoff at }T=g(X_T)}
+where $X_T$ is the underlying variable at maturity.
+
+\textbf{Payoff} is the terminal cash flow. \textbf{Profit} is payoff minus initial cost and financing. \textbf{Value} is the current market value of the contract.
+
+\subsection*{Forwards}
+Long forward: agree to buy at $K$.
+\formula{\text{long forward payoff}=S_T-K}
+
+Short forward: agree to sell at $K$.
+\formula{\text{short forward payoff}=K-S_T}
+
+For a non-income-paying investment asset:
+\formula{F_0=S_0e^{rT}}
+
+With simple annual interest, use the matching simple-compounding version, e.g.
+\[
+    F_0=S_0(1+rT).
+\]
+
+\note{If quoted $F_0>S_0e^{rT}$, cash-and-carry: borrow, buy asset, short forward. If quoted $F_0<S_0e^{rT}$, reverse cash-and-carry: short asset, invest proceeds, long forward.}
+
+\subsection*{Futures Daily Settlement}
+For $N$ contracts and contract size $Q$:
+\formula{\pnl_t^{\text{long}}=NQ(F_t-F_{t-1})}
+\formula{\pnl_t^{\text{short}}=NQ(F_{t-1}-F_t)}
+
+\note{Margin is collateral, not the price of the futures contract. Daily settlement reduces credit risk but can create liquidity risk.}
+
+\subsection*{Options}
+Call option payoff:
+\formula{\max(S_T-K,0)=(S_T-K)^+}
+
+Put option payoff:
+\formula{\max(K-S_T,0)=(K-S_T)^+}
+
+Profit, ignoring interest in payoff diagrams:
+\[
+    \text{long option profit}=\text{payoff}-\text{premium}.
+\]
+
+American exercise weakly increases value:
+\formula{C\geq c,\qquad P\geq p}
+
+\section*{2. Hedging With Futures}
+
+\subsection*{Choosing Hedge Direction}
+\begin{itemize}
+    \item \textbf{Short hedge:} use when the firm owns, produces, or expects to receive an asset it will later sell.
+    \item \textbf{Long hedge:} use when the firm expects to buy an asset later and wants protection against rising prices.
+    \item \textbf{Cross hedge:} use a related futures contract when no liquid futures contract exists on the exact exposure.
+\end{itemize}
+
+Simple contract count when hedge ratio is one:
+\formula{N=\frac{\text{quantity to hedge}}{\text{contract size}}}
+
+\subsection*{Basis Risk}
+Basis is spot minus futures:
+\formula{b_t=S_t-F_t}
+
+For a short hedge opened at $t=1$ and closed at $t=2$:
+\[
+    \text{futures gain}=F_1-F_2,
+\]
+\formula{\text{effective sale price}=S_2+(F_1-F_2)=F_1+b_2}
+
+For a long hedge opened at $t=1$ and closed at $t=2$:
+\[
+    \text{futures gain}=F_2-F_1,
+\]
+\formula{\text{effective purchase price}=S_2-(F_2-F_1)=F_1+b_2}
+
+\note{If $b_2=0$, the hedge locks in $F_1$. Otherwise, $b_2$ is the remaining basis risk.}
+
+Cross-hedge basis decomposition:
+\formula{S_2-F_2=(S_2-S_2^*)+(S_2^*-F_2)}
+The first term is mismatch between physical assets; the second is the usual basis for the futures underlying.
+
+\subsection*{Minimum-Variance Hedge Ratio}
+For a short hedge using hedge ratio $h$:
+\[
+    \Delta V=\Delta S-h\Delta F.
+\]
+
+Residual variance:
+\[
+    \Var(\Delta V)=\sigma_S^2+h^2\sigma_F^2-2h\Cov(\Delta S,\Delta F).
+\]
+
+Optimal hedge ratio:
+\formula{h^*=\frac{\Cov(\Delta S,\Delta F)}{\Var(\Delta F)}
+=\rho\frac{\sigma_S}{\sigma_F}}
+
+Contract count:
+\formula{N^*=h^*\frac{Q_A}{Q_F}
+\qquad\text{or}\qquad
+N^*=h^*\frac{V_A}{V_F}}
+
+\note{If the regression uses price changes, use physical quantities. If it uses percentage returns, use values.}
+
+\section*{3. Forward and Futures Pricing}
+
+\subsection*{Investment Assets}
+Non-income-paying asset:
+\formula{F_0=S_0e^{rT}}
+
+Known cash income with present value $I$:
+\formula{F_0=(S_0-I)e^{rT}}
+
+Known continuous yield $q$:
+\formula{F_0=S_0e^{(r-q)T}}
+
+Value of an existing long forward with delivery price $K$:
+\formula{f=(F_0-K)e^{-rT}}
+
+For an existing short forward:
+\[
+    f_{\text{short}}=(K-F_0)e^{-rT}.
+\]
+
+\subsection*{Commodity Pricing}
+Fixed storage cost with present value $U$:
+\formula{F_0=(S_0+U)e^{rT}}
+
+Proportional storage cost $u$:
+\formula{F_0=S_0e^{(r+u)T}}
+
+With proportional storage cost $u$ and convenience yield $y$:
+\formula{F_0=S_0e^{(r+u-y)T}}
+
+For consumption commodities, arbitrage may give only an upper bound:
+\formula{F_0\leq (S_0+U)e^{rT}}
+
+\textbf{Contango:} futures prices rise with maturity. \textbf{Backwardation:} futures prices fall with maturity.
+
+\subsection*{Futures Prices and Expected Spot Prices}
+The futures price is not just a forecast:
+\formula{F_0=\E(S_T)e^{(r-k)T}}
+where $k$ is the required expected return on the underlying asset.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Systematic risk & Relation & Implication \\
+\midrule
+None & $k=r$ & $F_0=\E(S_T)$ \\
+Positive & $k>r$ & $F_0<\E(S_T)$ \\
+Negative & $k<r$ & $F_0>\E(S_T)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\note{Do not confuse backwardation/contango as curve shapes with normal backwardation/contango as statements about expected future spot prices.}
+
+\section*{4. Options and Moneyness}
+
+\subsection*{Four Basic Positions}
+\begin{center}
+{\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+Position & Payoff & Exposure \\
+\midrule
+Long call & $\max(S_T-K,0)$ & Upside \\
+Short call & $-\max(S_T-K,0)$ & Upside loss \\
+Long put & $\max(K-S_T,0)$ & Downside protection \\
+Short put & $-\max(K-S_T,0)$ & Downside loss \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\subsection*{Break-Even Points}
+Ignoring interest:
+\[
+    \text{long call break-even}=K+\text{premium},
+\]
+\[
+    \text{long put break-even}=K-\text{premium}.
+\]
+
+\subsection*{Moneyness}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & Call & Put \\
+\midrule
+In the money & $S>K$ & $S<K$ \\
+At the money & $S=K$ & $S=K$ \\
+Out of the money & $S<K$ & $S>K$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Intrinsic value:
+\formula{\text{call intrinsic value}=\max(S-K,0)}
+\formula{\text{put intrinsic value}=\max(K-S,0)}
+
+Time value:
+\formula{\text{time value}=\text{option price}-\text{intrinsic value}}
+
+A standard U.S. exchange-traded stock option contract usually covers 100 shares, and quoted option prices are usually per share.
+
+\section*{5. Option Price Restrictions}
+
+\subsection*{Inputs to Stock Option Prices}
+\begin{center}
+{\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+Input increases & Call & Put \\
+\midrule
+$S_0$ & Increases & Decreases \\
+$K$ & Decreases & Increases \\
+$\sigma$ & Increases & Increases \\
+$r$ & Usually increases & Usually decreases \\
+Dividends & Decreases & Increases \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+\subsection*{Upper Bounds}
+\formula{c\leq S_0,\qquad C\leq S_0}
+\formula{p\leq K,\qquad P\leq K}
+For a European put:
+\formula{p\leq Ke^{-rT}}
+
+\subsection*{Lower Bounds}
+For European options on a non-dividend-paying stock:
+\formula{c\geq \max(S_0-Ke^{-rT},0)}
+\formula{p\geq \max(Ke^{-rT}-S_0,0)}
+
+\section*{6. Put-Call Parity}
+
+For European options on a non-dividend-paying stock:
+\formula{c+Ke^{-rT}=p+S_0}
+
+Equivalent form:
+\formula{c-p=S_0-Ke^{-rT}}
+
+Fiduciary call:
+\[
+    \text{call}+\text{cash }Ke^{-rT}.
+\]
+Protective put:
+\[
+    \text{put}+\text{stock}.
+\]
+Both pay $\max(S_T,K)$ at maturity.
+
+\subsection*{Parity Arbitrage Rule}
+Compare the two packages:
+\[
+    \underbrace{c+Ke^{-rT}}_{\text{fiduciary call}}
+    \quad\text{and}\quad
+    \underbrace{p+S_0}_{\text{protective put}}.
+\]
+
+\begin{center}
+\begin{tabular}{@{}p{0.36\linewidth}p{0.54\linewidth}@{}}
+\toprule
+Mispricing & Arbitrage direction \\
+\midrule
+$c+Ke^{-rT}>p+S_0$ &
+Sell fiduciary call; buy protective put \\
+$c+Ke^{-rT}<p+S_0$ &
+Buy fiduciary call; sell protective put \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\note{Buy the cheap package and sell the expensive package. The maturity payoffs cancel; the mispricing is cash today.}
+
+\section*{7. Binomial Trees}
+
+\subsection*{One-Step Setup}
+Stock movement:
+\formula{S_u=S_0u,\qquad S_d=S_0d,\qquad u>1,\quad d<1}
+
+Terminal option values are $f_u$ and $f_d$.
+
+\subsection*{Delta and Replication}
+Make $\Delta$ shares minus one option riskless:
+\[
+    S_0u\Delta-f_u=S_0d\Delta-f_d.
+\]
+
+Thus:
+\formula{\Delta=\frac{f_u-f_d}{S_0u-S_0d}
+=\frac{f_u-f_d}{S_0(u-d)}
+=\frac{f_u-f_d}{S_u-S_d}}
+
+\note{Delta is local to the current node and time step. In a multi-step tree it changes across nodes and must be rebalanced.}
+
+\subsection*{Risk-Neutral Probability and Price}
+One-step option price:
+\formula{f=e^{-rT}\left[p f_u+(1-p)f_d\right]}
+
+Risk-neutral probability:
+\formula{p=\frac{e^{rT}-d}{u-d}}
+
+Equivalent condition defining $p$:
+\formula{pS_0u+(1-p)S_0d=S_0e^{rT}}
+
+\note{$p$ is not generally the real-world probability of an up move. It is the pricing probability that makes the stock earn the risk-free rate.}
+
+\subsection*{Multi-Step Backward Induction}
+If option life is $T$ and there are $n$ steps:
+\formula{\Delta t=\frac{T}{n}}
+
+At each node:
+\formula{f=e^{-r\Delta t}\left[p f_u+(1-p)f_d\right]}
+
+For two steps:
+\[
+    f_u=e^{-r\Delta t}\left[p f_{uu}+(1-p)f_{ud}\right],
+\]
+\[
+    f_d=e^{-r\Delta t}\left[p f_{ud}+(1-p)f_{dd}\right],
+\]
+\[
+    f=e^{-r\Delta t}\left[p f_u+(1-p)f_d\right].
+\]
+
+Two-step terminal stock prices:
+\formula{S_0u^2,\qquad S_0ud,\qquad S_0d^2}
+
+\subsection*{Choosing Tree Parameters}
+For volatility $\sigma$ and time step $\Delta t$:
+\formula{u=e^{\sigma\sqrt{\Delta t}},\qquad
+d=e^{-\sigma\sqrt{\Delta t}}=\frac{1}{u}}
+
+Then:
+\formula{p=\frac{e^{r\Delta t}-d}{u-d}}
+
+\note{Given $S_0,u,d,r$ and the payoff, the option price is pinned down by arbitrage. The stock's real-world expected return does not enter.}
+
+\end{multicols}
+
+\end{document}

@@ -15,6 +15,10 @@ options.
 
 - [Syllabus PDF](lectures/syllabus.pdf)
 
+## Exam Formula Check
+
+- [Exam Formula-Check Notes](lectures/exam-formula-check-notes.pdf) covering Lecture 1, Lecture 2 sections 1-3, and Lecture 4. Lecture 3 is excluded.
+
 ## Lecture Notes
 
 - [Mathematical Foundations](lectures/lecture-0-math-foundations-notes.pdf)
