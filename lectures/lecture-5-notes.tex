@@ -1,0 +1,1140 @@
+\input{tufte-style.tex}
+
+\title{S181M116 Derivatives and Alternative Investments: Lecture 5}
+\author{Swapnil Singh}
+\date{}
+
+\hypersetup{
+  pdftitle={S181M116 Derivatives and Alternative Investments: Lecture 5},
+  pdfauthor={Swapnil Singh},
+  pdfkeywords={derivatives, stochastic calculus, Brownian motion, Wiener process, Ito's lemma, geometric Brownian motion, lognormal distribution}
+}
+
+\setlength{\headheight}{26pt}
+
+\newcommand{\dd}{\,d}
+\newcommand{\dt}{\Delta t}
+\newcommand{\dz}{\Delta z}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Corr}{\operatorname{Corr}}
+\newcommand{\Normal}{\mathcal{N}}
+\newcommand{\given}{\,|\,}
+\newcommand{\St}{S_T}
+\newcommand{\Szero}{S_0}
+\newcommand{\Ito}{Ito}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This lecture develops the stochastic calculus used in continuous-time option
+pricing. We begin with stochastic processes and the Markov property, then build
+Brownian motion from independent normal increments. We add drift and volatility,
+specialize the model to stock prices through geometric Brownian motion, and use
+Monte Carlo simulation to interpret the model. The main mathematical tool is
+\Ito's lemma, which explains how functions of stochastic variables evolve. The
+final result is the lognormal distribution of stock prices, which is the input
+for the Black-Scholes-Merton model in Lecture 6.
+\end{abstract}
+
+\begin{boxD}
+\textbf{Reading.} Hull, Chapter 14. The goal is not to turn students into
+probability theorists. The goal is to understand the stochastic notation well
+enough that the Black-Scholes-Merton derivation in the next lecture feels like
+economics plus no-arbitrage, not mysterious algebra.
+\end{boxD}
+
+\section{Roadmap}
+
+Lecture 4 ended with binomial trees. A binomial tree is a discrete-time model:
+over each short period the stock either moves up or down. Lecture 5 asks what
+happens when the time step becomes very small and the stock is allowed to move
+continuously.
+
+The lecture has five blocks:
+\begin{enumerate}
+    \item \textbf{Stochastic processes and Markov dynamics.} Define the objects
+    whose future is uncertain.
+    \item \textbf{Brownian motion.} Build the basic source of continuous-time
+    randomness.
+    \item \textbf{Drift, volatility, and stock prices.} Explain why stock prices
+    are modeled with percentage, not dollar, shocks.
+    \item \textbf{Correlated processes and simulation.} Connect the math to
+    practical Monte Carlo paths.
+    \item \textbf{\Ito's lemma and lognormality.} Learn the chain rule of
+    stochastic calculus and derive the distribution of future stock prices.
+\end{enumerate}
+
+\begin{boxF}
+\textbf{Main lesson.} In ordinary calculus, small changes are of order $dt$.
+In stochastic calculus, Brownian shocks are of order $\sqrt{dt}$. This is why
+the square of a random shock matters: $(dz)^2$ behaves like $dt$ and creates
+the extra $\frac{1}{2}$ term in \Ito's lemma.
+\end{boxF}
+
+\section{Stochastic Processes}
+
+\subsection{What Is a Stochastic Process?}
+
+A stochastic process is a collection of random variables indexed by time. If
+$X_t$ is the process, then $X_t$ is the value of the variable at time $t$.
+
+\begin{defN}[Stochastic process]
+A stochastic process is a rule that assigns a random variable $X_t$ to each
+date $t$ in a time set. The time set may be discrete, such as
+$t=0,1,2,\ldots$, or continuous, such as $t\in[0,T]$.
+\end{defN}
+
+There are two separate distinctions.
+\begin{description}
+    \item[Discrete time versus continuous time] A process is observed or updated
+    only at fixed dates in discrete time. In continuous time, changes can occur
+    at any instant.
+    \item[Discrete state versus continuous state] A process has a discrete state
+    space if it can take only certain values. It has a continuous state space if
+    it can take any value in an interval.
+\end{description}
+
+A binomial stock tree is discrete time and discrete state. A continuously
+traded stock model is usually treated as continuous time and continuous state,
+even though real exchanges trade in ticks and only during market hours.
+
+\begin{boxD}
+\textbf{Model versus reality.} Continuous-time models are idealizations. Stock
+prices do not literally change at every mathematical instant, and quotes are
+not infinitely divisible. The model is useful because it gives tractable
+approximations and sharp no-arbitrage restrictions.
+\end{boxD}
+
+\subsection{The Markov Property}
+
+\begin{defN}[Markov property]
+A process has the Markov property if the conditional distribution of the future
+depends on the current state, but not on the path taken to reach that state.
+Formally, for $u>t$,
+\[
+    \Prob(X_u \leq x \given X_t, X_{t_1},\ldots,X_{t_n})
+    =
+    \Prob(X_u \leq x \given X_t),
+\]
+for all past dates $t_1,\ldots,t_n<t$.
+\end{defN}
+
+For a stock price, the Markov assumption says that if the stock is worth 100
+now, then the distribution of its future price is summarized by the current
+price and current model parameters. The fact that it was 90 last month or 120
+last month does not directly matter after we condition on today's price.
+
+\begin{boxF}
+\textbf{Economic intuition.} A Markov stock price is the continuous-time cousin
+of weak-form market efficiency. If past price patterns contained reliable
+profit opportunities, traders would act on them, and their trades would tend to
+move the information into today's price.
+\end{boxF}
+
+The Markov property does not say that past data are useless. Historical prices
+can help estimate parameters such as volatility. It says that, after the model
+parameters are known, the current state is enough for forecasting the future
+distribution.
+
+\section{Variance and the Square Root of Time}
+
+\subsection{Adding Independent Normal Changes}
+
+Suppose a Markov variable has a normally distributed one-year change with mean
+zero and variance one:
+\[
+    \Delta X_{\text{1 year}} \sim \Normal(0,1).
+\]
+If annual changes are independent, the two-year change is the sum of two
+independent normal variables. Means add and variances add:
+\[
+    \Delta X_{\text{2 years}} \sim \Normal(0,2).
+\]
+The standard deviation is therefore $\sqrt{2}$, not $2$.
+
+More generally, if the variance rate is one per year, then over a time interval
+of length $T$ years,
+\[
+    \Delta X_T \sim \Normal(0,T),
+    \qquad
+    \operatorname{sd}(\Delta X_T)=\sqrt{T}.
+\]
+
+\begin{boxD}
+\textbf{Square-root-time rule.} Variance scales linearly with time. Standard
+deviation scales with the square root of time. This is why daily volatility is
+annual volatility divided by about $\sqrt{252}$, and annual volatility is daily
+volatility multiplied by about $\sqrt{252}$.
+\end{boxD}
+
+\begin{exmp}[Scaling uncertainty]
+If a process has annual standard deviation $20\%$, then under the square-root
+rule its one-month standard deviation is approximately
+\[
+    20\%\sqrt{\frac{1}{12}} = 5.77\%.
+\]
+Its one-week standard deviation, using 52 weeks per year, is
+\[
+    20\%\sqrt{\frac{1}{52}} = 2.77\%.
+\]
+The one-month uncertainty is not one twelfth of the annual uncertainty because
+standard deviations do not add across independent periods.
+\end{exmp}
+
+\section{Wiener Processes}
+
+\subsection{Definition}
+
+A Wiener process, also called standard Brownian motion, is the basic source of
+randomness in the continuous-time stock price model.
+
+\begin{defN}[Wiener process]
+A process $z_t$ is a Wiener process if:
+\begin{enumerate}
+    \item for a small interval $\dt$, the increment is
+    \[
+        \dz = \eps \sqrt{\dt},
+        \qquad
+        \eps\sim\Normal(0,1);
+    \]
+    \item increments over non-overlapping time intervals are independent.
+\end{enumerate}
+\end{defN}
+
+Thus,
+\[
+    \E[\dz]=0,
+    \qquad
+    \Var(\dz)=\dt,
+    \qquad
+    \operatorname{sd}(\dz)=\sqrt{\dt}.
+\]
+Over a longer interval $T$,
+\[
+    z_T-z_0 \sim \Normal(0,T).
+\]
+
+\subsection{Why Brownian Paths Are Jagged}
+
+Brownian increments are proportional to $\sqrt{\dt}$. For small $\dt$,
+$\sqrt{\dt}$ is much larger than $\dt$. For example, if
+$\dt=0.0001$, then $\sqrt{\dt}=0.01$. The random term is therefore large
+relative to deterministic time drift over very short intervals.
+
+This is the source of the strange-looking Brownian path. It is continuous, but
+it is nowhere differentiable in the ordinary sense. There is no well-defined
+instantaneous slope.
+
+\begin{boxF}
+\textbf{Intuition.} A smooth curve has small movements of order $dt$. Brownian
+motion has small movements of order $\sqrt{dt}$. As the time grid becomes
+finer, the path keeps revealing new short-run variation instead of settling
+down to a smooth tangent line.
+\end{boxF}
+
+\subsection{Differential Notation}
+
+In stochastic calculus, we write
+\[
+    dz
+\]
+for the infinitesimal increment of a Wiener process. This notation should be
+read through its discrete approximation:
+\[
+    dz \approx \eps \sqrt{dt}.
+\]
+The notation is compact, but the scale is important. The object $dz$ is random
+and has variance $dt$.
+
+\begin{exmp}[Distribution of a Brownian value]
+Suppose $z_0=25$. Since $z_T-z_0\sim\Normal(0,T)$,
+\[
+    z_T \sim \Normal(25,T).
+\]
+At $T=1$, the standard deviation is $1$. At $T=5$, the standard deviation is
+$\sqrt{5}=2.236$.
+\end{exmp}
+
+\section{Generalized Wiener Processes}
+
+\subsection{Adding Drift and Scale}
+
+The standard Wiener process has zero drift and variance rate one. A generalized
+Wiener process adds a deterministic drift and rescales the noise:
+\[
+    dx = a\,dt + b\,dz,
+\]
+where $a$ and $b$ are constants.
+
+Over a small time interval,
+\[
+    \Delta x = a\dt + b\eps\sqrt{\dt}.
+\]
+Therefore,
+\[
+    \E[\Delta x]=a\dt,
+    \qquad
+    \Var(\Delta x)=b^2\dt.
+\]
+Over a longer interval $T$,
+\[
+    x_T-x_0\sim\Normal(aT,b^2T).
+\]
+
+\begin{defN}[Drift rate and variance rate]
+In $dx=a\,dt+b\,dz$, the drift rate is $a$ and the variance rate is $b^2$.
+The diffusion coefficient $b$ determines the standard deviation per square root
+of time.
+\end{defN}
+
+\begin{exmp}[Cash position]
+A company's cash balance, measured in thousands, follows
+\[
+    dx = 20\,dt + 30\,dz.
+\]
+The drift rate is 20 thousand per year and the variance rate is
+$30^2=900$. If $x_0=50$, then after one year
+\[
+    x_1 \sim \Normal(70,900),
+\]
+so the mean is 70 and the standard deviation is 30. After six months,
+\[
+    x_{0.5}\sim\Normal(60,450),
+\]
+so the standard deviation is $\sqrt{450}=21.21$.
+\end{exmp}
+
+\subsection{What Drift and Diffusion Do}
+
+The drift term $a\,dt$ moves the expected path. The diffusion term $b\,dz$
+creates dispersion around that path. In a very short interval, the stochastic
+term is usually the visually dominant part because it is of order $\sqrt{dt}$.
+Over longer horizons, the drift accumulates linearly while uncertainty grows
+with the square root of time.
+
+\begin{boxD}
+\textbf{Useful mental picture.} Drift controls the direction of the cloud's
+center. Volatility controls the width of the cloud. A single realized path can
+move against the drift for a long time because the diffusion term is random.
+\end{boxD}
+
+\section{\Ito Processes}
+
+\subsection{State-Dependent Drift and Volatility}
+
+A generalized Wiener process has constant $a$ and $b$. An \Ito process allows
+them to depend on the current state and time:
+\[
+    dx = a(x,t)\,dt + b(x,t)\,dz.
+\]
+Over a small interval,
+\[
+    \Delta x
+    \approx
+    a(x,t)\dt + b(x,t)\eps\sqrt{\dt}.
+\]
+
+This is a local approximation. During the short interval from $t$ to $t+\dt$,
+we evaluate drift and volatility at the current state $(x,t)$.
+
+\begin{boxF}
+\textbf{Local thinking.} Continuous-time finance is local. We ask what happens
+over the next instant given the current state, then aggregate the implications.
+This is why derivatives can be priced by local hedging arguments.
+\end{boxF}
+
+If $a(x,t)$ and $b(x,t)$ depend only on current $x$ and $t$, the process is
+Markov. If they depend on the entire past path, the process is generally not
+Markov.
+
+\section{The Stock Price Process}
+
+\subsection{Why Not Constant Dollar Volatility?}
+
+It is tempting to model a stock as
+\[
+    dS = a\,dt + b\,dz.
+\]
+This says the expected dollar change and dollar volatility are constant. That
+is not natural for stocks. A 2 dollar daily standard deviation is huge for a
+10 dollar stock and small for a 200 dollar stock.
+
+Stock investors usually think in percentage returns. If required expected
+return is 10 percent per year, that means 10 percent whether the stock price is
+20 or 200. Likewise, volatility is usually quoted as a percentage of price.
+
+\subsection{Geometric Brownian Motion}
+
+The standard continuous-time stock price model is
+\[
+    dS = \mu S\,dt + \sigma S\,dz,
+\]
+or equivalently
+\[
+    \frac{dS}{S} = \mu\,dt + \sigma\,dz.
+\]
+
+\begin{defN}[Geometric Brownian motion]
+A stock price follows geometric Brownian motion if
+\[
+    \frac{dS}{S} = \mu\,dt + \sigma\,dz,
+\]
+where $\mu$ is the expected continuously compounded rate of return and
+$\sigma$ is the volatility.
+\end{defN}
+
+The proportional change over a short interval is approximately
+\[
+    \frac{\Delta S}{S}
+    =
+    \mu\dt+\sigma\eps\sqrt{\dt}.
+\]
+Thus,
+\[
+    \frac{\Delta S}{S}
+    \sim
+    \Normal(\mu\dt,\sigma^2\dt)
+    \quad
+    \text{approximately for small } \dt.
+\]
+
+\begin{boxD}
+\textbf{Interpretation of $\mu$ and $\sigma$.} The parameter $\mu$ moves the
+expected return. The parameter $\sigma$ is the annualized standard deviation of
+continuously compounded returns. In derivative pricing, $\sigma$ is central.
+The real-world $\mu$ will disappear from the no-arbitrage price in Lecture 6.
+\end{boxD}
+
+\begin{exmp}[Weekly stock return approximation]
+A stock has expected return $\mu=15\%$ and volatility $\sigma=30\%$ per year.
+For one week, take $\dt=1/52=0.01923$. Then
+\[
+    \frac{\Delta S}{S}
+    =
+    0.15(0.01923)+0.30\eps\sqrt{0.01923}
+    =
+    0.00288+0.0416\eps.
+\]
+The expected weekly return is about $0.288\%$ and the weekly standard deviation
+is about $4.16\%$.
+\end{exmp}
+
+\subsection{Why the Model Is Called Geometric}
+
+Without uncertainty,
+\[
+    dS=\mu S\,dt
+\]
+has solution
+\[
+    S_T=S_0e^{\mu T}.
+\]
+The stock grows geometrically, not linearly. With uncertainty, the same
+multiplicative idea remains: shocks affect percentage changes, so prices tend
+to stay positive and compound over time.
+
+\section{Monte Carlo Simulation}
+
+\subsection{Euler Simulation}
+
+The simplest simulation uses the discrete approximation
+\[
+    S_{t+\dt}
+    =
+    S_t + \mu S_t\dt + \sigma S_t\eps\sqrt{\dt}
+    =
+    S_t\left(1+\mu\dt+\sigma\eps\sqrt{\dt}\right).
+\]
+At each step we draw a new independent $\eps\sim\Normal(0,1)$.
+
+\begin{exmp}[One simulated step]
+Let $S_t=100$, $\mu=0.15$, $\sigma=0.30$, $\dt=1/52$, and suppose the normal
+draw is $\eps=0.52$. Then
+\[
+    \Delta S
+    =
+    100(0.00288+0.0416(0.52))
+    =
+    2.45.
+\]
+The simulated next price is $102.45$.
+\end{exmp}
+
+\subsection{Exact Lognormal Simulation}
+
+For geometric Brownian motion with constant $\mu$ and $\sigma$, we can simulate
+more accurately using the exact transition:
+\[
+    S_{t+\dt}
+    =
+    S_t
+    \exp\left[
+        \left(\mu-\frac{1}{2}\sigma^2\right)\dt
+        +\sigma\sqrt{\dt}\eps
+    \right].
+\]
+This formula comes from applying \Ito's lemma to $\ln S$, derived below.
+
+\begin{boxF}
+\textbf{Practical point.} Euler simulation is easy and useful for intuition.
+Exact lognormal simulation is preferred for geometric Brownian motion because
+it preserves positivity and avoids time-step approximation error for this
+specific model.
+\end{boxF}
+
+\section{Volatility and Parameters}
+
+\subsection{Annualization}
+
+If $\sigma$ is annual volatility, then the standard deviation of the
+continuously compounded return over $T$ years is
+\[
+    \sigma\sqrt{T}.
+\]
+For one trading day with 252 trading days in a year, it is
+\[
+    \frac{\sigma}{\sqrt{252}}.
+\]
+Conversely, if daily log-return standard deviation is $s_d$, annual volatility
+is approximately
+\[
+    s_d\sqrt{252}.
+\]
+
+\begin{exmp}[Daily and annual volatility]
+If annual volatility is $32\%$, daily volatility is approximately
+\[
+    \frac{0.32}{\sqrt{252}}=0.0202,
+\]
+or $2.02\%$. If daily volatility is $1.4\%$, annual volatility is approximately
+\[
+    0.014\sqrt{252}=0.222,
+\]
+or $22.2\%$.
+\end{exmp}
+
+\subsection{Why $\mu$ Is Harder Than $\sigma$}
+
+Expected returns are hard to estimate because the signal is small relative to
+noise. Volatility is easier because squared returns reveal the scale of
+fluctuations even when average returns are imprecise.
+
+For derivative pricing, this distinction matters. In the Black-Scholes-Merton
+model, the derivative price depends on volatility, not on the stock's real-world
+expected return. The reason is dynamic hedging: the stock's risk premium affects
+both the derivative and the hedge in a way that cancels out.
+
+\section{Correlated Wiener Processes}
+
+\subsection{Two Sources of Risk}
+
+Many derivatives depend on more than one risk factor. Examples include options
+on exchange rates, spread options, quanto options, and derivatives with
+stochastic volatility or stochastic interest rates.
+
+Suppose
+\[
+    dx_1=a_1\,dt+b_1\,dz_1,
+    \qquad
+    dx_2=a_2\,dt+b_2\,dz_2.
+\]
+If the Brownian shocks have correlation $\rho$, then
+\[
+    \Corr(dz_1,dz_2)=\rho.
+\]
+In differential notation this is often summarized by the multiplication rule
+\[
+    dz_1\,dz_2 = \rho\,dt.
+\]
+
+\subsection{Simulating Correlated Normals}
+
+To simulate two correlated standard normal shocks, draw independent
+$u,v\sim\Normal(0,1)$ and set
+\[
+    \eps_1=u,
+    \qquad
+    \eps_2=\rho u+\sqrt{1-\rho^2}\,v.
+\]
+Then $\eps_1$ and $\eps_2$ each have standard normal distributions and their
+correlation is $\rho$.
+
+\begin{exmp}[Constructing correlated shocks]
+Let $\rho=0.60$. Suppose $u=1.10$ and $v=-0.40$. Then
+\[
+    \eps_1=1.10,
+    \qquad
+    \eps_2=0.60(1.10)+\sqrt{1-0.60^2}(-0.40).
+\]
+Since $\sqrt{1-0.36}=0.80$,
+\[
+    \eps_2=0.66-0.32=0.34.
+\]
+The second shock shares a common component with the first shock but also has
+independent residual variation.
+\end{exmp}
+
+\section{The Rules of Stochastic Calculus}
+
+\subsection{Quadratic Variation}
+
+The defining scale of Brownian motion is
+\[
+    dz \sim \sqrt{dt}.
+\]
+Therefore,
+\[
+    (dz)^2 \sim dt.
+\]
+This is the key difference from ordinary calculus. Terms involving $(dt)^2$ and
+$dt\,dz$ are negligible, but $(dz)^2$ is not negligible because it is of order
+$dt$.
+
+The informal multiplication table is
+\[
+    (dt)^2=0,
+    \qquad
+    dt\,dz=0,
+    \qquad
+    (dz)^2=dt.
+\]
+For correlated Brownian motions,
+\[
+    dz_i\,dz_j=\rho_{ij}\,dt.
+\]
+
+\begin{boxF}
+\textbf{Why the table works.} In a small interval, $dt$ is tiny and $dz$ is of
+size $\sqrt{dt}$. Thus $(dt)^2$ is much smaller than $dt$, and $dt\,dz$ is of
+size $dt^{3/2}$, also much smaller than $dt$. But $(dz)^2$ is of size $dt$ and
+survives in the limit.
+\end{boxF}
+
+\subsection{Taylor Expansion With a Random Term}
+
+Let $x$ follow
+\[
+    dx=a(x,t)\,dt+b(x,t)\,dz.
+\]
+Let $G(x,t)$ be a smooth function. The second-order Taylor expansion is
+\[
+    dG
+    =
+    G_x\,dx+G_t\,dt
+    +\frac{1}{2}G_{xx}(dx)^2
+    +G_{xt}\,dx\,dt
+    +\frac{1}{2}G_{tt}(dt)^2
+    +\cdots.
+\]
+Using the stochastic multiplication table, the only second-order term that
+survives is $(dx)^2$:
+\[
+    (dx)^2
+    =
+    (a\,dt+b\,dz)^2
+    =
+    b^2(dz)^2
+    =
+    b^2dt.
+\]
+Therefore,
+\[
+    dG
+    =
+    G_x(a\,dt+b\,dz)+G_t\,dt+\frac{1}{2}G_{xx}b^2dt.
+\]
+
+\section{\Ito's Lemma}
+
+\begin{thmN}[\Ito's lemma, one state variable]
+If
+\[
+    dx=a(x,t)\,dt+b(x,t)\,dz,
+\]
+and $G=G(x,t)$ is sufficiently smooth, then
+\[
+    dG
+    =
+    \left(
+        G_xa+G_t+\frac{1}{2}G_{xx}b^2
+    \right)dt
+    +
+    G_xb\,dz.
+\]
+\end{thmN}
+
+The new term relative to ordinary calculus is
+\[
+    \frac{1}{2}G_{xx}b^2\,dt.
+\]
+It appears because the stochastic variable has nonzero quadratic variation.
+
+\begin{boxD}
+\textbf{Financial interpretation.} If $G$ is an option price and $x$ is the
+stock price, then $G_x$ is delta and $G_{xx}$ is gamma. \Ito's lemma says that
+option value changes because of delta exposure, direct passage of time, and
+curvature interacting with variance.
+\end{boxD}
+
+\subsection{Example: Squaring a Brownian Motion}
+
+Let $x=z$ be a Wiener process, so $dx=dz$. Take
+\[
+    G(x)=x^2.
+\]
+Then $G_x=2x$, $G_{xx}=2$, and $G_t=0$. Since $a=0$ and $b=1$,
+\Ito's lemma gives
+\[
+    d(x^2)=\frac{1}{2}(2)(1)\,dt+2x\,dz
+    =
+    dt+2x\,dz.
+\]
+
+Ordinary calculus would give only $2x\,dx$. Stochastic calculus adds $dt$.
+That extra term is the accumulated variance of Brownian motion.
+
+\subsection{Example: Exponential of Brownian Motion}
+
+Let
+\[
+    dx=\mu\,dt+\sigma\,dz,
+    \qquad
+    G=e^x.
+\]
+Here $G_x=G$ and $G_{xx}=G$. \Ito's lemma gives
+\[
+    dG
+    =
+    G\left(\mu+\frac{1}{2}\sigma^2\right)dt
+    +
+    G\sigma\,dz.
+\]
+The exponential transformation changes the drift by
+$\frac{1}{2}\sigma^2$. Convexity plus randomness raises the expected change in
+the exponential.
+
+\section{Applying \Ito's Lemma to Stock Prices}
+
+\subsection{General Function of a Stock Price}
+
+If
+\[
+    dS=\mu S\,dt+\sigma S\,dz,
+\]
+and $G=G(S,t)$, then $a=\mu S$ and $b=\sigma S$. \Ito's lemma becomes
+\[
+    dG
+    =
+    \left(
+        G_S\mu S+G_t+\frac{1}{2}G_{SS}\sigma^2S^2
+    \right)dt
+    +
+    G_S\sigma S\,dz.
+\]
+
+The same $dz$ appears in both $dS$ and $dG$. This common source of uncertainty
+is what allows a derivative to be hedged locally using the underlying stock.
+
+\begin{boxF}
+\textbf{Bridge to Lecture 6.} If an option and the underlying stock are driven
+by the same Brownian shock, a portfolio of the option and the stock can be
+chosen so that the $dz$ terms cancel. The resulting locally riskless portfolio
+must earn the risk-free rate. That is the engine behind the Black-Scholes-
+Merton differential equation.
+\end{boxF}
+
+\subsection{Application: Forward Price}
+
+For a non-dividend-paying stock with constant interest rate $r$, the forward
+price for maturity $T$ at time $t$ is
+\[
+    F(S,t)=S e^{r(T-t)}.
+\]
+The derivatives are
+\[
+    F_S=e^{r(T-t)},
+    \qquad
+    F_{SS}=0,
+    \qquad
+    F_t=-rS e^{r(T-t)}.
+\]
+Using \Ito's lemma,
+\[
+    dF
+    =
+    \left(\mu S e^{r(T-t)}-rS e^{r(T-t)}\right)dt
+    +
+    \sigma S e^{r(T-t)}dz.
+\]
+Since $F=S e^{r(T-t)}$,
+\[
+    dF=(\mu-r)F\,dt+\sigma F\,dz.
+\]
+
+\begin{boxD}
+\textbf{Interpretation.} The forward price has the same volatility as the stock
+because it is proportional to the stock price. Its real-world drift is
+$\mu-r$ because the forward price already compounds the spot price forward at
+rate $r$.
+\end{boxD}
+
+\section{The Lognormal Property}
+
+\subsection{Applying \Ito's Lemma to $\ln S$}
+
+Let
+\[
+    G(S)=\ln S.
+\]
+Then
+\[
+    G_S=\frac{1}{S},
+    \qquad
+    G_{SS}=-\frac{1}{S^2},
+    \qquad
+    G_t=0.
+\]
+With $dS=\mu S\,dt+\sigma S\,dz$,
+\[
+    d\ln S
+    =
+    \left[
+        \frac{1}{S}\mu S
+        +
+        \frac{1}{2}\left(-\frac{1}{S^2}\right)\sigma^2S^2
+    \right]dt
+    +
+    \frac{1}{S}\sigma S\,dz.
+\]
+Therefore,
+\[
+    d\ln S
+    =
+    \left(\mu-\frac{1}{2}\sigma^2\right)dt
+    +
+    \sigma\,dz.
+\]
+
+\begin{boxF}
+\textbf{The Ito correction.} The expected log return is not $\mu$. It is
+$\mu-\frac{1}{2}\sigma^2$. Volatility lowers expected log growth because losses
+hurt compounded wealth more than equal-sized gains help it.
+\end{boxF}
+
+\subsection{Distribution of Future Stock Prices}
+
+Integrating from 0 to $T$,
+\[
+    \ln S_T-\ln S_0
+    =
+    \left(\mu-\frac{1}{2}\sigma^2\right)T+\sigma(z_T-z_0).
+\]
+Since $z_T-z_0\sim\Normal(0,T)$,
+\[
+    \ln S_T
+    \sim
+    \Normal\left(
+        \ln S_0+\left(\mu-\frac{1}{2}\sigma^2\right)T,
+        \sigma^2T
+    \right).
+\]
+Equivalently,
+\[
+    S_T
+    =
+    S_0
+    \exp\left[
+        \left(\mu-\frac{1}{2}\sigma^2\right)T
+        +
+        \sigma\sqrt{T}\eps
+    \right],
+    \qquad
+    \eps\sim\Normal(0,1).
+\]
+
+\begin{defN}[Lognormal distribution]
+A positive random variable is lognormally distributed if its natural logarithm
+is normally distributed. Under geometric Brownian motion, $S_T$ is lognormal.
+\end{defN}
+
+\subsection{Mean, Median, and the Volatility Drag}
+
+The expected stock price under the real-world process is
+\[
+    \E[S_T]=S_0e^{\mu T}.
+\]
+The median stock price is
+\[
+    \operatorname{median}(S_T)
+    =
+    S_0e^{(\mu-\frac{1}{2}\sigma^2)T}.
+\]
+The mean exceeds the median because the lognormal distribution is right-skewed:
+rare large upward outcomes pull up the average.
+
+\begin{exmp}[Distribution after one year]
+Let $S_0=100$, $\mu=12\%$, $\sigma=30\%$, and $T=1$. Then
+\[
+    \ln S_1
+    \sim
+    \Normal\left(
+        \ln 100+(0.12-0.045),0.09
+    \right).
+\]
+The mean log return is $7.5\%$ and the standard deviation of the log return is
+$30\%$. The expected stock price is
+\[
+    100e^{0.12}=112.75,
+\]
+while the median stock price is
+\[
+    100e^{0.075}=107.79.
+\]
+\end{exmp}
+
+\section{From Real-World to Risk-Neutral Dynamics}
+
+Lecture 5 is mainly about stochastic calculus, but it is useful to preview the
+pricing move. Under the real-world probability measure, the stock model is
+\[
+    \frac{dS}{S}=\mu\,dt+\sigma\,dz.
+\]
+Under the risk-neutral measure used for pricing a non-dividend-paying stock,
+the drift becomes the risk-free rate:
+\[
+    \frac{dS}{S}=r\,dt+\sigma\,dz^{Q}.
+\]
+The volatility is unchanged in the basic Black-Scholes-Merton model.
+
+\begin{boxD}
+\textbf{Do not over-interpret risk-neutral probabilities.} Risk-neutral
+probabilities are pricing probabilities, not forecasts. They are constructed so
+that discounted asset prices are martingales and expected payoffs can be
+discounted at the risk-free rate.
+\end{boxD}
+
+The corresponding risk-neutral terminal distribution is
+\[
+    \ln S_T
+    \sim
+    \Normal\left(
+        \ln S_0+\left(r-\frac{1}{2}\sigma^2\right)T,
+        \sigma^2T
+    \right).
+\]
+This is the distribution used to derive the Black-Scholes-Merton formula.
+
+\section{Common Mistakes}
+
+\begin{enumerate}
+    \item \textbf{Adding standard deviations across time.} Variances add;
+    standard deviations scale with the square root of time.
+    \item \textbf{Treating $dz$ like $dt$.} Brownian increments are of order
+    $\sqrt{dt}$, so $(dz)^2$ contributes a $dt$ term.
+    \item \textbf{Forgetting the \Ito correction.} If $dS/S=\mu dt+\sigma dz$,
+    then $d\ln S=(\mu-\sigma^2/2)dt+\sigma dz$.
+    \item \textbf{Confusing arithmetic and log returns.} The expected
+    arithmetic instantaneous return is $\mu$, but expected log growth is
+    $\mu-\sigma^2/2$.
+    \item \textbf{Using real-world probabilities for pricing.} Option pricing
+    uses risk-neutral dynamics after no-arbitrage arguments, not the stock's
+    actual expected return.
+\end{enumerate}
+
+\section{Optional Extension: Fractional Brownian Motion}
+
+Standard Brownian motion has independent increments and variance proportional
+to elapsed time:
+\[
+    \Var(z_t-z_s)=t-s.
+\]
+Fractional Brownian motion generalizes this to
+\[
+    \Var(X_t-X_s)=\sigma^2(t-s)^{2H},
+\]
+where $H$ is the Hurst exponent. When $H=1/2$, the usual Brownian scaling is
+recovered. When $H\neq 1/2$, increments are no longer independent in the same
+way. Such models are useful in modern rough-volatility work, but the classical
+Black-Scholes-Merton model uses ordinary Brownian motion.
+
+\section{Worked Problems}
+
+\begin{exmp}[From annual to quarterly uncertainty]
+A stock has volatility $24\%$ per year. The standard deviation of its
+continuously compounded return over one quarter is
+\[
+    0.24\sqrt{0.25}=0.12.
+\]
+Thus the quarterly log-return standard deviation is $12\%$.
+\end{exmp}
+
+\begin{exmp}[Probability of a log return event]
+Let $S_0=50$, $\mu=8\%$, $\sigma=20\%$, and $T=1$. What is
+$\Prob(S_T>55)$ under the real-world process?
+
+Since
+\[
+    \ln S_T
+    \sim
+    \Normal\left(\ln 50+(0.08-0.5(0.20)^2),0.20^2\right),
+\]
+we have
+\[
+    \ln S_T
+    \sim
+    \Normal(\ln 50+0.06,0.04).
+\]
+Therefore
+\[
+    \Prob(S_T>55)
+    =
+    \Prob\left(
+        Z>
+        \frac{\ln(55)-\ln(50)-0.06}{0.20}
+    \right).
+\]
+The numerator is approximately $0.0953-0.06=0.0353$, so the $z$-score is
+$0.1765$. The probability is about $1-N(0.1765)=0.43$.
+\end{exmp}
+
+\begin{exmp}[\Ito's lemma for a power payoff]
+Let $G(S)=S^n$ and
+\[
+    dS=\mu S\,dt+\sigma S\,dz.
+\]
+Then
+\[
+    G_S=nS^{n-1},
+    \qquad
+    G_{SS}=n(n-1)S^{n-2}.
+\]
+\Ito's lemma gives
+\[
+    dG
+    =
+    \left[
+        n\mu S^n
+        +
+        \frac{1}{2}n(n-1)\sigma^2S^n
+    \right]dt
+    +
+    n\sigma S^n dz.
+\]
+Since $G=S^n$,
+\[
+    \frac{dG}{G}
+    =
+    \left[
+        n\mu+\frac{1}{2}n(n-1)\sigma^2
+    \right]dt
+    +
+    n\sigma dz.
+\]
+Convex power payoffs have drift terms that increase with variance.
+\end{exmp}
+
+\begin{exmp}[Risk-neutral lognormal distribution]
+A non-dividend-paying stock has $S_0=80$, $r=5\%$, $\sigma=25\%$, and
+$T=0.5$. Under the risk-neutral measure,
+\[
+    \ln S_T
+    \sim
+    \Normal\left(
+        \ln 80+\left(0.05-\frac{1}{2}0.25^2\right)0.5,
+        0.25^2(0.5)
+    \right).
+\]
+The log-price mean is
+\[
+    \ln 80+(0.05-0.03125)0.5
+    =
+    \ln 80+0.009375,
+\]
+and the log-price standard deviation is
+\[
+    0.25\sqrt{0.5}=0.1768.
+\]
+\end{exmp}
+
+\section{Checklist for Students}
+
+After this lecture you should be able to:
+\begin{itemize}
+    \item distinguish discrete-time, continuous-time, discrete-state, and
+    continuous-state stochastic processes;
+    \item state and interpret the Markov property;
+    \item explain why variance, not standard deviation, adds over independent
+    periods;
+    \item define a Wiener process and describe its increment distribution;
+    \item explain why Brownian paths are continuous but jagged;
+    \item write and interpret a generalized Wiener process;
+    \item write and interpret an \Ito process;
+    \item explain why stock prices are modeled with proportional drift and
+    proportional volatility;
+    \item simulate one step of geometric Brownian motion;
+    \item convert volatility across time units using the square-root-time rule;
+    \item construct correlated normal shocks from independent normal shocks;
+    \item use the stochastic multiplication rules $(dt)^2=0$, $dt\,dz=0$, and
+    $(dz)^2=dt$;
+    \item state \Ito's lemma for one stochastic variable;
+    \item apply \Ito's lemma to simple functions such as $x^2$, $e^x$, and
+    $\ln S$;
+    \item derive the process for $\ln S$ when $S$ follows geometric Brownian
+    motion;
+    \item state the lognormal distribution of $S_T$;
+    \item distinguish real-world and risk-neutral stock price dynamics.
+\end{itemize}
+
+\section{Practice Questions}
+
+\begin{enumerate}
+    \item A process has annual variance rate 4. What are the variance and
+    standard deviation of the change over 3 months?
+    \item If $z_t$ is a Wiener process and $z_0=10$, what is the distribution
+    of $z_2$?
+    \item Explain in words why Brownian motion does not have an ordinary
+    derivative.
+    \item A generalized Wiener process follows $dx=5dt+2dz$. What are the mean,
+    variance, and standard deviation of $x_T-x_0$ for $T=3$?
+    \item A cash balance follows $dx=12dt+8dz$ and starts at 40. What is the
+    distribution after one half year?
+    \item A stock follows $dS/S=0.10dt+0.25dz$. What are $\mu$ and $\sigma$?
+    Interpret both.
+    \item For the stock in the previous question, compute the approximate mean
+    and standard deviation of the proportional change over one month.
+    \item If annual volatility is $18\%$, what is daily volatility using 252
+    trading days?
+    \item If daily volatility is $1.8\%$, what is annualized volatility using
+    252 trading days?
+    \item Simulate one Euler step for $S=100$, $\mu=0.08$, $\sigma=0.20$,
+    $\dt=1/12$, and $\eps=-0.75$.
+    \item Draw independent $u=0.30$ and $v=1.20$. Construct two standard normal
+    shocks with correlation $\rho=0.50$ using the formula in the notes.
+    \item Explain why $(dz)^2$ is treated as $dt$ but $dt\,dz$ is treated as
+    zero.
+    \item State \Ito's lemma for $dx=a(x,t)dt+b(x,t)dz$ and $G=G(x,t)$.
+    \item Use \Ito's lemma to find the process for $G=x^3$ when $dx=a\,dt+b\,dz$
+    with constant $a$ and $b$.
+    \item Use \Ito's lemma to find the process for $G=1/S$ when
+    $dS=\mu Sdt+\sigma Sdz$.
+    \item Derive $d\ln S$ from $dS/S=\mu dt+\sigma dz$.
+    \item If $S_0=100$, $\mu=10\%$, $\sigma=40\%$, and $T=1$, write the
+    distribution of $\ln S_T$.
+    \item For the previous question, compute the expected stock price and the
+    median stock price.
+    \item Under risk-neutral dynamics for a non-dividend-paying stock, what
+    replaces $\mu$? What happens to $\sigma$?
+    \item Explain why the real-world expected return $\mu$ is not the key input
+    for Black-Scholes-Merton option pricing.
+    \item A derivative value is $G(S,t)$. Explain why the fact that $S$ and $G$
+    share the same Brownian shock is essential for delta hedging.
+    \item What part of the Lecture 5 material is a bridge to Lecture 6 rather
+    than a pricing result by itself?
+\end{enumerate}
+
+\end{document}

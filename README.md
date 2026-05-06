@@ -22,6 +22,7 @@ options.
 - [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-notes.pdf)
 - ~~[Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-notes.pdf)~~ (not covered in class)
 - [Lecture 4: Options, Put-Call Parity, and Binomial Trees](lectures/lecture-4-notes.pdf)
+- [Lecture 5: Stochastic Calculus](lectures/lecture-5-notes.pdf)
 
 ## Lecture Slides
 
@@ -29,6 +30,7 @@ options.
 - [Lecture 2: Hedging with Futures and Forward/Futures Prices](lectures/lecture-2-slides.pdf)
 - ~~[Lecture 3: Interest Rates, Bonds, Swaps, and Fixed-Income Derivative Inputs](lectures/lecture-3-slides.pdf)~~ (not covered in class)
 - [Lecture 4: Options, Put-Call Parity, and Binomial Trees](lectures/lecture-4-slides.pdf)
+- [Lecture 5: Stochastic Calculus](lectures/lecture-5-slides.pdf)
 
 ## Assignments
 
