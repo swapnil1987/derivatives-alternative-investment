@@ -111,6 +111,22 @@
     \end{block}
 \end{frame}
 
+
+
+\begin{frame}{One Stock Path, Finer Observation Intervals}
+	\small
+	\begin{center}
+		\includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/stock-frequency-sampling.pdf}
+	\end{center}
+	
+	\vspace{-0.2em}
+	\begin{block}{Intuition}
+		As the observation interval \(\dt\) shrinks, each move is smaller but there are many more moves.
+		The limiting object is a continuous but jagged random path, not an ordinary differentiable curve.
+	\end{block}
+\end{frame}
+
+
 \section{Stochastic Processes}
 
 \begin{frame}{What Is a Stochastic Process?}
@@ -216,17 +232,24 @@
         \Delta X_1\sim\Normal(0,1).
     \]
 
-    For two years, the total change is the sum of two independent normal changes:
+    For two years, the total change is the sum of two independent one-year changes:
     \[
-        \Delta X_2=\Delta X_{1,a}+\Delta X_{1,b}.
+        \Delta X_{\text{2 years}}
+        =
+        \Delta X_{\text{year 1}}
+        +
+        \Delta X_{\text{year 2}},
+        \qquad
+        \Delta X_{\text{year 1}},\Delta X_{\text{year 2}}
+        \sim\Normal(0,1).
     \]
 
     \begin{block}{Key rule}
         Means add and variances add:
         \[
-            \Delta X_2\sim\Normal(0,2),
+            \Delta X_{\text{2 years}}\sim\Normal(0,2),
             \qquad
-            \operatorname{sd}(\Delta X_2)=\sqrt{2}.
+            \operatorname{sd}(\Delta X_{\text{2 years}})=\sqrt{2}.
         \]
     \end{block}
 
@@ -234,26 +257,35 @@
 \end{frame}
 
 \begin{frame}{Volatility Scaling Example}
-    If annual volatility is \(20\%\), then under square-root-time scaling:
-    \[
-        \sigma_{\text{1 month}}
-        =
-        20\%\sqrt{\frac{1}{12}}
-        =
-        5.77\%.
-    \]
+    \small
+    Annual volatility of \(20\%\) means a one-year return has standard deviation \(20\%\).
+    Shorter horizons have less uncertainty because fewer shocks have accumulated.
 
-    \[
-        \sigma_{\text{1 week}}
-        =
-        20\%\sqrt{\frac{1}{52}}
-        =
-        2.77\%.
-    \]
+    \begin{block}{Rule}
+        \[
+            \sigma_{\text{horizon}}
+            =
+            \sigma_{\text{annual}}\sqrt{\text{fraction of a year}}
+        \]
+    \end{block}
+
+    \begin{center}
+        \footnotesize
+        \begin{tabular}{lcc}
+            \toprule
+            Horizon & Fraction of year & One-standard-deviation move \\
+            \midrule
+            1 year  & \(1\)          & \(20.00\%\) \\
+            1 month & \(1/12\)       & \(20\%\sqrt{1/12}=5.77\%\) \\
+            1 week  & \(1/52\)       & \(20\%\sqrt{1/52}=2.77\%\) \\
+            1 day   & \(1/252\)      & \(20\%\sqrt{1/252}=1.26\%\) \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
 
     \begin{alertblock}{Common mistake}
-        Do not divide annual volatility by 12 to get monthly volatility.
-        Divide variance by 12, or divide standard deviation by \(\sqrt{12}\).
+        Divide monthly volatility by \(\sqrt{12}\), not by \(12\).
+        Variance scales linearly with time; volatility scales with \(\sqrt{\text{time}}\).
     \end{alertblock}
 \end{frame}
 
@@ -283,16 +315,7 @@
 
 \begin{frame}{Brownian Motion as a Limit}
     \begin{center}
-    \begin{tikzpicture}[x=0.9cm,y=0.6cm]
-        \draw[->] (0,0) -- (10.4,0) node[right] {time};
-        \draw[->] (0,-2.2) -- (0,2.5) node[above] {\(z_t\)};
-        \draw[thick,blue]
-            (0,0) -- (0.7,0.4) -- (1.2,-0.2) -- (1.8,0.6) -- (2.4,0.2)
-            -- (3.0,1.0) -- (3.8,0.1) -- (4.3,0.7) -- (5.0,-0.4)
-            -- (5.7,-0.1) -- (6.1,-1.0) -- (6.8,-0.2) -- (7.4,-0.8)
-            -- (8.0,0.0) -- (8.7,0.5) -- (9.2,-0.3) -- (10,0.2);
-        \node[blue] at (7.2,1.7) {jagged continuous path};
-    \end{tikzpicture}
+        \includegraphics[width=0.96\textwidth,height=0.58\textheight,keepaspectratio]{images/brownian-motion-limit.pdf}
     \end{center}
 
     \begin{block}{Path intuition}
@@ -301,24 +324,6 @@
     \end{block}
 \end{frame}
 
-\begin{frame}{Why Brownian Paths Are Jagged}
-    Brownian increments satisfy
-    \[
-        dz \approx \eps\sqrt{dt}.
-    \]
-
-    For small \(dt\), \(\sqrt{dt}\) is much larger than \(dt\):
-    \[
-        dt=0.0001
-        \quad \Rightarrow \quad
-        \sqrt{dt}=0.01.
-    \]
-
-    \begin{alertblock}{Implication}
-        Random movement dominates deterministic drift at very short horizons.
-        This makes Brownian paths locally rough rather than tangent-line smooth.
-    \end{alertblock}
-\end{frame}
 
 \section{Drift, Volatility, and Stock Prices}
 
@@ -342,6 +347,32 @@
         \qquad
         \Var(\Delta x)=b^2\dt.
     \]
+\end{frame}
+
+
+\begin{frame}{Adding Drift and Volatility}
+	\begin{center}
+		\includegraphics[width=0.96\textwidth,height=0.78\textheight,keepaspectratio]{images/wiener-drift-volatility.pdf}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Why Brownian Paths Are Jagged}
+	Brownian increments satisfy
+	\[
+	dz \approx \eps\sqrt{dt}.
+	\]
+	
+	For small \(dt\), \(\sqrt{dt}\) is much larger than \(dt\):
+	\[
+	dt=0.0001
+	\quad \Rightarrow \quad
+	\sqrt{dt}=0.01.
+	\]
+	
+	\begin{alertblock}{Implication}
+		Random movement dominates deterministic drift at very short horizons.
+		This makes Brownian paths locally rough rather than tangent-line smooth.
+	\end{alertblock}
 \end{frame}
 
 \begin{frame}{Drift and Volatility: Visual Interpretation}
@@ -421,22 +452,59 @@
 \end{frame}
 
 \begin{frame}{Why Stock Prices Need Percentage Shocks}
-    A model like
+    \footnotesize
+    Stock investors care about \emph{returns}, not raw dollar moves:
     \[
-        dS=a\,dt+b\,dz
+        \text{return}=\frac{\Delta S}{S}.
     \]
-    gives constant dollar drift and constant dollar volatility.
 
-    \begin{alertblock}{Problem}
-        A daily standard deviation of 2 dollars is huge for a 10 dollar stock and small for a 200 dollar stock.
-    \end{alertblock}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{alertblock}{Constant dollar shock}
+                \centering
+                \(dS=a\,dt+b\,dz\)
 
-    Stock returns are naturally proportional:
-    \begin{itemize}
-        \item expected compensation is quoted as percent return;
-        \item volatility is quoted as percent volatility;
-        \item compounding acts on returns, not dollar changes.
-    \end{itemize}
+                \vspace{0.25em}
+                Same dollar shock, different return.
+
+                \vspace{0.25em}
+                \begin{tabular}{lcc}
+                    \toprule
+                    Price & Shock & Return \\
+                    \midrule
+                    \(\$10\)  & \(\$2\) & \(20\%\) \\
+                    \(\$200\) & \(\$2\) & \(1\%\) \\
+                    \bottomrule
+                \end{tabular}
+            \end{alertblock}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Percentage shock}
+                \centering
+                \(\frac{dS}{S}=\mu\,dt+\sigma\,dz\)
+
+                \vspace{0.25em}
+                Same return shock, different dollar move.
+
+                \vspace{0.25em}
+                \begin{tabular}{lcc}
+                    \toprule
+                    Price & Shock & Return \\
+                    \midrule
+                    \(\$10\)  & \(\$0.20\) & \(2\%\) \\
+                    \(\$200\) & \(\$4.00\) & \(2\%\) \\
+                    \bottomrule
+                \end{tabular}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.35em}
+    \begin{center}
+        \(\Delta S = S\times \text{return shock}\)
+        \qquad \(\Longrightarrow\qquad\)
+        \(dS=\mu S\,dt+\sigma S\,dz\).
+    \end{center}
 \end{frame}
 
 \begin{frame}[label=gbm_main]{Geometric Brownian Motion}
