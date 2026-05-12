@@ -39,3 +39,4 @@ options.
 ## Assignments
 
 - [Assignment 1: Lecture 1 and Lecture 2 Practice](assignments/assignment-1-lectures-1-2.pdf)
+- [Assignment 1 Solution Key](assignments/assignment-1-lectures-1-2-solutions.pdf)
