@@ -1,0 +1,232 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[enumerate]{leftmargin=2.2em,itemsep=0.35em,topsep=0.25em}
+
+\title{S181M116 Derivatives and Alternative Investments\\
+Exam Solution}
+\author{Swapnil Singh}
+\date{}
+
+\begin{document}
+\maketitle
+
+This answer key applies to both the English and Lithuanian multiple-choice
+versions of Variant B. Each item is worth 4 points.
+
+\section*{Answer Summary}
+
+\begin{center}
+\begin{tabular}{cccccccccc}
+\toprule
+1.1 & 1.2 & 1.3 & 1.4 & 2.1 & 2.2 & 2.3 & 2.4 & 3.1 & 3.2 \\
+\midrule
+B & A & B & A & A & C & B & B & A & C \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.75em}
+
+\begin{tabular}{cccccccccc}
+\toprule
+3.3 & 3.4 & 4.1 & 4.2 & 4.3 & 4.4 & 5.1 & 5.2 & 5.3 & 5.4 \\
+\midrule
+B & A & D & B & A & A & C & A & B & C \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Question 1: Concepts, Payoffs, and Market Structure}
+
+\begin{enumerate}[label=\textbf{1.\arabic*.}]
+    \item \textbf{B.} The payoff $\max(90-S_T,0)$ depends on the future asset
+    price $S_T$, so the contract is a derivative. The payoff is put-like, not
+    linear like a futures payoff.
+
+    \item \textbf{A.} The call payoff is
+    \[
+        \max(88-75,0)=13,
+    \]
+    so the call profit is $13-6=7$. The put payoff is
+    \[
+        \max(75-88,0)=0,
+    \]
+    so the put profit is $0-4=-4$.
+
+    \item \textbf{B.} OTC contracts can be customized to the counterparties'
+    needs, but this customization usually brings more counterparty, valuation,
+    and liquidity risk than exchange-traded contracts.
+
+    \item \textbf{A.} Futures are marked to market. If the futures position loses
+    money, cash must be posted through variation margin even if the underlying
+    exposure will generate an offsetting gain only later.
+\end{enumerate}
+
+\section*{Question 2: Futures Settlement and Forward Pricing}
+
+\begin{enumerate}[label=\textbf{2.\arabic*.}]
+    \item \textbf{A.} A short futures position gains when the futures price
+    falls:
+    \[
+        8 \times 25{,}000 \times (4.12-4.05)
+        = 200{,}000 \times 0.07
+        = 14{,}000.
+    \]
+    The result is a USD 14,000 gain.
+
+    \item \textbf{C.} The margin account receives the USD 14,000 gain:
+    \[
+        38{,}000+14{,}000=52{,}000.
+    \]
+    This is above the USD 30,000 maintenance margin, so there is no margin call.
+
+    \item \textbf{B.} For a stock with known cash dividends,
+    \[
+        F_0=(S_0-I)e^{rT}
+        =(120-2.40)e^{0.035\times 0.5}
+        =119.68.
+    \]
+
+    \item \textbf{B.} The quoted forward price 121 is above the no-arbitrage
+    forward price 119.68. The cash-and-carry arbitrage is to buy the asset,
+    short the forward, and lock in about
+    \[
+        121-119.68=1.32
+    \]
+    per share.
+\end{enumerate}
+
+\section*{Question 3: Cross Hedging, Basis Risk, and Effective Prices}
+
+\begin{enumerate}[label=\textbf{3.\arabic*.}]
+    \item \textbf{A.} The manufacturer will buy copper later, so it is exposed to
+    rising copper prices. A long futures position gains when the futures price
+    rises and therefore hedges that risk.
+
+    \item \textbf{C.} The minimum-variance hedge ratio is
+    \[
+        h^*=\rho\frac{\sigma_S}{\sigma_F}
+        =0.72\frac{0.18}{0.16}
+        =0.8100.
+    \]
+
+    \item \textbf{B.} The number of contracts before rounding is
+    \[
+        N^*=h^*\frac{Q_A}{Q_F}
+        =0.81\frac{1{,}250{,}000}{25{,}000}
+        =0.81\times 50
+        =40.5.
+    \]
+
+    \item \textbf{A.} For the long futures hedge, the futures gain per pound is
+    \[
+        F_2-F_1=4.05-3.80=0.25.
+    \]
+    The effective purchase price is therefore
+    \[
+        S_2-(F_2-F_1)=4.12-0.25=3.87.
+    \]
+    The realized basis is
+    \[
+        S_2-F_2=4.12-4.05=0.07.
+    \]
+    Since $0.07>0.03$, the realized basis is worse for the buyer than expected.
+\end{enumerate}
+
+\section*{Question 4: Option No-Arbitrage and Binomial Pricing}
+
+\begin{enumerate}[label=\textbf{4.\arabic*.}]
+    \item \textbf{D.} Put-call parity for a non-dividend-paying stock is
+    \[
+        c+Ke^{-rT}=p+S_0.
+    \]
+    Thus
+    \[
+        p=c+Ke^{-rT}-S_0
+        =2.60+50e^{-0.05\times0.25}-48
+        =3.98.
+    \]
+
+    \item \textbf{B.} The protective put costs
+    \[
+        S_0+p=48+3.20=51.20.
+    \]
+    The fiduciary call costs
+    \[
+        c+Ke^{-rT}=2.60+50e^{-0.0125}=51.98.
+    \]
+    These two portfolios have the same payoff, but the fiduciary call is more
+    expensive. Sell the fiduciary call and buy the protective put.
+
+    \item \textbf{A.} The one-step stock prices are
+    \[
+        S_u=48(1.18)=56.64,\qquad S_d=48(0.88)=42.24.
+    \]
+    The call payoffs are
+    \[
+        C_u=\max(56.64-50,0)=6.64,\qquad
+        C_d=\max(42.24-50,0)=0.
+    \]
+
+    \item \textbf{A.} The risk-neutral probability is
+    \[
+        q=\frac{e^{rT}-d}{u-d}
+        =\frac{e^{0.0125}-0.88}{1.18-0.88}
+        =0.4419.
+    \]
+    The call value is
+    \[
+        e^{-rT}\left(qC_u+(1-q)C_d\right)
+        =e^{-0.0125}(0.4419\times6.64)
+        =2.90.
+    \]
+\end{enumerate}
+
+\section*{Question 5: Option Bounds, Early Exercise, and Strategy Logic}
+
+\begin{enumerate}[label=\textbf{5.\arabic*.}]
+    \item \textbf{C.} For a European call on a non-dividend-paying stock,
+    \[
+        c\geq \max(S_0-Ke^{-rT},0).
+    \]
+    Here
+    \[
+        Ke^{-rT}=68e^{-0.045\times0.75}=65.74,
+    \]
+    so the lower bound is
+    \[
+        70-65.74=4.26.
+    \]
+    A quote of $c=3.80$ violates the lower bound.
+
+    \item \textbf{A.} For a European put,
+    \[
+        p\geq \max(Ke^{-rT}-S_0,0)
+        =\max(65.74-70,0)
+        =0.
+    \]
+    A quote of $p=0.60$ does not violate this lower bound.
+
+    \item \textbf{B.} Put-call parity gives
+    \[
+        p=c+Ke^{-rT}-S_0
+        =6.00+65.74-70
+        =1.74.
+    \]
+
+    \item \textbf{C.} An American put must be worth at least as much as the
+    otherwise identical European put because it has all the European exercise
+    rights plus the option to exercise early. A covered call is not risk-free:
+    owning the stock and writing a call still leaves downside stock risk.
+\end{enumerate}
+
+\end{document}

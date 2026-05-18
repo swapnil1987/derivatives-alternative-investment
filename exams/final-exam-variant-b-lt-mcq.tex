@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\newcommand{\pts}[1]{\hspace{0.35em}\textnormal{\textbf{[#1 balai]}}}
+\newenvironment{choices}{\begin{enumerate}[label=\Alph*.,leftmargin=2.2em,itemsep=0.12em,topsep=0.12em]}{\end{enumerate}}
+
+\title{S181M116 Išvestinės finansinės priemonės ir alternatyvios investicijos\\
+Baigiamasis egzaminas, B variantas: testas}
+\author{Laikas: 1 valanda 30 minučių \qquad Iš viso: 80 balų}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Instrukcijos.} Atsakykite į visus klausimus. Kiekviename punkte yra
+vienas geriausias atsakymas. Jei nenurodyta kitaip, ignoruokite sandorių kaštus,
+mokesčius, pirkimo ir pardavimo kainų skirtumus bei įsipareigojimų nevykdymo
+riziką. Naudokite tolydinį palūkanų skaičiavimą. Piniginius atsakymus
+apvalinkite iki dviejų skaitmenų po kablelio, tikimybes iki keturių skaitmenų po
+kablelio, o apsidraudimo santykius iki keturių skaitmenų po kablelio.
+
+\textbf{Vertinimas.} Egzamine yra 20 testo punktų. Kiekvienas punktas vertas 4
+balų, iš viso 80 balų.
+
+\textbf{Aprėptis.} Egzaminas remiasi klasėje aptarta medžiaga: išvestinių
+priemonių pagrindais, rinkos struktūra, išankstiniais ir ateities sandoriais,
+apsidraudimu ir bazės rizika, išankstinių ir ateities sandorių kainodara,
+opcionais, pirkimo ir pardavimo opcionų paritetu, binominiais medžiais ir
+opcionų nearbitražo apribojimais. 3 ir 5 paskaitų medžiaga neįtraukta.
+
+\section*{1 klausimas: Sąvokos, išmokos ir rinkos struktūra \pts{16}}
+
+Šis klausimas yra lengvesnis.
+
+\begin{enumerate}
+    \item Sutartis po šešių mėnesių išmoka $\max(90-S_T,0)$. Kuris teiginys
+    teisingas? \pts{4}
+    \begin{choices}
+        \item Tai nėra išvestinė priemonė, nes nėra pradinės premijos.
+        \item Tai išvestinė priemonė, kurios bazinis kintamasis yra turto kaina $S_T$.
+        \item Tai obligacija, nes išmoka yra apribota iš viršaus.
+        \item Tai ateities sandoris, nes išmoka yra tiesinė.
+    \end{choices}
+
+    \item Europos pirkimo opcionas ir Europos pardavimo opcionas turi tą pačią
+    vykdymo kainą $K=75$. Pirkimo opciono premija yra 6, o pardavimo opciono
+    premija yra 4. Jei $S_T=88$, kokios yra pirkėjo pirkimo opciono išmoka,
+    pirkimo opciono pelnas, pardavimo opciono išmoka ir pardavimo opciono
+    pelnas? \pts{4}
+    \begin{choices}
+        \item $13,\;7,\;0,\;-4$
+        \item $13,\;13,\;0,\;0$
+        \item $0,\;-6,\;13,\;9$
+        \item $7,\;13,\;-4,\;0$
+    \end{choices}
+
+    \item Kuris teiginys geriausiai apibūdina OTC išvestinę priemonę, palyginti
+    su biržoje prekiaujama išvestine priemone? \pts{4}
+    \begin{choices}
+        \item OTC sutartys yra labiau standartizuotos ir visada centralizuotai kliringuojamos.
+        \item OTC sutartys yra pritaikomos, bet kelia daugiau sandorio šalies,
+        vertinimo ir likvidumo rizikos.
+        \item OTC sutartys neturi sandorio šalies rizikos, nes yra privačios.
+        \item OTC sutartys visada pigesnės, nes joms nereikia garantinės įmokos.
+    \end{choices}
+
+    \item Kodėl garantinė įmoka gali sukurti likvidumo spaudimą? \pts{4}
+    \begin{choices}
+        \item Nes kasdienis atsiskaitymas gali priversti nuostolingas pozicijas
+        įnešti pinigų dar negavus kompensuojančio bazinės pozicijos pinigų srauto.
+        \item Nes garantinė įmoka yra ateities sandorio pirkimo kaina.
+        \item Nes kintamoji garantinė įmoka pašalina visą kainos riziką.
+        \item Nes garantinės įmokos reikalavimai atsiranda tik tada, kai
+        apsidraudimas yra pelningas.
+    \end{choices}
+\end{enumerate}
+
+\section*{2 klausimas: Ateities sandorių atsiskaitymas ir išankstinių sandorių kainodara \pts{16}}
+
+Šis klausimas yra lengvesnis.
+
+\begin{enumerate}
+    \item Prekiautojas turi \textbf{trumpąją} poziciją aštuoniuose vario ateities
+    sandoriuose. Kiekvienas sandoris yra 25 000 svarų. Vakar dienos atsiskaitymo
+    kaina buvo 4,12 JAV dolerio už svarą, o šiandienos atsiskaitymo kaina yra
+    4,05 JAV dolerio už svarą. Koks yra šiandienos pelnas arba nuostolis iš
+    ateities sandorių? \pts{4}
+    \begin{choices}
+        \item 14 000 JAV dolerių pelnas
+        \item 14 000 JAV dolerių nuostolis
+        \item 1 400 JAV dolerių pelnas
+        \item 1 400 JAV dolerių nuostolis
+    \end{choices}
+
+    \item Prieš atsiskaitymą prekiautojo garantinės sąskaitos likutis buvo
+    38 000 JAV dolerių. Palaikomoji garantinė įmoka yra 30 000 JAV dolerių, o
+    pradinė garantinė įmoka yra 38 000 JAV dolerių. Koks likutis po atsiskaitymo
+    ir ar yra garantinės įmokos reikalavimas? \pts{4}
+    \begin{choices}
+        \item 24 000 JAV dolerių; taip, reikia įnešti 14 000 JAV dolerių.
+        \item 30 000 JAV dolerių; garantinės įmokos reikalavimo nėra.
+        \item 52 000 JAV dolerių; garantinės įmokos reikalavimo nėra.
+        \item 52 000 JAV dolerių; taip, reikia įnešti 8 000 JAV dolerių.
+    \end{choices}
+
+    \item Akcijos dabartinė kaina yra $S_0=120$. Žinomų piniginių dividendų per
+    šešių mėnesių išankstinio sandorio laikotarpį dabartinė vertė yra $I=2.40$.
+    Tolydinė nerizikinga palūkanų norma yra 3,5\% per metus. Kokia yra
+    nearbitražinė išankstinio sandorio kaina? \pts{4}
+    \begin{choices}
+        \item 117.60
+        \item 119.68
+        \item 122.10
+        \item 124.25
+    \end{choices}
+
+    \item Prekiautojas tam pačiam sandoriui kotiruoja 121 išankstinę kainą.
+    Kuris teiginys teisingas? \pts{4}
+    \begin{choices}
+        \item Kaina per maža; reikia parduoti turtą trumpai ir pirkti išankstinį sandorį.
+        \item Kaina per didelė; reikia pirkti turtą, parduoti išankstinį sandorį
+        ir užfiksuoti apie 1.32 pelno vienai akcijai.
+        \item Kaina tiksliai atitinka nearbitražinę kainą.
+        \item Kaina per didelė; reikia parduoti turtą trumpai, investuoti pajamas
+        ir pirkti išankstinį sandorį.
+    \end{choices}
+\end{enumerate}
+
+\section*{3 klausimas: Kryžminis apsidraudimas, bazės rizika ir efektyvios kainos \pts{16}}
+
+Šis klausimas yra sunkesnis.
+
+Gamintojas po trijų mėnesių pirks 1 250 000 svarų vario. Jis kryžmiškai
+apsidraudžia naudodamas susijusio metalo ateities sandorį. Kiekvienas ateities
+sandoris apima 25 000 svarų. Istoriniai duomenys yra:
+\[
+    \rho=0.72,\qquad \sigma_S=0.18,\qquad \sigma_F=0.16.
+\]
+Apsidraudimas pradedamas, kai $F_1=3.80$. Uždarant apsidraudimą, gamintojas
+perka varį už $S_2=4.12$ ir uždaro ateities sandorius už $F_2=4.05$.
+
+\begin{enumerate}
+    \item Kokią apsidraudimo kryptį turėtų pasirinkti gamintojas? \pts{4}
+    \begin{choices}
+        \item Ilgąją ateities sandorių poziciją, nes jis vėliau pirks žaliavą ir
+        nori apsisaugoti nuo kainos kilimo.
+        \item Trumpąją ateities sandorių poziciją, nes jis vėliau pirks žaliavą.
+        \item Ilgąją poziciją tik tada, jei laukiama bazė yra neigiama.
+        \item Apsidraudimas neįmanomas, nes tai kryžminis apsidraudimas.
+    \end{choices}
+
+    \item Koks yra minimalios dispersijos apsidraudimo santykis? \pts{4}
+    \begin{choices}
+        \item 0.6400
+        \item 0.7200
+        \item 0.8100
+        \item 1.1250
+    \end{choices}
+
+    \item Koks ateities sandorių skaičius gaunamas pagal apsidraudimo santykį
+    prieš apvalinimą? \pts{4}
+    \begin{choices}
+        \item 36.0
+        \item 40.5
+        \item 50.0
+        \item 56.25
+    \end{choices}
+
+    \item Kokia yra efektyvi pirkimo kaina vienam svarui ir kaip realizuota bazė
+    palyginama su laukiama baze 0.03? \pts{4}
+    \begin{choices}
+        \item 3.87; realizuota bazė pirkėjui blogesnė.
+        \item 3.87; realizuota bazė pirkėjui geresnė.
+        \item 4.37; realizuota bazė pirkėjui blogesnė.
+        \item 4.37; realizuota bazė pirkėjui geresnė.
+    \end{choices}
+\end{enumerate}
+
+\section*{4 klausimas: Opcionų nearbitražas ir binominė kainodara \pts{16}}
+
+Šis klausimas yra sunkesnis.
+
+Nagrinėkite Europos opcionus akcijai, kuri nemoka dividendų. Dabartinė akcijos
+kaina yra $S_0=48$, vykdymo kaina yra $K=50$, tolydinė nerizikinga palūkanų norma
+yra $r=5\%$, o terminas yra $T=0.25$ metų. Pariteto klausimams Europos pirkimo
+opcionas prekiaujamas už $c=2.60$. Atskirai, binominio modelio klausimams
+naudokite $u=1.18$ ir $d=0.88$.
+
+\begin{enumerate}
+    \item Kokia nearbitražinė Europos pardavimo opciono kaina gaunama iš pirkimo
+    ir pardavimo opcionų pariteto? \pts{4}
+    \begin{choices}
+        \item 1.22
+        \item 2.60
+        \item 3.20
+        \item 3.98
+    \end{choices}
+
+    \item Tarkime, kad rinkos pardavimo opciono kaina yra $p=3.20$. Kuris
+    arbitražo teiginys teisingas? \pts{4}
+    \begin{choices}
+        \item Apsauginis pardavimo opcionas brangus; parduoti jį ir pirkti
+        fiduciarinį pirkimo opcioną.
+        \item Fiduciarinis pirkimo opcionas brangus; parduoti jį ir pirkti
+        apsauginį pardavimo opcioną.
+        \item Abu paketai įkainoti teisingai.
+        \item Arbitražo nėra, nes tiek pirkimo, tiek pardavimo opcionų kainos yra
+        teigiamos.
+    \end{choices}
+
+    \item Vieno žingsnio medyje kokios yra akcijos kainos kilimo ir kritimo
+    būsenose bei pirkimo opciono išmokos? \pts{4}
+    \begin{choices}
+        \item $S_u=56.64$, $S_d=42.24$; išmokos $6.64$ ir $0$.
+        \item $S_u=56.64$, $S_d=42.24$; išmokos $0$ ir $7.76$.
+        \item $S_u=59.00$, $S_d=44.00$; išmokos $9.00$ ir $0$.
+        \item $S_u=48.18$, $S_d=47.88$; išmokos $0$ ir $0$.
+    \end{choices}
+
+    \item Kuri pora yra artimiausia rizikai neutraliai tikimybei ir binominei
+    pirkimo opciono vertei? \pts{4}
+    \begin{choices}
+        \item $q=0.4419$, pirkimo opciono vertė $2.90$
+        \item $q=0.4419$, pirkimo opciono vertė $6.64$
+        \item $q=0.5581$, pirkimo opciono vertė $2.60$
+        \item $q=0.5581$, pirkimo opciono vertė $3.67$
+    \end{choices}
+\end{enumerate}
+
+\section*{5 klausimas: Opcionų ribos, ankstyvas vykdymas ir strategijų logika \pts{16}}
+
+Šis klausimas yra sunkesnis.
+
+Nagrinėkite opcionus akcijai, kuri nemoka dividendų. Dabartinė akcijos kaina yra
+$S_0=70$, vykdymo kaina yra $K=68$, tolydinė nerizikinga palūkanų norma yra
+$r=4.5\%$, o terminas yra $T=0.75$ metų.
+
+\begin{enumerate}
+    \item Kokia yra Europos pirkimo opciono apatinė riba ir ką ji reiškia, jei
+    pirkimo opcionas kotiruojamas už $c=3.80$? \pts{4}
+    \begin{choices}
+        \item Apatinė riba apie 0; arbitražo nėra.
+        \item Apatinė riba apie 1.74; arbitražo nėra.
+        \item Apatinė riba apie 4.26; pirkimo opcionas pažeidžia apatinę ribą.
+        \item Apatinė riba apie 6.00; pirkimo opcionas įkainotas teisingai.
+    \end{choices}
+
+    \item Kokia yra Europos pardavimo opciono apatinė riba ir ką ji reiškia, jei
+    pardavimo opcionas kotiruojamas už $p=0.60$? \pts{4}
+    \begin{choices}
+        \item Apatinė riba 0; pagal šią ribą arbitražo nėra.
+        \item Apatinė riba 1.74; pardavimo opcionas pažeidžia apatinę ribą.
+        \item Apatinė riba 4.26; pardavimo opcionas pažeidžia apatinę ribą.
+        \item Apatinė riba 68; pardavimo opcionas pažeidžia apatinę ribą.
+    \end{choices}
+
+    \item Jei Europos pirkimo opcionas su šia vykdymo kaina ir terminu
+    prekiaujamas už $c=6.00$, kokia yra nearbitražinė Europos pardavimo opciono
+    kaina pagal pirkimo ir pardavimo opcionų paritetą? \pts{4}
+    \begin{choices}
+        \item 0.00
+        \item 1.74
+        \item 3.80
+        \item 6.00
+    \end{choices}
+
+    \item Kuris teiginys teisingas? \pts{4}
+    \begin{choices}
+        \item Amerikos pardavimo opciono kaina $P=1.50$ suderinama, jei Europos
+        pardavimo opciono vertė pagal paritetą yra apie 1.74.
+        \item Dengtas pirkimo opcionas yra nerizikingas, nes opciono išrašytojas turi akciją.
+        \item Amerikos pardavimo opcionas turi būti vertas bent tiek, kiek
+        atitinkamas Europos pardavimo opcionas, o dengtas pirkimo opcionas vis
+        dar turi akcijos kainos kritimo riziką.
+        \item Dengtas pirkimo opcionas turi neribotą augimo potencialą, nes
+        opciono išrašytojas turi akciją.
+    \end{choices}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,277 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\newcommand{\pts}[1]{\hspace{0.35em}\textnormal{\textbf{[#1 points]}}}
+\newenvironment{choices}{\begin{enumerate}[label=\Alph*.,leftmargin=2.2em,itemsep=0.12em,topsep=0.12em]}{\end{enumerate}}
+
+\title{S181M116 Derivatives and Alternative Investments\\
+Final Exam, Variant B: Multiple Choice}
+\author{Time allowed: 1 hour 30 minutes \qquad Total: 80 points}
+\date{}
+
+\begin{document}
+\maketitle
+
+\textbf{Instructions.} Answer all questions. Each item has exactly one best
+answer. Unless stated otherwise, ignore transaction costs, taxes, bid-ask
+spreads, and default risk. Use continuous compounding. Round monetary answers to
+two decimals, probabilities to four decimals, and hedge ratios to four decimals.
+
+\textbf{Scoring.} There are 20 multiple-choice items. Each item is worth 4
+points, for a total of 80 points.
+
+\textbf{Coverage.} This exam is based on the material covered in class:
+derivative basics, market structure, forwards and futures, hedging and basis
+risk, forward/futures pricing, options, put-call parity, binomial trees, and
+option no-arbitrage restrictions. Lecture 3 and Lecture 5 material are excluded.
+
+\section*{Question 1: Concepts, Payoffs, and Market Structure \pts{16}}
+
+This question is on the easier side.
+
+\begin{enumerate}
+    \item A contract pays $\max(90-S_T,0)$ in six months. Which statement is
+    correct? \pts{4}
+    \begin{choices}
+        \item It is not a derivative because it has no initial premium.
+        \item It is a derivative whose underlying variable is the asset price $S_T$.
+        \item It is a bond because the payoff is bounded above.
+        \item It is a futures contract because the payoff is linear.
+    \end{choices}
+
+    \item A European call and a European put both have strike $K=75$. The call
+    premium is 6 and the put premium is 4. If $S_T=88$, what are the buyer's
+    call payoff, call profit, put payoff, and put profit? \pts{4}
+    \begin{choices}
+        \item $13,\;7,\;0,\;-4$
+        \item $13,\;13,\;0,\;0$
+        \item $0,\;-6,\;13,\;9$
+        \item $7,\;13,\;-4,\;0$
+    \end{choices}
+
+    \item Which statement best describes an OTC derivative relative to an
+    exchange-traded derivative? \pts{4}
+    \begin{choices}
+        \item OTC contracts are more standardized and always centrally cleared.
+        \item OTC contracts are customizable, but can create more counterparty,
+        valuation, and liquidity risk.
+        \item OTC contracts have no counterparty risk because they are private.
+        \item OTC contracts are always cheaper because they have no margin.
+    \end{choices}
+
+    \item Why can margin create liquidity pressure? \pts{4}
+    \begin{choices}
+        \item Because daily settlement can require losing positions to post cash
+        before the underlying exposure has generated offsetting cash flow.
+        \item Because margin is the purchase price of the futures contract.
+        \item Because variation margin removes all price risk.
+        \item Because margin calls occur only when the hedge is profitable.
+    \end{choices}
+\end{enumerate}
+
+\section*{Question 2: Futures Settlement and Forward Pricing \pts{16}}
+
+This question is on the easier side.
+
+\begin{enumerate}
+    \item A trader is \textbf{short} eight copper futures contracts. Each
+    contract is for 25,000 pounds. Yesterday's settlement price was USD 4.12 per
+    pound and today's settlement price is USD 4.05 per pound. What is today's
+    futures profit or loss? \pts{4}
+    \begin{choices}
+        \item USD 14,000 gain
+        \item USD 14,000 loss
+        \item USD 1,400 gain
+        \item USD 1,400 loss
+    \end{choices}
+
+    \item The trader's margin account balance before settlement was USD 38,000.
+    The maintenance margin is USD 30,000 and the initial margin is USD 38,000.
+    What is the margin account balance after settlement, and is there a margin
+    call? \pts{4}
+    \begin{choices}
+        \item USD 24,000; yes, deposit USD 14,000.
+        \item USD 30,000; no margin call.
+        \item USD 52,000; no margin call.
+        \item USD 52,000; yes, deposit USD 8,000.
+    \end{choices}
+
+    \item A stock has current price $S_0=120$. The present value of known cash
+    dividends during a six-month forward contract is $I=2.40$. The continuously
+    compounded risk-free rate is 3.5\% per year. What is the no-arbitrage
+    forward price? \pts{4}
+    \begin{choices}
+        \item 117.60
+        \item 119.68
+        \item 122.10
+        \item 124.25
+    \end{choices}
+
+    \item A dealer quotes a forward price of 121 for the same contract. Which
+    statement is correct? \pts{4}
+    \begin{choices}
+        \item The quote is too low; short the asset and long the forward.
+        \item The quote is too high; buy the asset, short the forward, and lock
+        in about 1.32 per share.
+        \item The quote is exactly no-arbitrage.
+        \item The quote is too high; short the asset, invest proceeds, and long
+        the forward.
+    \end{choices}
+\end{enumerate}
+
+\section*{Question 3: Cross Hedging, Basis Risk, and Effective Prices \pts{16}}
+
+This question is on the harder side.
+
+A manufacturer will buy 1,250,000 pounds of copper in three months. It cross
+hedges with a related metals futures contract. Each futures contract covers
+25,000 pounds. Historical data give
+\[
+    \rho=0.72,\qquad \sigma_S=0.18,\qquad \sigma_F=0.16.
+\]
+The hedge is opened at $F_1=3.80$. At hedge close, the manufacturer buys copper
+at $S_2=4.12$ and closes futures at $F_2=4.05$.
+
+\begin{enumerate}
+    \item What hedge direction should the manufacturer use? \pts{4}
+    \begin{choices}
+        \item Long futures, because it will buy the commodity later and wants
+        protection against rising prices.
+        \item Short futures, because it will buy the commodity later.
+        \item Long futures only if the expected basis is negative.
+        \item No hedge is possible because the contract is a cross hedge.
+    \end{choices}
+
+    \item What is the minimum-variance hedge ratio? \pts{4}
+    \begin{choices}
+        \item 0.6400
+        \item 0.7200
+        \item 0.8100
+        \item 1.1250
+    \end{choices}
+
+    \item What number of futures contracts is implied by the hedge ratio before
+    rounding? \pts{4}
+    \begin{choices}
+        \item 36.0
+        \item 40.5
+        \item 50.0
+        \item 56.25
+    \end{choices}
+
+    \item What is the effective purchase price per pound, and how does the
+    realized basis compare with an expected basis of 0.03? \pts{4}
+    \begin{choices}
+        \item 3.87; the realized basis is worse for the buyer.
+        \item 3.87; the realized basis is better for the buyer.
+        \item 4.37; the realized basis is worse for the buyer.
+        \item 4.37; the realized basis is better for the buyer.
+    \end{choices}
+\end{enumerate}
+
+\section*{Question 4: Option No-Arbitrage and Binomial Pricing \pts{16}}
+
+This question is on the harder side.
+
+Consider European options on a non-dividend-paying stock. The current stock
+price is $S_0=48$, the strike is $K=50$, the continuously compounded risk-free
+rate is $r=5\%$, and maturity is $T=0.25$ years. For the parity questions, a
+European call trades at $c=2.60$. Separately, for the binomial model questions,
+use $u=1.18$ and $d=0.88$.
+
+\begin{enumerate}
+    \item What is the no-arbitrage European put price implied by put-call
+    parity? \pts{4}
+    \begin{choices}
+        \item 1.22
+        \item 2.60
+        \item 3.20
+        \item 3.98
+    \end{choices}
+
+    \item Suppose the market put price is $p=3.20$. Which arbitrage statement is
+    correct? \pts{4}
+    \begin{choices}
+        \item The protective put is expensive; sell it and buy the fiduciary call.
+        \item The fiduciary call is expensive; sell it and buy the protective put.
+        \item Both packages are fairly priced.
+        \item There is no arbitrage because call and put prices are both positive.
+    \end{choices}
+
+    \item In the one-step tree, what are the up-state and down-state stock
+    prices and call payoffs? \pts{4}
+    \begin{choices}
+        \item $S_u=56.64$, $S_d=42.24$; payoffs $6.64$ and $0$.
+        \item $S_u=56.64$, $S_d=42.24$; payoffs $0$ and $7.76$.
+        \item $S_u=59.00$, $S_d=44.00$; payoffs $9.00$ and $0$.
+        \item $S_u=48.18$, $S_d=47.88$; payoffs $0$ and $0$.
+    \end{choices}
+
+    \item Which pair is closest to the risk-neutral probability and binomial call
+    value? \pts{4}
+    \begin{choices}
+        \item $q=0.4419$, call value $2.90$
+        \item $q=0.4419$, call value $6.64$
+        \item $q=0.5581$, call value $2.60$
+        \item $q=0.5581$, call value $3.67$
+    \end{choices}
+\end{enumerate}
+
+\section*{Question 5: Option Bounds, Early Exercise, and Strategy Logic \pts{16}}
+
+This question is on the harder side.
+
+Consider options on a non-dividend-paying stock with current price $S_0=70$,
+strike $K=68$, risk-free rate $r=4.5\%$ with continuous compounding, and maturity
+$T=0.75$ years.
+
+\begin{enumerate}
+    \item What is the lower bound for the European call, and what does it imply
+    if the call is quoted at $c=3.80$? \pts{4}
+    \begin{choices}
+        \item Lower bound about 0; no arbitrage.
+        \item Lower bound about 1.74; no arbitrage.
+        \item Lower bound about 4.26; the call violates the lower bound.
+        \item Lower bound about 6.00; the call is fairly priced.
+    \end{choices}
+
+    \item What is the lower bound for the European put, and what does it imply
+    if the put is quoted at $p=0.60$? \pts{4}
+    \begin{choices}
+        \item Lower bound 0; no lower-bound arbitrage from this quote.
+        \item Lower bound 1.74; the put violates the lower bound.
+        \item Lower bound 4.26; the put violates the lower bound.
+        \item Lower bound 68; the put violates the lower bound.
+    \end{choices}
+
+    \item If a European call with this strike and maturity trades at $c=6.00$,
+    what is the no-arbitrage European put price from put-call parity? \pts{4}
+    \begin{choices}
+        \item 0.00
+        \item 1.74
+        \item 3.80
+        \item 6.00
+    \end{choices}
+
+    \item Which statement is correct? \pts{4}
+    \begin{choices}
+        \item An American put price of $P=1.50$ is consistent if the European put
+        value from parity is about 1.74.
+        \item A covered call is risk-free because the writer owns the stock.
+        \item An American put must be worth at least as much as the otherwise
+        identical European put, and a covered call still has downside stock risk.
+        \item A covered call has unlimited upside because the writer owns the stock.
+    \end{choices}
+\end{enumerate}
+
+\end{document}
